@@ -1,6 +1,6 @@
-import {store} from 'index';
 import {Parse} from 'parse';
 
+import {store} from 'index';
 import {UserData} from 'models/UserData';
 import {config} from 'utils/initialize';
 import {send} from 'utils/server';

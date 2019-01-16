@@ -1,0 +1,54 @@
+.CheckboxControl
+  display: flex
+  flex-flow: row nowrap
+  align-items: center
+
+.checkbox
+  display: none
+
+  &-button
+    margin-right: 26px
+
+  &-label
+    cursor: pointer
+    position: relative
+    padding-left: 30px
+
+    font-size: 14px
+    color: #2C2C30
+    letter-spacing: 0.5px
+
+  &-label:before
+    content: ''
+    position: absolute
+    left: 0
+    top: 50%
+    transform: translateY(-50%)
+    height: 20px
+    width: 20px
+    border-radius: 33%
+    background: #fff
+    border: 1px solid #E5E5E5
+
+  &:checked + &-label:before
+    content: ''
+    color: #ffffff
+    font-size: 21px
+    text-indent: 2px
+    background: url('assets/images/Checkbox.png') no-repeat center center / contain
+
+  & + &-label:before,
+  &:checked + &-label:before
+    transition: background 0.1s ease
+
+.disabled
+
+  .checkbox-label
+    color: #999999
+
+  .checkbox-label:before
+    border: 1px solid #bfbfbf
+
+  .checkbox:checked + .checkbox-label:before
+    background: #dbdbdb
+

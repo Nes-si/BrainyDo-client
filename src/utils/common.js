@@ -2,13 +2,13 @@ const locale = navigator.language || navigator.userLanguage;
 
 export function removeOddSpaces(str) {
   if (!str)
-    return '';
-  return str.trim().replace(/\s+/g, ' ');
+    return ``;
+  return str.trim().replace(/\s+/g, ` `);
 }
 
-export function filterSpecials(str, symb = "_") {
+export function filterSpecials(str, symb = `_`) {
   if (!str)
-    return '';
+    return ``;
   str = removeOddSpaces(str);
   return str.replace(/\W/g, symb);
 }
@@ -26,7 +26,7 @@ export function getRandomColor() {
 }
 
 export function trimFileExt(name) {
-  let ind = name.lastIndexOf('.');
+  let ind = name.lastIndexOf(`.`);
   if (ind > 0)
     return name.slice(0, ind);
   else
@@ -39,7 +39,7 @@ export function checkURL(str) {
     '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
     '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
     '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-    '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+    '(\\#[-a-z\\d_]*)?$', `i`); // fragment locator
   return pattern.test(str);
 }
 
@@ -50,7 +50,7 @@ export function checkEmail(str) {
 
 export function getTextDate(date) {
   return date.toLocaleString(locale,
-    {year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric'});
+    {year: `numeric`, month: `short`, day: `numeric`, hour: `numeric`, minute: `numeric`});
 }
 
 export function getRelativeTime(date) {
@@ -62,13 +62,13 @@ export function getRelativeTime(date) {
   
   let diff = now - date;
   
-  let time = date.toLocaleString(locale, {hour: 'numeric', minute: 'numeric'});
+  let time = date.toLocaleString(locale, {hour: `numeric`, minute: `numeric`});
   
   if (diff < MINUTE) {
     if (diff < 10 * SECOND)
-      return 'A few seconds ago';
+      return `A few seconds ago`;
     else
-      return 'Less a minute ago';
+      return `Less a minute ago`;
     
   } else if (diff < HOUR) {
     let minutes = Math.floor(diff / MINUTE);
@@ -102,9 +102,9 @@ export function parseURLParams(querystring = null) {
   
   let pair; // Really a match. Index 0 is the full match; 1 & 2 are the key & val.
   let tokenize = /([^&=]+)=?([^&]*)/g;
-  // decodeURIComponents escapes everything but will leave +s that should be ' '
-  let reSpace = s => decodeURIComponent(s.replace(/\+/g, " "));
-  // Substring to cut off the leading '?'
+  // decodeURIComponents escapes everything but will leave +s that should be ` `
+  let reSpace = s => decodeURIComponent(s.replace(/\+/g, ` `));
+  // Substring to cut off the leading `?`
   if (!querystring)
     querystring = location.search.substring(1);
   
@@ -117,14 +117,14 @@ export function parseURLParams(querystring = null) {
 export function URLEncode(params) {
   return Object
     .keys(params)
-    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
-    .join('&');
+    .map(key => encodeURIComponent(key) + `=` + encodeURIComponent(params[key]))
+    .join(`&`);
 }
 
 
-export const BYTES = "Bytes";
-export const K_BYTES = "KB";
-export const M_BYTES = "MB";
+export const BYTES = `Bytes`;
+export const K_BYTES = `KB`;
+export const M_BYTES = `MB`;
 export const DATA_UNITS = [BYTES, K_BYTES, M_BYTES];
 
 export function convertDataUnits(data, oldUnit, newUnit) {
@@ -154,21 +154,21 @@ export function convertDataUnits(data, oldUnit, newUnit) {
 }
 
 
-export const TYPE_IMAGE   = "Image";
-export const TYPE_TEXT    = "Text";
-export const TYPE_HTML    = "HTML";
-export const TYPE_XML     = "XML";
-export const TYPE_MARKDOWN= "Markdown";
-export const TYPE_JSON    = "JSON";
-export const TYPE_PDF     = "PDF";
-export const TYPE_F_TEXT  = "Formatted text";
-export const TYPE_TABLE   = "Table";
-export const TYPE_PRESENT = "Presentation";
-export const TYPE_AUDIO   = "Audio";
-export const TYPE_VIDEO   = "Video";
-export const TYPE_ARCHIVE = "Archive";
-export const TYPE_EXE     = "Windows program";
-export const TYPE_OTHER   = "Other";
+export const TYPE_IMAGE   = `Image`;
+export const TYPE_TEXT    = `Text`;
+export const TYPE_HTML    = `HTML`;
+export const TYPE_XML     = `XML`;
+export const TYPE_MARKDOWN= `Markdown`;
+export const TYPE_JSON    = `JSON`;
+export const TYPE_PDF     = `PDF`;
+export const TYPE_F_TEXT  = `Formatted text`;
+export const TYPE_TABLE   = `Table`;
+export const TYPE_PRESENT = `Presentation`;
+export const TYPE_AUDIO   = `Audio`;
+export const TYPE_VIDEO   = `Video`;
+export const TYPE_ARCHIVE = `Archive`;
+export const TYPE_EXE     = `Windows program`;
+export const TYPE_OTHER   = `Other`;
 export const FILE_TYPES = [TYPE_IMAGE, TYPE_TEXT, TYPE_HTML, TYPE_XML, TYPE_MARKDOWN, TYPE_JSON, TYPE_PDF, TYPE_F_TEXT,
   TYPE_TABLE, TYPE_PRESENT, TYPE_AUDIO, TYPE_VIDEO, TYPE_ARCHIVE, TYPE_EXE, TYPE_OTHER];
 

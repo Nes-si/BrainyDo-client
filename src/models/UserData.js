@@ -3,49 +3,53 @@ import {Parse} from 'parse';
 
 export class UserData {
   origin = null;
-  
-  email = "";
-  emailNew = "";
-  firstName = "";
-  lastName = "";
-  avatar = null;
-  sex = "male";
-  StripeId = '';
-  
-  //links
-  payPlan = null;
-  
-  
+
+  email = ``;
+  emailNew = ``;
+  nameFirst = ``;
+  nameLast = ``;
+  image = null;
+  sex = `male`;
+  birthdate = null;
+
+
   setOrigin(origin = Parse.User.current()) {
     this.origin = origin;
-    
-    if (origin.get('email'))      this.email      = origin.get('email');
-      if (!this.email)            this.email      = origin.get('username');
-    
-    if (origin.get('emailNew'))   this.emailNew   = origin.get('emailNew');
-    if (origin.get('firstName'))  this.firstName  = origin.get('firstName');
-    if (origin.get('lastName'))   this.lastName   = origin.get('lastName');
-    if (origin.get('avatar'))     this.avatar     = origin.get('avatar');
-    if (origin.get('sex'))        this.sex        = origin.get('sex');
-    if (origin.get('StripeId'))   this.StripeId   = origin.get('StripeId');
+
+    if (origin.get(`email`))      this.email      = origin.get(`email`);
+      if (!this.email)            this.email      = origin.get(`username`);
+
+    if (origin.get(`emailNew`))   this.emailNew   = origin.get(`emailNew`);
+    if (origin.get(`nameFirst`))  this.nameFirst  = origin.get(`nameFirst`);
+    if (origin.get(`nameLast`))   this.nameLast   = origin.get(`nameLast`);
+    if (origin.get(`image`))      this.image      = origin.get(`image`);
+    if (origin.get(`sex`))        this.sex        = origin.get(`sex`);
+    if (origin.get(`birthdate`))  this.birthdate  = origin.get(`birthdate`);
 
     return this;
   }
 
   updateOrigin() {
-    this.origin.set("firstName",  this.firstName);
-    this.origin.set("lastName",   this.lastName);
-    this.origin.set("avatar",     this.avatar);
-    this.origin.set("sex",        this.sex);
-    this.origin.set("StripeId",   this.StripeId);
-    if (this.payPlan)
-      this.origin.set("payPlan", this.payPlan.origin);
+    this.origin.set(`nameFirst`,  this.nameFirst);
+    this.origin.set(`nameLast`,   this.nameLast);
+    this.origin.set(`image`,      this.image);
+    this.origin.set(`sex`,        this.sex);
+    this.origin.set(`birthdate`,  this.birthdate);
   }
-  
+
+  get age() {
+    if (!this.birthdate)
+      return 0;
+
+    const ageMs = Date.now() - birthdate;
+    const ageDate = new Date(ageMs);
+    return ageDate.getUTCFullYear() - 1970;
+  }
+
   get emailFiltered () {
     return encodeURIComponent(this.email)
       .replace(/[!'()*.~_-]/g, c =>
-        '%' + c.charCodeAt(0).toString(16)
+        `%` + c.charCodeAt(0).toString(16)
       )
       .replace(/%/g, `_`);
   }

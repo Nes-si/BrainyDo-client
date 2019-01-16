@@ -1,0 +1,29 @@
+.item
+  display: flex
+  align-items: center
+  margin-bottom: 10px
+
+  &:last-child
+    margin-bottom: 0
+
+  &:not(:first-child)
+    input
+      border-radius: 20px
+
+  &-input
+    cursor: auto
+
+  &-plus,
+  &-minus
+    margin-left: 10px
+    font-size: 26px
+    color: #999999
+    cursor: pointer
+
+  &-plus
+    padding-top: 4px
+
+.plus
+  font-size: 13px
+  color: #999999
+  cursor: pointer

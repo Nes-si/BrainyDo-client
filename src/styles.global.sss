@@ -3,7 +3,8 @@
 
 body
   -webkit-font-smoothing: antialiased
-  font-family: 'Open Sans', sans-serif
+  font-family: 'Fira Sans', sans-serif
+  font-size: 13px
   background: #fff
 
 a
@@ -26,86 +27,17 @@ p
 .container
   position: relative
   margin: 0 auto
-  padding: 0 30px
+  padding: 0
   min-height: 100%
   overflow: hidden
-  max-width: 1260px
   width: 100%
   text-align: left
 
   &-inner
     position: relative
 
-.registration-container
-  display: flex
-  flex-flow: row nowrap
-  justify-content: flex-start
-  align-items: flex-start
-  overflow: auto
-  max-width: 100%
-  padding-left: 0
-  padding-top: 15vh
-  padding-bottom: 50px
-  min-height: 100vh
-  height: 100%
-
-  font-family: 'Inter-UI'
-
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button
   -webkit-appearance: none
   margin: 0
-
-.medium-editor-element
-  outline: none !important
-
-.start-working
-  display: flex
-  flex-flow: column nowrap
-  justify-content: center
-  align-items: center
-  height: 100%
-  font-size: 18px
-  color: rgba(0,0,0,0.5)
-  font-weight: 300
-
-  .hammer
-    margin-right: 15px
-    margin-bottom: 15px
-    svg
-      height: 47px
-
-  .docs
-    color: rgba(0,0,0,0.5)
-
-    &-link
-      color: #6D9EE1
-      border-bottom: 1px #6D9EE1 solid
-
-  .hint
-    font-size: 11px
-    margin-top: 10px
-
-.fade-exit
-  position: absolute
-  width: 100%
-
-.fade-enter
-  position: relative
-  width: 100%
-  transform: translateX(50%)
-  opacity: 0
-
-.fade-enter-active
-  position: relative
-  transition: transform .3s ease, opacity .3s ease
-  transform: translateX(0)
-  opacity: 1
-
-.fade-exit-active
-  position: absolute
-  top: 0
-  transition: transform .3s ease, opacity .25s ease
-  transform: translateX(-50%)
-  opacity: 0
