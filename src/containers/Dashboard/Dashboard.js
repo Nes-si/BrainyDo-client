@@ -1,29 +1,31 @@
 import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
+import {bindActionCreators} from "redux";
+import {connect} from "react-redux";
 import CSSModules from 'react-css-modules';
-import {connect} from 'react-redux';
 import {Helmet} from "react-helmet";
 
-import {showModal, showAlert} from 'ducks/nav';
+import {showAlert, showModal} from "ducks/nav";
 
-import styles from './StartView.sss';
+import CalendarComponent from "components/main/Dashboard/CalendarComponent/CalendarComponent";
+
+import styles from './Dashboard.sss';
 
 
 @CSSModules(styles, {allowMultiple: true})
-class StartView extends Component {
+class Dashboard extends Component {
   render() {
     return (
       <div>
         <Helmet>
-          <title>Добро пожаловать — Triple L</title>
+          <title>Dashboard — Triple L</title>
         </Helmet>
-        <div className='title'>
-          Привет! Это пиздатый сервис.
-        </div>
+        <div styleName="title">ДАШБОАРД!</div>
+        <CalendarComponent />
       </div>
     );
   }
 }
+
 
 function mapStateToProps(state) {
   return {
@@ -38,4 +40,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(StartView);
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

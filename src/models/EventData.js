@@ -1,3 +1,5 @@
+import {Parse} from 'parse';
+
 
 export const AGE_LIMIT_NO_LIMIT = `0+`;
 export const AGE_LIMIT_6_PLUS = `6+`;
@@ -9,6 +11,8 @@ export const AGE_LIMIT_18_MINUS = `18–`;
 
 
 export class EventData {
+  static get OriginClass() {return Parse.Object.extend("EventData");}
+
   origin = null;
 
   name = ``;
@@ -29,7 +33,7 @@ export class EventData {
   members = [];
 
 
-  setOrigin(origin = Parse.User.current()) {
+  setOrigin(origin) {
     this.origin = origin;
 
     if (origin.get(`name`))         this.name         = origin.get(`name`);

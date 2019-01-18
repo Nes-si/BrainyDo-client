@@ -7,7 +7,7 @@ import styles from './EventCard.sss';
 
 
 @CSSModules(styles, {allowMultiple: true})
-export class EventCard extends Component {
+export default class EventCard extends Component {
   state = {
     expanded: false
   };
@@ -24,6 +24,8 @@ export class EventCard extends Component {
   render() {
     const {event} = this.props;
 
+    const date = event.date.toLocaleString();
+
     return (
       <div styleName="EventCard">
         <div styleName="title">{event.name}</div>
@@ -35,12 +37,12 @@ export class EventCard extends Component {
         }
 
         {event.price ?
-          <div styleName="cost">event.price</div>
+          <div styleName="cost">{event.price}</div>
         :
           <div styleName="cost">Free</div>
         }
 
-        <div styleName="date">{event.date}</div>
+        <div styleName="date">{date}</div>
 
         <div styleName="button-wrapper">
           <ButtonControl onClick={this.onJoin}

@@ -1,6 +1,9 @@
+import {Parse} from 'parse';
 
 
 export class OrganizationData {
+  static get OriginClass() {return Parse.Object.extend("OrganizationData");}
+
   origin = null;
 
   name = ``;
@@ -22,7 +25,7 @@ export class OrganizationData {
   members = [];
 
 
-  setOrigin(origin = Parse.User.current()) {
+  setOrigin(origin) {
     this.origin = origin;
 
     if (origin.get(`name`))         this.name         = origin.get(`name`);

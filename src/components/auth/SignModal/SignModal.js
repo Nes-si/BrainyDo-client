@@ -42,8 +42,45 @@ export default class SignModal extends Component {
       this.state.mode = props.mode;
   }
 
+  componentWillReceiveProps(nextProps) {
+    const {user, serverStatus} = nextProps;
+
+    if (serverStatus.problemB) {
+      this.setState({
+        error: null,
+        lock: false,
+        mode: MODE_SERVER_DOWN
+      });
+      return;
+    }
+
+    const status = user.status;
+    if (!status)
+      return;
+
+    let mode = this.state.mode;
+    if (mode == MODE_REG && status == OK)
+      mode = MODE_REG_MAIL;
+    else if (mode == MODE_FORGOT && status == OK)
+      mode = MODE_FORGOT_MAIL;
+    else if (mode == MODE_LOGIN && status == ERROR_UNVERIF)
+      mode = MODE_UNVERIF;
+
+    this.props.resetStatus();
+    this.setState({
+      error: status,
+      lock: !status,
+      mode
+    });
+  }
+
   setMode = mode => {
-    this.setState({mode});
+    this.setState({
+      mode,
+      error: null,
+      password: '',
+      passwordConfirm: ''
+    });
   };
 
   onEmailChange = event => {
@@ -93,6 +130,25 @@ export default class SignModal extends Component {
     return false;
   };
 
+  onRestore = event => {
+    event.preventDefault();
+
+    if (!this.getForgotAvail())
+      return false;
+
+    const {restorePassword} = this.props;
+    restorePassword(this.state.email);
+    this.setState({lock: true});
+
+    return false;
+  };
+
+  onResend = () => {
+    const {resendVerEmail} = this.props;
+    resendVerEmail(this.state.email);
+    this.setState({mode: MODE_REG_MAIL});
+  };
+
   getLoginAvail() {
     return !this.state.lock &&
       this.state.email &&
@@ -106,11 +162,13 @@ export default class SignModal extends Component {
       this.state.password == this.state.passwordConfirm;
   }
 
+  getForgotAvail() {
+    return !this.state.lock &&
+      this.state.email;
+  }
+
   close = () => {
-    const {callback} = this.props.params;
     this.props.onClose();
-    if (callback)
-      callback();
   };
 
   render() {
@@ -240,6 +298,94 @@ export default class SignModal extends Component {
           <div styleName="title">Регистрация</div>
         );
 
+        break;
+
+      case MODE_REG_MAIL:
+        content = (
+          <div styleName="form">
+            <div styleName="description">
+              Мы отправили письмо на ваш email для подтверждения регистрации. Пожалуйста, перейдите по ссылке в нём.
+            </div>
+
+            <div styleName="forgot" onClick={() => this.setMode(MODE_LOGIN)}>
+              Вернуться ко входу
+            </div>
+          </div>
+        );
+        break;
+
+      case MODE_UNVERIF:
+        content = (
+          <div styleName="form">
+            <div styleName="description">
+              <p>Похоже, что ваш email ещё не подтверждён.</p>
+              <p>Пожалуйста, активируйте его, перейдя по ссылке в нашем письме.</p>
+            </div>
+
+            <div styleName="forgot" onClick={this.onResend}>
+              Отправить подтверждение ещё раз
+            </div>
+
+            <div styleName="forgot" onClick={() => this.setMode(MODE_LOGIN)}>
+              Вернуться ко входу
+            </div>
+          </div>
+        );
+        break;
+
+      case MODE_FORGOT:
+        content = (
+          <form styleName="form" onSubmit={this.onRestore}>
+            <div styleName="description">
+              Введите ваш email, и мы отправим вам ссылку для сброса пароля.
+            </div>
+            {this.elmEmail}
+            <div styleName="button">
+              <ButtonControl color="green"
+                             type="submit"
+                             disabled={!this.getForgotAvail()}
+                             value="Восстановить пароль" />
+            </div>
+
+            <div styleName="errors">
+              {this.state.error == ERROR_OTHER &&
+                <div styleName="error">Неправильный email!</div>
+              }
+            </div>
+
+            <div styleName="forgot" onClick={() => this.setMode(MODE_LOGIN)}>
+              Вернуться ко входу
+            </div>
+          </form>
+        );
+        break;
+
+      case MODE_FORGOT_MAIL:
+        content = (
+          <div styleName="form">
+            <div styleName="description">
+              Письмо отправлено. Пожалуйста, проверьте почту.
+            </div>
+
+            <div styleName="forgot" onClick={() => this.setMode(MODE_LOGIN)}>
+              Вернуться ко входу
+            </div>
+          </div>
+        );
+        break;
+
+      case MODE_SERVER_DOWN:
+        content = (
+          <div styleName="form">
+            <div styleName="description">
+              Просим прощения, но похоже, что возникли проблемы с нашим сервисом. Пожалуйста, зайдите позднее.
+            </div>
+
+            <div styleName="forgot" onClick={() => this.setMode(MODE_LOGIN)}>
+              Вернуться ко входу
+            </div>
+          </div>
+        );
         break;
     }
 
