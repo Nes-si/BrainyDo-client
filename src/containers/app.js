@@ -2,7 +2,7 @@ import React from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import CSSModules from 'react-css-modules';
-import {Route, Switch} from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {Helmet} from "react-helmet";
 import CSSTransition from 'react-transition-group/CSSTransition';
 
@@ -98,36 +98,41 @@ class App extends React.Component {
       !serverStatus.problemB;
 
     let res = (
-      <div styleName="wrapper">
-        <Helmet>
-          <title>Triple L</title>
-        </Helmet>
-        <Header />
-        <div styleName='container'>
-          {user.authorized ?
-            <Switch>
-              <Route path="/dashboard" component={Dashboard}/>
-              <Route path="/events-list" component={EventsList}/>
-              <Route path="/settings" component={SettingsView}/>
-            </Switch>
-          :
-            <Route path="/" component={StartView}/>
+      <Router>
+        <div styleName="wrapper">
+          <Helmet>
+            <title>Triple L</title>
+          </Helmet>
+          <Header />
+          <div styleName='container'>
+            {user.authorized ?
+              <Switch>
+                <Route path="/dashboard" component={Dashboard}/>
+                <Route path="/events-list" component={EventsList}/>
+                <Route path="/settings" component={SettingsView}/>
+                <Route path="/event:id" component={EventView} />
+              </Switch>
+            :
+              <Switch>
+                <Route path="/" component={StartView}/>
+                <Route path="/event:id" component={EventView} />
+              </Switch>
+            }
+            <Footer />
+          </div>
+          {showModalLoader &&
+            <SiteLoader />
           }
-          <Route path="/event:id" component={EventView} />
-          <Footer />
+          <CSSTransition in={!!modal}
+                         timeout={300}
+                         classNames={transitions}
+                         mountOnEnter={true}
+                         unmountOnExit={true}>
+            {this.lastModal}
+          </CSSTransition>
+          {this.getAlarm()}
         </div>
-        {showModalLoader &&
-          <SiteLoader />
-        }
-        <CSSTransition in={!!modal}
-                       timeout={300}
-                       classNames={transitions}
-                       mountOnEnter={true}
-                       unmountOnExit={true}>
-          {this.lastModal}
-        </CSSTransition>
-        {this.getAlarm()}
-      </div>
+      </Router>
     );
 
     if (!user.localStorageReady)

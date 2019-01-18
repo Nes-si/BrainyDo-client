@@ -2,7 +2,7 @@ import {Parse} from 'parse';
 
 
 export class OrganizationData {
-  static get OriginClass() {return Parse.Object.extend("OrganizationData");}
+  static get OriginClass() {return Parse.Object.extend("Organization");}
 
   origin = null;
 

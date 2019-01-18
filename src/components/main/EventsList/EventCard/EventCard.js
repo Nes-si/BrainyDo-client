@@ -24,7 +24,7 @@ export default class EventCard extends Component {
   render() {
     const {event} = this.props;
 
-    const date = event.date.toLocaleString();
+    const date = event.dateStart.toLocaleString();
 
     return (
       <div styleName="EventCard">

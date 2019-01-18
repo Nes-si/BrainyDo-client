@@ -10,7 +10,7 @@ export const INIT_END     = 'app/events/INIT_END';
 export const SHOW_EVENTS  = 'app/events/SHOW_EVENTS';
 
 
-async function requestEvents(filter) {
+async function requestEvents(filter = {}) {
   const userData = store.getState().user.userData;
 
   const query = new Parse.Query(EventData.OriginClass);
@@ -69,12 +69,12 @@ export function init() {
   };
 }
 
-export function showEvents(filter) {
+export function showEvents(filter = {}) {
   return async dispatch => {
-
+    const events = await requestEvents(filter);
     dispatch({
       type: SHOW_EVENTS,
-      events: await requestEvents(filter)
+      events
     });
   };
 }

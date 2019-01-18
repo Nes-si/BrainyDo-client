@@ -11,7 +11,7 @@ export const AGE_LIMIT_18_MINUS = `18–`;
 
 
 export class EventData {
-  static get OriginClass() {return Parse.Object.extend("EventData");}
+  static get OriginClass() {return Parse.Object.extend("Event");}
 
   origin = null;
 

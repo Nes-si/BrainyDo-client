@@ -7,7 +7,7 @@ import './styles.global.sss';
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
-import {BrowserRouter as Router, Route} from "react-router-dom";
+import {BrowserRouter as Router} from "react-router-dom";
 
 import configureStore from 'store/configureStore';
 import {initApp} from 'utils/initialize';
