@@ -2,7 +2,7 @@ import React from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import CSSModules from 'react-css-modules';
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import {Route, Switch, withRouter} from "react-router-dom";
 import {Helmet} from "react-helmet";
 import CSSTransition from 'react-transition-group/CSSTransition';
 
@@ -98,41 +98,39 @@ class App extends React.Component {
       !serverStatus.problemB;
 
     let res = (
-      <Router>
-        <div styleName="wrapper">
-          <Helmet>
-            <title>Triple L</title>
-          </Helmet>
-          <Header />
-          <div styleName='container'>
-            {user.authorized ?
-              <Switch>
-                <Route path="/dashboard" component={Dashboard}/>
-                <Route path="/events-list" component={EventsList}/>
-                <Route path="/settings" component={SettingsView}/>
-                <Route path="/event:id" component={EventView} />
-              </Switch>
-            :
-              <Switch>
-                <Route path="/" component={StartView}/>
-                <Route path="/event:id" component={EventView} />
-              </Switch>
-            }
-            <Footer />
-          </div>
-          {showModalLoader &&
-            <SiteLoader />
+      <div styleName="wrapper">
+        <Helmet>
+          <title>Triple L</title>
+        </Helmet>
+        <Header />
+        <div styleName='container'>
+          {user.authorized ?
+            <Switch>
+              <Route path="/dashboard" component={Dashboard}/>
+              <Route path="/events-list" component={EventsList}/>
+              <Route path="/settings" component={SettingsView}/>
+              <Route path="/event:id" component={EventView} />
+            </Switch>
+          :
+            <Switch>
+              <Route path="/" component={StartView}/>
+              <Route path="/event:id" component={EventView} />
+            </Switch>
           }
-          <CSSTransition in={!!modal}
-                         timeout={300}
-                         classNames={transitions}
-                         mountOnEnter={true}
-                         unmountOnExit={true}>
-            {this.lastModal}
-          </CSSTransition>
-          {this.getAlarm()}
+          <Footer />
         </div>
-      </Router>
+        {showModalLoader &&
+          <SiteLoader />
+        }
+        <CSSTransition in={!!modal}
+                       timeout={300}
+                       classNames={transitions}
+                       mountOnEnter={true}
+                       unmountOnExit={true}>
+          {this.lastModal}
+        </CSSTransition>
+        {this.getAlarm()}
+      </div>
     );
 
     if (!user.localStorageReady)
@@ -158,4 +156,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
