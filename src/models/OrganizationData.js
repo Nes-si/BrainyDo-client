@@ -25,6 +25,11 @@ export class OrganizationData {
   members = [];
 
 
+  constructor(origin) {
+    if (origin)
+      this.setOrigin(origin);
+  }
+
   setOrigin(origin) {
     this.origin = origin;
 

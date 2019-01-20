@@ -13,7 +13,7 @@ async function requesOrganizations() {
   ));
   const organizations = [];
   for (let organization_o of organizations_o) {
-    const organization = new OrganizationData().setOrigin(organization_o);
+    const organization = new OrganizationData(organization_o);
     organizations.push(organization);
   }
 

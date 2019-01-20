@@ -13,13 +13,20 @@ import styles from './StartView.sss';
 class StartView extends Component {
   render() {
     return (
-      <div>
+      <div styleName="StartView">
         <Helmet>
           <title>Добро пожаловать — Triple L</title>
         </Helmet>
-        <div className='title'>
-          Привет! Это пиздатый сервис.
-        </div>
+        <section styleName="page-open">
+          <div className='title'>
+            Привет! Это пиздатый сервис.
+          </div>
+        </section>
+        <section styleName="page-about">
+          <div className='title'>
+            Мы служим силам света
+          </div>
+        </section>
       </div>
     );
   }

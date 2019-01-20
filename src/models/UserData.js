@@ -13,6 +13,10 @@ export class UserData {
   birthdate = null;
 
 
+  constructor(origin) {
+    this.setOrigin(origin);
+  }
+
   setOrigin(origin = Parse.User.current()) {
     this.origin = origin;
 

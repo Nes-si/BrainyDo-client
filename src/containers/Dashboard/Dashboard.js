@@ -17,7 +17,7 @@ class Dashboard extends Component {
     return (
       <div>
         <Helmet>
-          <title>Dashboard — Triple L</title>
+          <title>Моя страница — Triple L</title>
         </Helmet>
         <div styleName="title">ДАШБОАРД!</div>
         <CalendarComponent />

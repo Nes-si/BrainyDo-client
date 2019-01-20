@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import CSSModules from 'react-css-modules';
 
 import ButtonControl from 'components/elements/ButtonControl/ButtonControl';
-import InputControl from 'components/elements/InputControl/InputControl';
 import ModalContainer from 'components/elements/ModalContainer/ModalContainer';
 import CheckboxControl from 'components/elements/CheckboxControl/CheckboxControl';
 import {ERROR_USER_EXISTS, ERROR_WRONG_PASS, ERROR_UNVERIF, ERROR_OTHER, OK} from 'ducks/user';
@@ -221,7 +220,7 @@ export default class SignModal extends Component {
             </div>
 
             <div styleName="button">
-              <ButtonControl color="purple"
+              <ButtonControl color="green"
                              type="submit"
                              disabled={!this.getLoginAvail()}
                              value="Войти" />
@@ -239,8 +238,7 @@ export default class SignModal extends Component {
           <div styleName="bottom-content">
             Нет аккаунта? Нет проблем!
             <div styleName="button-wrapper">
-              <ButtonControl color="black"
-                             type="submit"
+              <ButtonControl type="submit"
                              value="Регистрация"
                              onClick={() => this.setMode(MODE_REG)}/>
             </div>
@@ -286,8 +284,7 @@ export default class SignModal extends Component {
               Уже есть аккаунт?
             </div>
             <div styleName="button-wrapper">
-              <ButtonControl color="black"
-                             type="submit"
+              <ButtonControl type="submit"
                              value="Вход"
                              onClick={() => this.setMode(MODE_LOGIN)}/>
             </div>

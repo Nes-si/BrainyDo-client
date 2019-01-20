@@ -1,5 +1,9 @@
+import {Parse} from 'parse';
+
+import {store} from 'index';
 import {AGE_LIMIT_NO_LIMIT, AGE_LIMIT_6_MINUS, AGE_LIMIT_6_PLUS, AGE_LIMIT_12_MINUS, AGE_LIMIT_12_PLUS, AGE_LIMIT_18_MINUS,
   AGE_LIMIT_18_PLUS} from 'models/EventData';
+import {send} from 'utils/server';
 
 
 export function checkAgeLimit(age, ageLimit) {
@@ -25,4 +29,10 @@ export function getPermissibleAgeLimits(age) {
   if (age <= 18)  limits.push(AGE_LIMIT_18_MINUS);
 
   return limits;
+}
+
+export function checkPassword(password) {
+  return send(
+    Parse.Cloud.run('checkPassword', {password})
+  );
 }

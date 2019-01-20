@@ -2,7 +2,7 @@ import React from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import CSSModules from 'react-css-modules';
-import {Route, Switch, withRouter} from "react-router-dom";
+import {Route, Switch, Redirect, withRouter} from "react-router-dom";
 import {Helmet} from "react-helmet";
 import CSSTransition from 'react-transition-group/CSSTransition';
 
@@ -10,7 +10,7 @@ import {closeAlert, closeModal, MODAL_TYPE_SIGN} from 'ducks/nav';
 import {login, register, restorePassword, resendVerEmail, resetStatus} from 'ducks/user';
 
 import SiteLoader from 'components/misc/SiteLoader/SiteLoader';
-import SignModal from 'components/auth/SignModal/SignModal';
+import SignModal from 'components/modals/SignModal/SignModal';
 import Header from "containers/Header/Header";
 import Footer from "containers/Footer/Footer";
 import Dashboard from "containers/Dashboard/Dashboard";
@@ -18,7 +18,7 @@ import EventsList from "containers/EventsList/EventsList";
 import EventView from "containers/EventView/EventView";
 import SettingsView from "containers/SettingsView/SettingsView";
 import StartView from "containers/StartView/StartView";
-import AlertModal, {ALERT_TYPE_ALERT} from 'components/misc/AlertModal/AlertModal';
+import AlertModal, {ALERT_TYPE_ALERT} from 'components/modals/AlertModal/AlertModal';
 
 import styles from './app.sss';
 
@@ -110,11 +110,13 @@ class App extends React.Component {
               <Route path="/events-list" component={EventsList}/>
               <Route path="/settings" component={SettingsView}/>
               <Route path="/event:id" component={EventView} />
+              <Redirect to="/dashboard" />
             </Switch>
           :
             <Switch>
-              <Route path="/" component={StartView}/>
+              <Route path="/" exact component={StartView}/>
               <Route path="/event:id" component={EventView} />
+              <Redirect to="/" />
             </Switch>
           }
           <Footer />

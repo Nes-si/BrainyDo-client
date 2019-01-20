@@ -1,4 +1,4 @@
-import {LOGOUT} from 'ducks/user';
+import {LOGIN_RESPONSE, LOGOUT} from 'ducks/user';
 
 
 export const INIT_END     = 'app/nav/INIT_END';
@@ -91,7 +91,19 @@ export default function navReducer(state = initialState, action) {
       };
 
     case CLOSE_MODAL:
-      return {...state, modalShowing: false};
+      return {
+        ...state,
+        modalShowing: false
+      };
+
+    case LOGIN_RESPONSE:
+      if (action.authorized && state.modalType == MODAL_TYPE_SIGN)
+        return {
+          ...state,
+          modalShowing: false
+        };
+      else
+        return state;
 
     default:
       return state;

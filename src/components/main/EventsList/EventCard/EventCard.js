@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import CSSModules from 'react-css-modules';
+import {Link} from 'react-router-dom';
 
 import ButtonControl from 'components/elements/ButtonControl/ButtonControl';
+import LoaderComponent from "components/elements/LoaderComponent/LoaderComponent";
 
 import styles from './EventCard.sss';
 
@@ -23,12 +25,16 @@ export default class EventCard extends Component {
 
   render() {
     const {event} = this.props;
+    if (!event)
+      return <LoaderComponent />;
 
     const date = event.dateStart.toLocaleString();
 
     return (
       <div styleName="EventCard">
-        <div styleName="title">{event.name}</div>
+        <Link to={`/event${event.origin.id}`}>
+          <div styleName="title">{event.name}</div>
+        </Link>
 
         {this.state.expanded ?
           <div styleName="description">{event.description}</div>

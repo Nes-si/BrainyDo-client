@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import CSSModules from 'react-css-modules';
-import {Link} from "react-router-dom";
+import {Link, NavLink, withRouter} from "react-router-dom";
 
 import {showModal, MODAL_TYPE_SIGN} from "ducks/nav";
 import {logout} from "ducks/user";
-import {MODE_LOGIN, MODE_REG} from "components/auth/SignModal/SignModal";
+import {MODE_LOGIN, MODE_REG} from "components/modals/SignModal/SignModal";
 
 import styles from './Header.sss';
 
@@ -30,24 +30,46 @@ class Header extends Component {
   render() {
     const {authorized} = this.props.user;
 
-    let content = (
-      <div styleName="Header">
-        <div styleName="point" onClick={this.onLogin}>Вход</div>
-        <div styleName="point" onClick={this.onReg}>Регистрация</div>
+    let menu = (
+      <div styleName="menu">
+        <div styleName="item" onClick={this.onLogin}>Вход</div>
+        <div styleName="item" onClick={this.onReg}>Регистрация</div>
       </div>
     );
 
     if (authorized)
-      content = (
-        <div styleName="Header">
-          <Link styleName="point" to="/dashboard">Домой</Link>
-          <Link styleName="point" to="/events-list">Найти события</Link>
-          <Link styleName="point" to="/settings">Настройки</Link>
-          <div styleName="point" onClick={this.onLogout}>Выход</div>
+      menu = (
+        <div styleName="menu">
+          <NavLink styleName="item"
+                   activeClassName={styles.itemActive}
+                   to="/dashboard">
+            Домой
+          </NavLink>
+          <NavLink styleName="item"
+                   activeClassName={styles.itemActive}
+                   to="/events-list">
+            Найти события
+          </NavLink>
+          <NavLink styleName="item"
+                   activeClassName={styles.itemActive}
+                   to="/settings">
+            Настройки
+          </NavLink>
+          <div styleName="item" onClick={this.onLogout}>Выход</div>
         </div>
       );
 
-    return content;
+    return (
+      <div styleName="Header">
+        <div styleName="logo">
+          <img src={require("assets/images/logo.png")} />
+        </div>
+        {menu}
+        <div styleName="location">
+          Ростов-на-Дону
+        </div>
+      </div>
+    );
   }
 }
 
@@ -66,4 +88,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

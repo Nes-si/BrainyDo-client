@@ -1,17 +1,79 @@
 .Header
-  height: 50px
-  background: #607D8B
-  text-align: center
   position: fixed
+  top: 0
+  left: 0
   width: 100%
+  min-height: 60px
+  background: #fff
+
   display: flex
-  justify-content: center
+  justify-content: space-between
   align-items: center
 
-  .point
-    margin-right: 40px
-    cursor: pointer
-    color: #fff
+  box-shadow: 0px 4px 6px -2px rgba(0,0,0,0.10)
 
-  .point:last-child
-    margin-right: 0
+  z-index: 50
+
+  .logo
+    position: absolute
+    left: 30px
+    top: 0
+    display: flex
+    flex-flow: row nowrap
+    align-items: center
+    height: 100%
+
+    img
+      height: 30px
+
+  .menu
+    flex: 1
+    display: flex
+    justify-content: center
+
+    .item
+      font-size: 13px
+      color: #666666
+      letter-spacing: 0.5px
+      cursor: pointer
+      user-select: none
+      line-height: 60px
+      padding: 0 30px
+
+      transition: background 0.2s ease
+      will-change: background
+
+      &:hover
+        background: #f9f9f9
+
+    .itemActive
+      background: #F9F9F9
+      color: #6D9EE1
+
+
+  .location
+    position: absolute
+    right: 30px
+    top: 0
+    font-size: 13px
+    color: #666666
+    line-height: 60px
+    opacity: 0.7
+    font-weight: 300
+    cursor: pointer
+    transition: opacity 0.2s ease
+    will-change: opacity
+
+    display: flex
+    flex-flow: row nowrap
+    align-items: center
+
+    &-icon
+      margin-left: 10px
+
+      svg
+        opacity: 0.5
+        height: 14px
+
+    &:hover
+      opacity: 1

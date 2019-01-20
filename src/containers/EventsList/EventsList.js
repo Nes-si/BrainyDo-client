@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import CSSModules from 'react-css-modules';
+import {Helmet} from "react-helmet";
 
 import {showAlert, showModal} from "ducks/nav";
 import {showEvents} from "ducks/events";
@@ -25,6 +26,9 @@ class EventsList extends Component {
 
     return (
       <div>
+        <Helmet>
+          <title>Список событий — Triple L</title>
+        </Helmet>
         <div styleName="title">Список событий!</div>
         <EventFilterComponent />
         {events.map(event =>

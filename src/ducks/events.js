@@ -8,6 +8,8 @@ import {getPermissibleAgeLimits} from 'utils/data';
 
 export const INIT_END     = 'app/events/INIT_END';
 export const SHOW_EVENTS  = 'app/events/SHOW_EVENTS';
+export const SHOW_EVENT   = 'app/events/SHOW_EVENT';
+
 
 
 async function requestEvents(filter = {}) {
@@ -49,7 +51,7 @@ async function requestEvents(filter = {}) {
 
   const events = [];
   for (let event_o of events_o) {
-    const event = new EventData().setOrigin(event_o);
+    const event = new EventData(event_o);
     events.push(event);
   }
 
@@ -79,9 +81,21 @@ export function showEvents(filter = {}) {
   };
 }
 
+export function showEvent(id) {
+  return async dispatch => {
+    const event_o = await send(new Parse.Query(EventData.OriginClass).get(id));
+    const event = new EventData(event_o);
+    dispatch({
+      type: SHOW_EVENT,
+      event
+    });
+  }
+}
+
 const initialState = {
   userEvents: [],
-  currentEvents: []
+  currentEvents: [],
+  currentEvent: null
 };
 
 export default function eventsReducer(state = initialState, action) {
@@ -96,6 +110,12 @@ export default function eventsReducer(state = initialState, action) {
       return {
         ...state,
         currentEvents: action.events
+      };
+
+    case SHOW_EVENT:
+      return {
+        ...state,
+        currentEvent: action.event
       };
 
     default:

@@ -1,2 +1,73 @@
-.title
-  font-size: 20px
+.SettingsView
+  display: flex
+  flex-flow: column nowrap
+  align-items: flex-start
+
+  width: 100%
+
+  .section
+    margin-top: 20px
+    margin-bottom: 40px
+    width: 100%
+
+    &-header
+      font-size: 18px
+      color: #313133
+      font-weight: 600
+
+
+  .field
+    margin-top: 15px
+    width: 100%
+    text-align: left
+
+    display: flex
+    flex-flow: column nowrap
+
+    transition: color 0.2s ease
+    will-change: color
+
+    &-title,
+    &-error,
+    &-success
+      font-size: 14px
+      color: #2C2C30
+      letter-spacing: 0.5px
+      line-height: 30px
+
+      transition: color 0.2s ease
+      will-change: color
+
+    &-error
+      color: #DD5555
+
+    &-success
+      color: #5DAD47
+
+      &-resend
+        cursor: pointer
+        text-decoration: underline
+
+    &-value
+      font-size: 18px
+      color: #666666
+      margin-bottom: 10px
+
+    .input-wrapper
+      display: flex
+      flex-flow: column nowrap
+
+  .buttons-wrapper
+    margin-top: 20px
+    display: flex
+    flex-flow: row nowrap
+    justify-content: flex-end
+
+  .name-wrapper
+    display: flex
+    flex-flow: row nowrap
+    justify-content: space-between
+    width: 100%
+
+    .field
+      width: 49%

@@ -74,7 +74,7 @@ export function login(email, password) {
     send(Parse.User.logIn(email, password))
 
       .then(() => {
-        const userData = new UserData().setOrigin();
+        const userData = new UserData();
         dispatch({
           type: LOGIN_RESPONSE,
           status: OK,
@@ -108,7 +108,7 @@ export function getLocalStorage() {
   
     send(currentUser.fetch())
       .then(() => {
-        const userData = new UserData().setOrigin();
+        const userData = new UserData();
         dispatch({
           type: LOGIN_RESPONSE,
           status: OK,
