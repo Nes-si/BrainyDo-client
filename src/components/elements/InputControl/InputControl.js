@@ -10,7 +10,7 @@ import styles from './InputControl.sss';
 export default class InputControl extends Component {
   render() {
     let {label, type, value, placeholder, onChange, readOnly, autoFocus, onKeyDown, onBlur, DOMRef, icon,
-      onIconClick, inputType, dropdown, titled} = this.props;
+      onIconClick, inputType, dropdown} = this.props;
 
     if (readOnly || !onChange) {
       readOnly = true;
@@ -30,9 +30,6 @@ export default class InputControl extends Component {
       inputStyles += ' input-readOnly';
     if (dropdown)
       inputStyles += ' input-disabled';
-    if (titled)
-      inputStyles += ' input-titled';
-
 
     let iconEl;
     if (icon)

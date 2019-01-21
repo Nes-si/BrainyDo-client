@@ -4,11 +4,16 @@ import {EventData, FilterEventData} from 'models/EventData';
 import {store} from 'index';
 import {send, getAllObjects} from 'utils/server';
 import {getPermissibleAgeLimits} from 'utils/data';
+import {UserData} from "../models/UserData";
 
 
-export const INIT_END     = 'app/events/INIT_END';
-export const SHOW_EVENTS  = 'app/events/SHOW_EVENTS';
-export const SHOW_EVENT   = 'app/events/SHOW_EVENT';
+export const INIT_END           = 'app/events/INIT_END';
+export const SHOW_START_EVENTS  = 'app/events/SHOW_START_EVENTS';
+export const SHOW_EVENTS        = 'app/events/SHOW_EVENTS';
+export const SHOW_EVENT         = 'app/events/SHOW_EVENT';
+export const JOIN_EVENT         = 'app/events/JOIN_EVENT';
+export const LEAVE_EVENT        = 'app/events/LEAVE_EVENT';
+
 
 
 
@@ -58,6 +63,28 @@ async function requestEvents(filter = {}) {
   return events;
 }
 
+export function showStartEvents() {
+  return async dispatch => {
+    let filter = new FilterEventData();
+    filter.date.today = true;
+    const eventsToday = await requestEvents(filter);
+
+    filter = new FilterEventData();
+    filter.date.tomorrow = true;
+    const eventsTomorrow = await requestEvents(filter);
+
+    filter = new FilterEventData();
+    const eventsNext = await requestEvents(filter);
+
+    dispatch({
+      type: SHOW_START_EVENTS,
+      eventsToday,
+      eventsTomorrow,
+      eventsNext
+    })
+  };
+}
+
 export function init() {
   return async dispatch => {
     const filterMy = new FilterEventData();
@@ -85,6 +112,17 @@ export function showEvent(id) {
   return async dispatch => {
     const event_o = await send(new Parse.Query(EventData.OriginClass).get(id));
     const event = new EventData(event_o);
+
+    const members_o = event_o.get('members');
+    if (members_o) {
+      await send(members_o.fetchAll());
+      const members = [];
+      for (let member_o of members_o) {
+        members.push(new UserData(member_o));
+      }
+      event.members = members;
+    }
+
     dispatch({
       type: SHOW_EVENT,
       event
@@ -92,14 +130,56 @@ export function showEvent(id) {
   }
 }
 
+export function joinEvent(event) {
+  send(
+    Parse.Cloud.run('joinEvent', {id: event.origin.id})
+  );
+
+  return {
+    type: JOIN_EVENT,
+    event
+  };
+}
+
+export function leaveEvent(event) {
+  send(
+    Parse.Cloud.run('leaveEvent', {id: event.origin.id})
+  );
+
+  return {
+    type: LEAVE_EVENT,
+    event
+  };
+}
+
 const initialState = {
+  startEvents: {
+    eventsToday: [],
+    eventsTomorrow: [],
+    eventsNext: []
+  },
+
   userEvents: [],
+
   currentEvents: [],
+
   currentEvent: null
 };
 
 export default function eventsReducer(state = initialState, action) {
+  let userEvents;
+
   switch (action.type) {
+    case SHOW_START_EVENTS:
+      return {
+        ...state,
+        startEvents: {
+          eventsToday: action.eventsToday,
+          eventsTomorrow: action.eventsTomorrow,
+          eventsNext: action.eventsNext
+        }
+      };
+
     case INIT_END:
       return {
         ...state,
@@ -117,6 +197,26 @@ export default function eventsReducer(state = initialState, action) {
         ...state,
         currentEvent: action.event
       };
+
+    case JOIN_EVENT:
+      userEvents = state.userEvents.slice();
+      userEvents.push(action.event);
+      return {
+        ...state,
+        userEvents
+      };
+
+    case LEAVE_EVENT:
+      userEvents = state.userEvents.slice();
+      let eventInd = userEvents.indexOf(action.event);
+      if (eventInd != -1) {
+        userEvents.splice(eventInd, 1);
+        return {
+          ...state,
+          userEvents
+        };
+      }
+      return state;
 
     default:
       return state;

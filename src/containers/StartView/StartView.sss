@@ -1,12 +1,98 @@
 .StartView
   padding: 0
+  width: 100%
 
   .page-open
     height: 100vh
-    background: #ffeedd
+    width: 100%
+    background: #ffffff
+    position: relative
 
-  .title
-    font-size: 20px
+    .back-images
+      display: flex
+      width: 100%
+      height: 100%
+
+      .image-left, .image-right
+        margin: 0
+        height: 100%
+        width: 50%
+        background-repeat: no-repeat
+        background-size: contain
+        background-position: center center
+        opacity: 0.5
+
+      .image-left
+        background-image: url(assets/images/кот1.jpg)
+
+      .image-right
+        background-image: url(assets/images/кот2.jpg)
+
+    .title
+      position: absolute
+      top: 10%
+      width: 100%
+      text-align: center
+      font-size: 40px
+
+    .events
+      position: absolute
+      bottom: 100px
+      width: 100%
+      display: flex
+      justify-content: space-around
+
+      .item
+        margin: 0
+        width: 33%
+
+        &-title
+          text-align: center
+          font-size: 18px
+          margin-bottom: 10px
+
+        .image
+          width: 120px
+          height: 120px
+          margin-left: auto
+          margin-right: auto
+          background-repeat: no-repeat
+          background-size: cover
+          background-position: center center
+          overflow: hidden
+          border-radius: 50%
+          box-shadow: 0 0 15px 0 #999999
+
+
+
+    .arrow-down-wrapper
+      position: absolute
+      bottom: 20px
+      left: 50%
+      transform: translateX(-50%) translateY(0)
+      transition: transform 0.5s
+      cursor: pointer
+
+      &:hover
+        transform: translateX(-50%) translateY(5px)
+
+      .arrow-down
+        opacity: 1
+
+        svg
+          height: 20px
+
 
   .page-about
     padding: 0
+
+    .title
+      margin-top: 40px
+      margin-left: 40px
+      font-size: 40px
+
+    .text
+      margin-top: 40px
+      margin-left: 40px
+      margin-right: 40px
+      font-size: 18px

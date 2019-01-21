@@ -65,7 +65,7 @@ export default class DropdownControl extends Component {
   };
 
   render() {
-    const {label, type, titled} = this.props;
+    const {label, type} = this.props;
 
     let value = this.state.suggestionValue;
     if (value == '')
@@ -77,7 +77,6 @@ export default class DropdownControl extends Component {
       return <InputControl label={label}
                            icon="lock"
                            value={value}
-                           titled={titled}
                            dropdown={true}
                            readOnly={true} />;
 
@@ -89,8 +88,7 @@ export default class DropdownControl extends Component {
     const inputClasses = classNames({
       'input': true,
       'suggestions-visible': this.state.suggestionsVisibility,
-      'empty': !this.state.suggestionValue,
-      'input-titled': titled
+      'empty': !this.state.suggestionValue
     });
 
     const arrowClasses = classNames({
@@ -113,7 +111,7 @@ export default class DropdownControl extends Component {
       );
     });
 
-    let icon = <InlineSVG styleName={arrowClasses} src={require("assets/images/icon-triangular-arrow.svg")} />;
+    let icon = <InlineSVG styleName={arrowClasses} src={require("assets/images/arrow-down.svg")} />;
     if (type === 'big')
       icon = <InlineSVG styleName="arrows" src={require("assets/images/arrows.svg")} />;
 

@@ -15,7 +15,7 @@ import styles from './Dashboard.sss';
 class Dashboard extends Component {
   render() {
     return (
-      <div>
+      <div styleName="Dashboard">
         <Helmet>
           <title>Моя страница — Triple L</title>
         </Helmet>

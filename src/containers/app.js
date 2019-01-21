@@ -102,7 +102,9 @@ class App extends React.Component {
         <Helmet>
           <title>Triple L</title>
         </Helmet>
-        <Header />
+        <header>
+          <Header />
+        </header>
         <div styleName='container'>
           {user.authorized ?
             <Switch>

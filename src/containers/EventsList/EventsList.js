@@ -5,7 +5,7 @@ import CSSModules from 'react-css-modules';
 import {Helmet} from "react-helmet";
 
 import {showAlert, showModal} from "ducks/nav";
-import {showEvents} from "ducks/events";
+import {showEvents, joinEvent} from "ducks/events";
 
 import EventCard from 'components/main/EventsList/EventCard/EventCard';
 import EventFilterComponent from 'components/main/EventsList/EventFilterComponent/EventFilterComponent';
@@ -23,16 +23,19 @@ class EventsList extends Component {
 
   render() {
     const events = this.props.events.currentEvents;
+    const {joinEvent} = this.props.eventsActions;
 
     return (
-      <div>
+      <div styleName="EventsList">
         <Helmet>
           <title>Список событий — Triple L</title>
         </Helmet>
-        <div styleName="title">Список событий!</div>
+        <div styleName="title">Список событий</div>
         <EventFilterComponent />
         {events.map(event =>
-          <EventCard event={event} key={event.origin.id}/>)
+          <EventCard key={event.origin.id}
+                     event={event}
+                     joinEvent={joinEvent} />)
         }
       </div>
     );
@@ -50,7 +53,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    eventsActions:bindActionCreators({showEvents}, dispatch),
+    eventsActions:bindActionCreators({showEvents, joinEvent}, dispatch),
     navActions:   bindActionCreators({showModal, showAlert}, dispatch)
   };
 }

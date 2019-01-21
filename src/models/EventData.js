@@ -75,7 +75,9 @@ export class FilterEventData {
     greaterThan: null,
     lessThan: null,
     onlyFuture: false,
-    onlyPast: false
+    onlyPast: false,
+    today: false,
+    tomorrow: false
   };
 
   ageLimit = {

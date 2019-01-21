@@ -50,15 +50,16 @@ export function checkEmail(str) {
 
 export function getTextDate(date) {
   return date.toLocaleString(locale,
-    {year: `numeric`, month: `short`, day: `numeric`, hour: `numeric`, minute: `numeric`});
+    {year: `numeric`, month: `long`, day: `numeric`, hour: `numeric`, minute: `numeric`});
 }
+
+const SECOND = 1000;
+const MINUTE = 60 * SECOND;
+const HOUR = 60 * MINUTE;
+const DAY = 24 * HOUR;
 
 export function getRelativeTime(date) {
   let now = new Date();
-  
-  const SECOND = 1000;
-  const MINUTE = 60 * SECOND;
-  const HOUR = 60 * MINUTE;
   
   let diff = now - date;
   
@@ -66,34 +67,73 @@ export function getRelativeTime(date) {
   
   if (diff < MINUTE) {
     if (diff < 10 * SECOND)
-      return `A few seconds ago`;
+      return `Несколько секунд назад`;
     else
-      return `Less a minute ago`;
+      return `Меньше минуты назад`;
     
   } else if (diff < HOUR) {
     let minutes = Math.floor(diff / MINUTE);
     if (minutes == 1)
-      return `${minutes} minute ago`;
+      return `Минуту назад`;
+    else if (minutes % 10 == 1 && minutes % 100 != 11)
+      return `${minutes} минуту назад`;
+    else if (minutes <= 4 || (minutes % 10 >= 2 && minutes % 10 <= 4 && minutes % 100 > 20))
+      return `${minutes} минуты назад`;
     else
-      return `${minutes} minutes ago`;
-  
-  // today
+      return `${minutes} минут назад`;
+
   } else if (now.getDate() == date.getDate() &&
             now.getMonth() == date.getMonth() &&
             now.getFullYear() == date.getFullYear()) {
-    return `Today, at ${time}`;
+    return `Сегодня, в ${time}`;
   
   } else {
     let tomorrow = new Date(date);
     tomorrow.setDate(tomorrow.getDate() + 1);
-  
-    // yesterday
+
     if (now.getDate() == tomorrow.getDate() &&
         now.getMonth() == tomorrow.getMonth() &&
         now.getFullYear() == tomorrow.getFullYear())
-      return `Yesterday, at ${time}`;
+      return `Вчера, в ${time}`;
   }
   
+  return getTextDate(date);
+}
+
+export function getEventDate(date) {
+  const now = new Date();
+
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const diff = date - now;
+
+  const time = date.toLocaleString('ru', {hour: `numeric`, minute: `numeric`});
+
+  if (now.getDate() == date.getDate() &&
+      now.getMonth() == date.getMonth() &&
+      now.getFullYear() == date.getFullYear()) {
+    return `Сегодня, в ${time}`;
+
+  } else if (tomorrow.getDate() == date.getDate() &&
+             tomorrow.getMonth() == date.getMonth() &&
+             tomorrow.getFullYear() == date.getFullYear()) {
+    return `Завтра, в ${time}`;
+
+  } else if (diff > 0 && diff < DAY * 6) {
+    let DOW = date.toLocaleString('ru', {weekday: 'long'});
+    let prefix = `В`;
+    if (DOW == 'вторник')
+      prefix = `Во`;
+    if (DOW == 'среда')
+      DOW = 'среду';
+    else if (DOW == 'пятница')
+      DOW = 'пятницу';
+    else if (DOW == 'суббота')
+      DOW = 'субботу';
+    return `${prefix} ${DOW}, ${time}`;
+  }
+
   return getTextDate(date);
 }
 

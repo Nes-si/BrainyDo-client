@@ -78,6 +78,7 @@
     "express": "^4.16.2",
     "normalize.css": "^8.0.0",
     "parse": "^2.1.0",
+    "rc-scroll-anim": "^2.5.6",
     "react": "^16.6.0",
     "react-css-modules": "github:Nes-si/react-css-modules",
     "react-dom": "^16.6.0",
