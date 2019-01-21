@@ -35,6 +35,7 @@ export default class EventCard extends Component {
 
     const imageSrc = event.image ? event.image.url() : require('assets/images/event-empty.png');
 
+
     return (
       <div styleName="EventCard">
         <div styleName="icon-img"
@@ -83,6 +84,13 @@ export default class EventCard extends Component {
           }
 
           <div styleName="date">{event.place}</div>
+
+          {(event.tags && !!event.tags.length) &&
+            <div styleName="tags">
+              {event.tags.map((tag, i) =>
+                <div key={i} styleName="tag">{tag}</div>)}
+            </div>
+          }
 
           <div styleName="button-wrapper">
             <ButtonControl onClick={this.onJoin}
