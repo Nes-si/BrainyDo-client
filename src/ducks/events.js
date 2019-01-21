@@ -252,7 +252,13 @@ export default function eventsReducer(state = initialState, action) {
 
     case LEAVE_EVENT:
       userEvents = state.userEvents.slice();
-      let eventInd = userEvents.indexOf(action.event);
+      let eventInd = -1;
+      for (let i = 0; i < userEvents.length; i++) {
+        if (userEvents[i].origin.id == action.event.origin.id){
+          eventInd = i;
+          break;
+        }
+      }
       if (eventInd != -1) {
         userEvents.splice(eventInd, 1);
         return {
