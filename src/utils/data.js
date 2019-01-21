@@ -36,3 +36,12 @@ export function checkPassword(password) {
     Parse.Cloud.run('checkPassword', {password})
   );
 }
+
+export function isMeEventMember(event) {
+  const {userEvents} = store.getState().events;
+  for (let userEvent of userEvents) {
+    if (userEvent.origin.id == event.origin.id)
+      return true;
+  }
+  return false;
+}

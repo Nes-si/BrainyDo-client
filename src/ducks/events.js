@@ -13,7 +13,9 @@ export const SHOW_EVENTS        = 'app/events/SHOW_EVENTS';
 export const SHOW_EVENT         = 'app/events/SHOW_EVENT';
 export const JOIN_EVENT         = 'app/events/JOIN_EVENT';
 export const LEAVE_EVENT        = 'app/events/LEAVE_EVENT';
-
+export const CREATE_EVENT       = 'app/events/CREATE_EVENT';
+export const UPDATE_EVENT       = 'app/events/UPDATE_EVENT';
+export const DELETE_EVENT       = 'app/events/DELETE_EVENT';
 
 
 
@@ -37,7 +39,7 @@ async function requestEvents(filter = {}) {
   }
   if (filter.price) {
     if (filter.price.onlyFree) {
-      query.equalTo("price", 0);
+      query.containedIn("price", [0, undefined]);
     } else {
       if (filter.price.greaterThan)
         query.greaterThan("price", filter.price.greaterThan);
@@ -48,7 +50,7 @@ async function requestEvents(filter = {}) {
   if (filter.age) {
     if (filter.age.my)
       query.containsIn("ageLimit", getPermissibleAgeLimits(userData.age));
-    if (filter.age.age)
+    if (filter.age.age != undefined)
       query.containsIn("ageLimit", getPermissibleAgeLimits(filter.age.age));
   }
 
@@ -57,6 +59,15 @@ async function requestEvents(filter = {}) {
   const events = [];
   for (let event_o of events_o) {
     const event = new EventData(event_o);
+
+    event.owner = new UserData(event_o.get('owner'));
+
+    const members_o = event_o.get('members');
+    if (members_o) {
+      for (let member_o of members_o)
+        event.members.push(new UserData(member_o))
+    }
+    
     events.push(event);
   }
 
@@ -89,11 +100,12 @@ export function init() {
   return async dispatch => {
     const filterMy = new FilterEventData();
     filterMy.members.onlyMy = true;
-    filterMy.date.onlyFuture = true;
+
+    const events = await requestEvents(filterMy);
 
     dispatch({
       type: INIT_END,
-      events: await requestEvents(filterMy)
+      events
     });
   };
 }
@@ -148,6 +160,38 @@ export function leaveEvent(event) {
 
   return {
     type: LEAVE_EVENT,
+    event
+  };
+}
+
+export function createEvent(event) {
+  event.owner = store.getState().user.userData;
+  event.updateOrigin();
+  event.origin.setACL(new Parse.ACL(event.owner.origin));
+
+  send(event.origin.save());
+
+  return {
+    type: CREATE_EVENT,
+    event
+  };
+}
+
+export function updateEvent(event) {
+  event.updateOrigin();
+  send(event.origin.save());
+
+  return {
+    type: UPDATE_EVENT,
+    event
+  };
+}
+
+export function deleteEvent(event) {
+  send(event.origin.destroy());
+
+  return {
+    type: DELETE_EVENT,
     event
   };
 }
@@ -217,6 +261,26 @@ export default function eventsReducer(state = initialState, action) {
         };
       }
       return state;
+
+    case CREATE_EVENT:
+      userEvents = state.userEvents;
+      userEvents.push(action.event);
+      return {
+        ...state,
+        userEvents
+      };
+
+    case UPDATE_EVENT:
+      return state;
+
+    case DELETE_EVENT:
+      userEvents = state.userEvents;
+      userEvents.splice(userEvents.indexOf(action.event), 1);
+
+      return {
+        ...state,
+        event
+      };
 
     default:
       return state;

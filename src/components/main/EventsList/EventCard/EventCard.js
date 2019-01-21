@@ -3,6 +3,7 @@ import CSSModules from 'react-css-modules';
 import {Link} from 'react-router-dom';
 
 import {getEventDate} from 'utils/common';
+import {isMeEventMember} from 'utils/data';
 
 import ButtonControl from 'components/elements/ButtonControl/ButtonControl';
 import LoaderComponent from "components/elements/LoaderComponent/LoaderComponent";
@@ -25,8 +26,13 @@ export default class EventCard extends Component {
     joinEvent(event);
   };
 
+  onLeave = () => {
+    const {leaveEvent, event} = this.props;
+    leaveEvent(event);
+  };
+
   render() {
-    const {event} = this.props;
+    const {event, userData} = this.props;
     if (!event)
       return <LoaderComponent />;
 
@@ -34,6 +40,10 @@ export default class EventCard extends Component {
     const dateEnd = event.dateEnd ? getEventDate(event.dateEnd) : null;
 
     const imageSrc = event.image ? event.image.url() : require('assets/images/event-empty.png');
+
+    const isMember = isMeEventMember(event);
+
+    const isOwner = event.owner.origin.id == userData.origin.id;
 
 
     return (
@@ -92,10 +102,20 @@ export default class EventCard extends Component {
             </div>
           }
 
-          <div styleName="button-wrapper">
-            <ButtonControl onClick={this.onJoin}
-                           value="Пойду"/>
-          </div>
+          {isOwner ?
+            <div styleName="expand">Я создатель</div>
+          :
+            <div styleName="button-wrapper">
+              {isMember ?
+                <ButtonControl onClick={this.onLeave}
+                               color="red"
+                               value="Не пойду"/>
+              :
+                <ButtonControl onClick={this.onJoin}
+                               value="Пойду"/>
+              }
+            </div>
+          }
         </div>
       </div>
     );

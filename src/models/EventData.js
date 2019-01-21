@@ -81,13 +81,13 @@ export class FilterEventData {
   };
 
   ageLimit = {
-    age: 0,
+    age: undefined,
     my: false
   };
 
   price = {
-    greaterThan: 0,
-    lessThan: Number.MAX_SAFE_INTEGER,
+    greaterThan: undefined,
+    lessThan: undefined,
     onlyFree: false
   };
 
