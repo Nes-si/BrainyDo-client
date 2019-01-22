@@ -16,14 +16,12 @@ export default class DropdownControl extends Component {
     disabled: false
   };
   suggestionsList = [];
-  onSuggest = null;
 
 
   constructor(props) {
     super(props);
 
-    const {suggestionsList, suggest, current, disabled} = props;
-    this.onSuggest = suggest;
+    const {suggestionsList, current, disabled} = props;
     if (suggestionsList)
       this.suggestionsList = suggestionsList;
 
@@ -49,7 +47,7 @@ export default class DropdownControl extends Component {
       suggestionValue: item,
       suggestionsVisibility: false
     });
-    this.onSuggest(item);
+    this.props.onSuggest(item);
   };
 
   onSuggestionInputClick = () => {

@@ -19,7 +19,7 @@ export function checkAgeLimit(age, ageLimit) {
 }
 
 export function getPermissibleAgeLimits(age) {
-  const limits = [AGE_LIMIT_NO_LIMIT];
+  const limits = [undefined, '', AGE_LIMIT_NO_LIMIT];
 
   if (age >= 6)   limits.push(AGE_LIMIT_6_PLUS);
   if (age >= 12)  limits.push(AGE_LIMIT_12_PLUS);

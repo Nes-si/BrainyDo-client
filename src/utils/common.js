@@ -50,6 +50,11 @@ export function checkEmail(str) {
 
 export function getTextDate(date) {
   return date.toLocaleString(locale,
+    {year: `numeric`, month: `long`, day: `numeric`});
+}
+
+export function getTextDateTime(date) {
+  return date.toLocaleString(locale,
     {year: `numeric`, month: `long`, day: `numeric`, hour: `numeric`, minute: `numeric`});
 }
 
@@ -97,10 +102,10 @@ export function getRelativeTime(date) {
       return `Вчера, в ${time}`;
   }
   
-  return getTextDate(date);
+  return getTextDateTime(date);
 }
 
-export function getEventDate(date) {
+export function getEventDateTime(date, capitalize) {
   const now = new Date();
 
   const tomorrow = new Date();
@@ -110,31 +115,39 @@ export function getEventDate(date) {
 
   const time = date.toLocaleString('ru', {hour: `numeric`, minute: `numeric`});
 
+  let result;
+
   if (now.getDate() == date.getDate() &&
       now.getMonth() == date.getMonth() &&
       now.getFullYear() == date.getFullYear()) {
-    return `Сегодня, в ${time}`;
+    result = `сегодня, в ${time}`;
 
   } else if (tomorrow.getDate() == date.getDate() &&
              tomorrow.getMonth() == date.getMonth() &&
              tomorrow.getFullYear() == date.getFullYear()) {
-    return `Завтра, в ${time}`;
+    result = `завтра, в ${time}`;
 
   } else if (diff > 0 && diff < DAY * 6) {
     let DOW = date.toLocaleString('ru', {weekday: 'long'});
-    let prefix = `В`;
+    let prefix = `в`;
     if (DOW == 'вторник')
-      prefix = `Во`;
+      prefix = `во`;
     if (DOW == 'среда')
       DOW = 'среду';
     else if (DOW == 'пятница')
       DOW = 'пятницу';
     else if (DOW == 'суббота')
       DOW = 'субботу';
-    return `${prefix} ${DOW}, ${time}`;
+    result = `${prefix} ${DOW}, ${time}`;
+
+  } else {
+    result = getTextDateTime(date);
   }
 
-  return getTextDate(date);
+  if (capitalize)
+    result = result[0].toUpperCase() + result.substring(1);
+
+  return result;
 }
 
 export function parseURLParams(querystring = null) {

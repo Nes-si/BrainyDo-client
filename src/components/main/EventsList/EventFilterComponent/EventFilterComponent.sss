@@ -1,13 +1,13 @@
 .EventFilterComponent
   padding-top: 20px
   padding-bottom: 20px
-  background: #6D9EE1
-  text-align: center
+  background: #f9f9f9
   width: 100%
 
   .title
+    font-size: 18px
     font-weight: bold
-    color: #fff
+    text-align: center
 
   .filters
     padding: 20px
@@ -15,5 +15,37 @@
     display: flex
     flex-wrap: wrap
 
+    .filter
+      margin-right: 20px
+
+      .filter-title
+        font-weight: bold
+
+      .radio-group
+        margin-top: 10px
+
+        .radio-wrapper
+          margin-top: 10px
+
+      .date-group
+        margin-top: 10px
+
+        .date-component
+          margin-top: 10px
+          margin-left: 30px
+          display: flex
+          align-items: baseline
+
+          .date-title
+            margin-right: 10px
+            width: 18px
+
+          .date-picker
+            padding: 0
+
     .dropdown-wrapper
       padding: 0
+
+  .button-apply
+    margin-top: 10px
+    margin-left: 30px

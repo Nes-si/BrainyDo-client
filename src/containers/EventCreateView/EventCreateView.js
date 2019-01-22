@@ -89,7 +89,7 @@ class EventCreateView extends Component {
 
             <DropdownControl label="Возрастное ограничение"
                              suggestionsList={AGE_LIMITS}
-                             suggest={this.onChangeAgeLimit}
+                             onSuggest={this.onChangeAgeLimit}
                              current={this.state.ageLimit} />
 
             <div styleName="button-wrapper">

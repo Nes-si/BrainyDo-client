@@ -6,6 +6,7 @@ import {Helmet} from "react-helmet";
 
 import {showAlert, showModal} from "ducks/nav";
 import {showEvents, joinEvent, leaveEvent} from "ducks/events";
+import {FilterEventData, FILTER_DATE_FUTURE} from "models/EventData";
 
 import EventCard from 'components/main/EventsList/EventCard/EventCard';
 import EventFilterComponent from 'components/main/EventsList/EventFilterComponent/EventFilterComponent';
@@ -18,8 +19,14 @@ class EventsList extends Component {
   constructor(props) {
     super(props);
 
-    props.eventsActions.showEvents();
+    const filter = new FilterEventData();
+    filter.date.type = FILTER_DATE_FUTURE;
+    props.eventsActions.showEvents(filter);
   }
+
+  onFilterChange = filter => {
+    this.props.eventsActions.showEvents(filter);
+  };
 
   render() {
     const events = this.props.events.currentEvents;
@@ -38,14 +45,19 @@ class EventsList extends Component {
         </div>
 
         <div styleName='content'>
-          <EventFilterComponent />
-          {events.map(event =>
-            <EventCard key={event.origin.id}
-                       event={event}
-                       userData={userData}
-                       joinEvent={joinEvent}
-                       leaveEvent={leaveEvent} />)
+          <EventFilterComponent onChange={this.onFilterChange}
+                                hasAge={userData.birthdate} />
+          {!!events.length ?
+            events.map(event =>
+              <EventCard key={event.origin.id}
+                         event={event}
+                         userData={userData}
+                         joinEvent={joinEvent}
+                         leaveEvent={leaveEvent} />)
+          :
+            <div styleName="caption-not-found">События не найдены</div>
           }
+
         </div>
       </div>
     );

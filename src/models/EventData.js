@@ -72,23 +72,29 @@ export class EventData {
 }
 
 
+export const FILTER_DATE_OFF = "FILTER_DATE_OFF";
+export const FILTER_DATE_FUTURE = "FILTER_DATE_FUTURE";
+export const FILTER_DATE_TODAY = "FILTER_DATE_TODAY";
+export const FILTER_DATE_TOMORROW = "FILTER_DATE_TOMORROW";
+export const FILTER_DATE_WEEK = "FILTER_DATE_WEEK";
+export const FILTER_DATE_WEEKEND = "FILTER_DATE_WEEKEND";
+export const FILTER_DATE_VALUES = "FILTER_DATE_VALUES";
+
+
 export class FilterEventData {
   date = {
+    type: FILTER_DATE_OFF,
     greaterThan: null,
-    lessThan: null,
-    onlyFuture: false,
-    onlyPast: false,
-    today: false,
-    tomorrow: false
+    lessThan: null
   };
 
   ageLimit = {
     age: undefined,
-    my: false
+    my: false,
+    ageLimit: undefined
   };
 
   price = {
-    greaterThan: undefined,
     lessThan: undefined,
     onlyFree: false
   };

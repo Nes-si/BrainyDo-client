@@ -1,10 +1,11 @@
 import {Parse} from 'parse';
 
-import {EventData, FilterEventData} from 'models/EventData';
+import {EventData, FilterEventData, FILTER_DATE_OFF, FILTER_DATE_FUTURE, FILTER_DATE_TODAY, FILTER_DATE_TOMORROW, FILTER_DATE_VALUES,
+  FILTER_DATE_WEEK, FILTER_DATE_WEEKEND} from 'models/EventData';
 import {store} from 'index';
 import {send, getAllObjects} from 'utils/server';
 import {getPermissibleAgeLimits} from 'utils/data';
-import {UserData} from "../models/UserData";
+import {UserData} from "models/UserData";
 
 
 export const INIT_END           = 'app/events/INIT_END';
@@ -22,36 +23,121 @@ export const DELETE_EVENT       = 'app/events/DELETE_EVENT';
 async function requestEvents(filter = {}) {
   const userData = store.getState().user.userData;
 
-  const query = new Parse.Query(EventData.OriginClass);
+  let query = new Parse.Query(EventData.OriginClass);
+
+  if (filter.date && filter.date.type != FILTER_DATE_OFF) {
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59);
+
+    const todayDOW = todayStart.getDay() ? todayStart.getDay() : 7;
+
+    const weekEnd = new Date();
+    weekEnd.setDate(todayStart.getDate() + (7 - todayDOW));
+    weekEnd.setHours(23, 59, 59);
+
+    const query2 = new Parse.Query(EventData.OriginClass);
+    query2.doesNotExist("dateEnd");
+
+    switch (filter.date.type) {
+      case FILTER_DATE_FUTURE:
+        query.greaterThan("dateEnd", new Date());
+        query2.greaterThan("dateStart", todayStart);
+
+        query = Parse.Query.or(query, query2);
+        break;
+
+      case FILTER_DATE_TODAY:
+        query.greaterThan("dateEnd", new Date());
+        query.lessThan("dateStart", todayEnd);
+
+        query2.greaterThanOrEqualTo("dateStart", todayStart);
+        query2.lessThan("dateStart", todayEnd);
+
+        query = Parse.Query.or(query, query2);
+        break;
+
+      case FILTER_DATE_TOMORROW:
+        const tomorrowStart = new Date(todayStart);
+        tomorrowStart.setDate(todayStart.getDate() + 1);
+
+        const tomorrowEnd = new Date(tomorrowStart);
+        tomorrowEnd.setHours(23, 59, 59);
+
+        query.greaterThan("dateEnd", tomorrowStart);
+        query.lessThan("dateStart", tomorrowEnd);
+
+        query2.greaterThanOrEqualTo("dateStart", tomorrowStart);
+        query2.lessThan("dateStart", tomorrowEnd);
+
+        query = Parse.Query.or(query, query2);
+
+        break;
+
+      case FILTER_DATE_WEEK:
+        query.greaterThan("dateEnd", new Date());
+        query.lessThan("dateStart", weekEnd);
+
+        query2.greaterThanOrEqualTo("dateStart", todayStart);
+        query2.lessThan("dateStart", weekEnd);
+
+        query = Parse.Query.or(query, query2);
+
+        break;
+
+      case FILTER_DATE_WEEKEND:
+        const weekEndStart = new Date();
+        const diff = 6 - todayDOW;
+        if (diff > 0) {
+          weekEndStart.setDate(todayStart.getDate() + diff);
+          weekEndStart.setHours(0, 0, 0, 0);
+        }
+
+        query.greaterThanOrEqualTo("dateEnd", weekEndStart);
+        query.lessThan("dateStart", weekEnd);
+
+        query2.greaterThanOrEqualTo("dateStart", weekEndStart);
+        query2.lessThan("dateStart", weekEnd);
+
+        query = Parse.Query.or(query, query2);
+
+        break;
+
+      case FILTER_DATE_VALUES:
+        if (filter.date.greaterThan) {
+          query.greaterThan("dateEnd", filter.date.greaterThan);
+          query2.greaterThan("dateStart", filter.date.greaterThan);
+          query = Parse.Query.or(query, query2);
+        }
+
+        if (filter.date.lessThan)
+          query.lessThan("dateStart", filter.date.lessThan);
+
+        break;
+    }
+  }
+
   if (filter.members) {
     if (filter.members.onlyMy)
       query.equalTo("members", Parse.User.current());
   }
-  if (filter.date) {
-    if (filter.date.greaterThan)
-      query.greaterThan("dateEnd", filter.date.greaterThan);
-    if (filter.date.lessThan)
-      query.lessThan("dateStart", filter.date.lessThan);
-    if (filter.date.onlyFuture)
-      query.greaterThan("dateEnd", new Date());
-    if (filter.date.onlyPast)
-      query.lessThan("dateStart", new Date());
-  }
+
   if (filter.price) {
-    if (filter.price.onlyFree) {
+    if (filter.price.onlyFree)
       query.containedIn("price", [0, undefined]);
-    } else {
-      if (filter.price.greaterThan)
-        query.greaterThan("price", filter.price.greaterThan);
-      if (filter.price.lessThan)
-        query.lessThan("price", filter.price.lessThan);
-    }
+    else if (filter.price.lessThan)
+      query.lessThanOrEqualTo("price", filter.price.lessThan);
   }
-  if (filter.age) {
-    if (filter.age.my)
+
+  if (filter.ageLimit) {
+    if (filter.ageLimit.my)
       query.containsIn("ageLimit", getPermissibleAgeLimits(userData.age));
-    if (filter.age.age != undefined)
+    if (filter.ageLimit.age)
       query.containsIn("ageLimit", getPermissibleAgeLimits(filter.age.age));
+    if (filter.ageLimit.ageLimit)
+      query.equalTo("ageLimit", filter.ageLimit.ageLimit);
   }
 
   const events_o = await send(getAllObjects(query));
@@ -111,6 +197,7 @@ export function init() {
 }
 
 export function showEvents(filter = {}) {
+  console.log(filter);
   return async dispatch => {
     const events = await requestEvents(filter);
     dispatch({

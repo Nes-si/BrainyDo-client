@@ -6,7 +6,7 @@ import {Helmet} from "react-helmet";
 
 import {showAlert, showModal} from "ducks/nav";
 import {showEvent, joinEvent, leaveEvent} from "ducks/events";
-import {getEventDate} from "utils/common";
+import {getEventDateTime} from "utils/common";
 import {isMeEventMember} from "utils/data";
 
 import LoaderComponent from "components/elements/LoaderComponent/LoaderComponent";
@@ -41,8 +41,8 @@ class EventView extends Component {
     if (!event)
       return <LoaderComponent />;
 
-    const dateStart = getEventDate(event.dateStart);
-    const dateEnd = event.dateEnd ? getEventDate(event.dateEnd) : null;
+    const dateStart = getEventDateTime(event.dateStart);
+    const dateEnd = event.dateEnd ? getEventDateTime(event.dateEnd) : null;
 
     const imageSrc = event.image ? event.image.url() : require('assets/images/event-empty.png');
 

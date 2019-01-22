@@ -1,22 +1,22 @@
 import React, {Component} from 'react';
 import CSSModules from 'react-css-modules';
-import _ from "lodash/core";
 
 import styles from './RadioControl.sss';
 
 
+let idCounter = 0;
+
 @CSSModules(styles, {allowMultiple: true})
-export default class DropdownControl extends Component {
+export default class RadioControl extends Component {
   state = {
     value: false
   };
-  id = '0';
-  
+
   constructor(props) {
     super(props);
     
     this.state.value = props.value;
-    this.id = _.uniqueId('radio_');
+    this.id = idCounter++;
   }
   
   componentWillReceiveProps (nextProps) {

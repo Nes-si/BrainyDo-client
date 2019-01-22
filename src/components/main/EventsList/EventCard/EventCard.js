@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import CSSModules from 'react-css-modules';
 import {Link} from 'react-router-dom';
 
-import {getEventDate} from 'utils/common';
+import {getEventDateTime} from 'utils/common';
 import {isMeEventMember} from 'utils/data';
 
 import ButtonControl from 'components/elements/ButtonControl/ButtonControl';
@@ -36,8 +36,8 @@ export default class EventCard extends Component {
     if (!event)
       return <LoaderComponent />;
 
-    const dateStart = getEventDate(event.dateStart);
-    const dateEnd = event.dateEnd ? getEventDate(event.dateEnd) : null;
+    const dateStart = getEventDateTime(event.dateStart, true);
+    const dateEnd = event.dateEnd ? getEventDateTime(event.dateEnd) : null;
 
     const imageSrc = event.image ? event.image.url() : require('assets/images/event-empty.png');
 
@@ -83,10 +83,10 @@ export default class EventCard extends Component {
             <div styleName="cost">Бесплатно</div>
           }
 
-          <div styleName="date">{dateStart}</div>
-
-          {dateEnd &&
-            <div styleName="date">{dateEnd}</div>
+          {dateEnd ?
+            <div styleName="date">{dateStart} — {dateEnd}</div>
+          :
+            <div styleName="date">{dateStart}</div>
           }
 
           {event.ageLimit &&
