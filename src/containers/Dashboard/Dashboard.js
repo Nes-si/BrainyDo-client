@@ -3,10 +3,12 @@ import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import CSSModules from 'react-css-modules';
 import {Helmet} from "react-helmet";
+import {Link} from 'react-router-dom';
 
 import {showAlert, showModal} from "ducks/nav";
 
 import CalendarComponent from "components/main/Dashboard/CalendarComponent/CalendarComponent";
+import ButtonControl from 'components/elements/ButtonControl/ButtonControl';
 
 import styles from './Dashboard.sss';
 
@@ -21,6 +23,9 @@ class Dashboard extends Component {
         </Helmet>
         <div styleName="title">ДАШБОАРД!</div>
         <CalendarComponent />
+        <Link to="/event-creation">
+          <ButtonControl value="Создать событие" />
+        </Link>
       </div>
     );
   }

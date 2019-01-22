@@ -8,6 +8,8 @@ export const AGE_LIMIT_18_PLUS = `18+`;
 export const AGE_LIMIT_6_MINUS = `6–`;
 export const AGE_LIMIT_12_MINUS = `12–`;
 export const AGE_LIMIT_18_MINUS = `18–`;
+export const AGE_LIMITS = [AGE_LIMIT_NO_LIMIT, AGE_LIMIT_6_PLUS, AGE_LIMIT_12_PLUS, AGE_LIMIT_18_PLUS, AGE_LIMIT_6_MINUS,
+  AGE_LIMIT_12_MINUS, AGE_LIMIT_18_MINUS];
 
 
 export class EventData {

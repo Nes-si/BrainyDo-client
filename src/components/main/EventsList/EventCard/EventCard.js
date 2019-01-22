@@ -78,9 +78,9 @@ export default class EventCard extends Component {
           }
 
           {event.price ?
-            <div styleName="cost">{event.price}</div>
+            <div styleName="cost">{event.price} рублей</div>
           :
-            <div styleName="cost">Бесплатно!</div>
+            <div styleName="cost">Бесплатно</div>
           }
 
           <div styleName="date">{dateStart}</div>
@@ -103,7 +103,7 @@ export default class EventCard extends Component {
           }
 
           {isOwner ?
-            <div styleName="expand">Я создатель</div>
+            <div styleName="expand">Я создатель события, ёпта</div>
           :
             <div styleName="button-wrapper">
               {isMember ?

@@ -26,14 +26,14 @@ export default class EventFilterComponent extends Component {
       <div styleName="EventFilterComponent">
         Фильтр
         <div styleName="dropdown-wrapper">
-          <DropdownControl  suggestionsList={DATES}
-                            suggest={this.onChangeDate}
-                            current={this.state.date} />
+          <DropdownControl suggestionsList={DATES}
+                           suggest={this.onChangeDate}
+                           current={this.state.date} />
         </div>
         <div styleName="dropdown-wrapper">
-          <DropdownControl  suggestionsList={DATES}
-                            suggest={this.onChangeDate}
-                            current={this.state.date} />
+          <DropdownControl suggestionsList={DATES}
+                           suggest={this.onChangeDate}
+                           current={this.state.date} />
         </div>
       </div>
     );

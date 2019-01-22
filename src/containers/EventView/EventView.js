@@ -5,10 +5,12 @@ import CSSModules from 'react-css-modules';
 import {Helmet} from "react-helmet";
 
 import {showAlert, showModal} from "ducks/nav";
-import {showEvent} from "ducks/events";
+import {showEvent, joinEvent, leaveEvent} from "ducks/events";
+import {getEventDate} from "utils/common";
+import {isMeEventMember} from "utils/data";
 
 import LoaderComponent from "components/elements/LoaderComponent/LoaderComponent";
-import ButtonControl from "components/main/EventsList/EventCard/EventCard";
+import ButtonControl from "components/elements/ButtonControl/ButtonControl";
 
 import styles from './EventView.sss';
 
@@ -23,8 +25,15 @@ class EventView extends Component {
   }
 
   onJoin = () => {
-    const {onJoin} = this.props;
-    onJoin();
+    const {currentEvent} = this.props.events;
+    const {joinEvent} = this.props.eventsActions;
+    joinEvent(currentEvent);
+  };
+
+  onLeave = () => {
+    const {currentEvent} = this.props.events;
+    const {leaveEvent} = this.props.eventsActions;
+    leaveEvent(currentEvent);
   };
 
   render() {
@@ -32,31 +41,71 @@ class EventView extends Component {
     if (!event)
       return <LoaderComponent />;
 
-    const date = event.dateStart.toLocaleString();
+    const dateStart = getEventDate(event.dateStart);
+    const dateEnd = event.dateEnd ? getEventDate(event.dateEnd) : null;
+
+    const imageSrc = event.image ? event.image.url() : require('assets/images/event-empty.png');
+
+    const isMember = isMeEventMember(event);
+
+    const {userData} = this.props.user;
+    const isOwner = event.owner.origin.id == userData.origin.id;
 
     return (
       <div styleName="EventView">
         <Helmet>
-          <title>Событие — Triple L</title>
+          <title>{event.name} — Triple L</title>
         </Helmet>
 
-        <div styleName="title">Событие!</div>
+        <div styleName="image"
+             style={{backgroundImage: `url(${imageSrc}`}} />
 
-        <div styleName="title">{event.name}</div>
+        <div styleName="content">
+          <div styleName="title">{event.name}</div>
 
-        <div styleName="description">{event.description}</div>
+          {event.description &&
+            <div styleName="description">{event.description}</div>
+          }
 
-        {event.price ?
-          <div styleName="cost">{event.price}</div>
+          {event.price ?
+            <div styleName="cost">{event.price} рублей</div>
           :
-          <div styleName="cost">Free</div>
-        }
+            <div styleName="cost">Бесплатно!</div>
+          }
 
-        <div styleName="date">{date}</div>
+          <div styleName="date">{dateStart}</div>
 
-        <div styleName="button-wrapper">
-          <ButtonControl onClick={this.onJoin}
-                         value="Пойду"/>
+          {dateEnd &&
+            <div styleName="date">{dateEnd}</div>
+          }
+
+          {event.ageLimit &&
+            <div styleName="date">{event.ageLimit}</div>
+          }
+
+          <div styleName="date">{event.place}</div>
+
+          {(event.tags && !!event.tags.length) &&
+            <div styleName="tags">
+              {event.tags.map((tag, i) =>
+                <div key={i} styleName="tag">{tag}</div>)}
+            </div>
+          }
+
+          {isOwner ?
+            <div styleName="expand">Я создатель события, ёпта</div>
+          :
+            <div styleName="button-wrapper">
+              {isMember ?
+                <ButtonControl onClick={this.onLeave}
+                               color="red"
+                               value="Не пойду"/>
+              :
+                <ButtonControl onClick={this.onJoin}
+                               value="Пойду"/>
+              }
+            </div>
+          }
         </div>
       </div>
     );
@@ -74,7 +123,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    eventsActions:bindActionCreators({showEvent}, dispatch),
+    eventsActions:bindActionCreators({showEvent, joinEvent, leaveEvent}, dispatch),
     navActions:   bindActionCreators({showModal, showAlert}, dispatch)
   };
 }

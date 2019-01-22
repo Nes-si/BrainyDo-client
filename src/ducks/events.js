@@ -65,7 +65,7 @@ async function requestEvents(filter = {}) {
     const members_o = event_o.get('members');
     if (members_o) {
       for (let member_o of members_o)
-        event.members.push(new UserData(member_o))
+        event.members.push(new UserData(member_o));
     }
     
     events.push(event);
@@ -125,14 +125,13 @@ export function showEvent(id) {
     const event_o = await send(new Parse.Query(EventData.OriginClass).get(id));
     const event = new EventData(event_o);
 
+    event.owner = new UserData(event_o.get('owner'));
+
     const members_o = event_o.get('members');
     if (members_o) {
-      await send(members_o.fetchAll());
-      const members = [];
-      for (let member_o of members_o) {
-        members.push(new UserData(member_o));
-      }
-      event.members = members;
+      await send(Parse.Object.fetchAll(members_o));
+      for (let member_o of members_o)
+        event.members.push(new UserData(member_o));
     }
 
     dispatch({

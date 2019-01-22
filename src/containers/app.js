@@ -18,6 +18,7 @@ import EventsList from "containers/EventsList/EventsList";
 import EventView from "containers/EventView/EventView";
 import SettingsView from "containers/SettingsView/SettingsView";
 import StartView from "containers/StartView/StartView";
+import EventCreateView from 'containers/EventCreateView/EventCreateView';
 import AlertModal, {ALERT_TYPE_ALERT} from 'components/modals/AlertModal/AlertModal';
 
 import styles from './app.sss';
@@ -110,6 +111,7 @@ class App extends React.Component {
             <Switch>
               <Route path="/dashboard" component={Dashboard}/>
               <Route path="/events-list" component={EventsList}/>
+              <Route path="/event-creation" component={EventCreateView}/>
               <Route path="/settings" component={SettingsView}/>
               <Route path="/event:id" component={EventView} />
               <Redirect to="/dashboard" />
