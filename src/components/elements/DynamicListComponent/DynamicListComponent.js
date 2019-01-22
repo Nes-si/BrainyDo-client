@@ -56,11 +56,6 @@ export default class DynamicListComponent extends Component {
     let valuesRight = values.slice(i + 1);
     values = valuesLeft.concat('', valuesRight);
 
-    // this.setState(
-    //   {values},
-    //   () => this.inputs[i + 1].focus()
-    // );
-
     this.props.onChange(values);
   };
   
