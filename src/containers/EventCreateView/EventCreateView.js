@@ -40,18 +40,15 @@ class EventCreateView extends Component {
     createEvent(this.event);
   };
 
-  onChangeName = event => {
-    const name = event.target.value;
+  onChangeName = name => {
     this.setState({name});
   };
 
-  onChangeDescription = event => {
-    const description = event.target.value;
+  onChangeDescription = description => {
     this.setState({description});
   };
 
-  onChangePrice = event => {
-    const price = event.target.value;
+  onChangePrice = price => {
     this.setState({price});
   };
 

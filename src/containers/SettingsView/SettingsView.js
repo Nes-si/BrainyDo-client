@@ -175,18 +175,15 @@ class SettingsView extends Component {
       });
   }
 
-  onChangeNameFirst = event => {
-    const nameFirst = event.target.value;
+  onChangeNameFirst = nameFirst => {
     this.setState({nameFirst, dirtyData: true, errorData: null});
   };
 
-  onChangeNameLast = event => {
-    const nameLast = event.target.value;
+  onChangeNameLast = nameLast => {
     this.setState({nameLast, dirtyData: true, errorData: null});
   };
 
-  onChangeEmail = event => {
-    const emailNew = event.target.value;
+  onChangeEmail = emailNew => {
     this.setState({
       emailNew,
       dirtyEmail: emailNew != this.userData.emailNew,
@@ -194,20 +191,17 @@ class SettingsView extends Component {
     });
   };
 
-  onChangePasswordOld = event => {
-    const passwordOld = event.target.value;
+  onChangePasswordOld = passwordOld => {
     const dirtyPassword = !!passwordOld || !!this.state.password || !!this.state.passwordConfirm;
     this.setState({passwordOld, dirtyPassword, errorPassword: null});
   };
 
-  onChangePassword = event => {
-    const password = event.target.value;
+  onChangePassword = password => {
     const dirtyPassword = !!password || !!this.state.passwordOld || !!this.state.passwordConfirm;
     this.setState({password, dirtyPassword, errorPassword: null});
   };
 
-  onChangePasswordConfirm = event => {
-    const passwordConfirm = event.target.value;
+  onChangePasswordConfirm = passwordConfirm => {
     const dirtyPassword = !!passwordConfirm || !!this.state.passwordOld || !!this.state.password;
     this.setState({passwordConfirm, dirtyPassword, errorPassword: null});
   };
@@ -237,18 +231,14 @@ class SettingsView extends Component {
               <div styleName="field">
                 <div styleName="field-title">Имя</div>
                 <div styleName="input-wrapper">
-                  <InputControl type="big"
-                                titled
-                                value={this.state.nameFirst}
+                  <InputControl value={this.state.nameFirst}
                                 onChange={this.onChangeNameFirst} />
                 </div>
               </div>
               <div styleName="field">
                 <div styleName="field-title">Фамилия</div>
                 <div styleName="input-wrapper">
-                  <InputControl type="big"
-                                titled
-                                value={this.state.nameLast}
+                  <InputControl value={this.state.nameLast}
                                 onChange={this.onChangeNameLast} />
                 </div>
               </div>
@@ -256,7 +246,6 @@ class SettingsView extends Component {
             <div styleName="buttons-wrapper">
               <ButtonControl color="purple"
                              type="submit"
-                             titled
                              disabled={!this.state.dirtyData || this.state.errorData}
                              value="Обновить личные данные"/>
             </div>
@@ -273,9 +262,7 @@ class SettingsView extends Component {
             <div styleName="field">
               <div styleName="field-title">Email</div>
               <div styleName="input-wrapper">
-                <InputControl type="big"
-                              value={this.state.emailNew}
-                              titled
+                <InputControl value={this.state.emailNew}
                               onChange={this.onChangeEmail} />
               </div>
             </div>
@@ -305,9 +292,7 @@ class SettingsView extends Component {
             <div styleName="field">
               <div styleName="field-title">Введите текущий пароль</div>
               <div styleName="input-wrapper">
-                <InputControl type="big"
-                              inputType="password"
-                              titled
+                <InputControl inputType="password"
                               value={this.state.passwordOld}
                               onChange={this.onChangePasswordOld} />
               </div>
@@ -315,9 +300,7 @@ class SettingsView extends Component {
             <div styleName="field">
               <div styleName="field-title">Введите новый пароль</div>
               <div styleName="input-wrapper">
-                <InputControl type="big"
-                              inputType="password"
-                              titled
+                <InputControl inputType="password"
                               value={this.state.password}
                               onChange={this.onChangePassword} />
               </div>
@@ -325,9 +308,7 @@ class SettingsView extends Component {
             <div styleName="field">
               <div styleName="field-title">Введите новый пароль повторно</div>
               <div styleName="input-wrapper">
-                <InputControl type="big"
-                              inputType="password"
-                              titled
+                <InputControl inputType="password"
                               value={this.state.passwordConfirm}
                               onChange={this.onChangePasswordConfirm} />
               </div>

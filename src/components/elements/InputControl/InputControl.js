@@ -8,14 +8,18 @@ import styles from './InputControl.sss';
 
 @CSSModules(styles, {allowMultiple: true})
 export default class InputControl extends Component {
+  onChange = e => {
+    const {onChange} = this.props;
+    if (onChange)
+      onChange(e.target.value);
+  };
+
   render() {
-    let {label, type, value, placeholder, onChange, readOnly, autoFocus, onKeyDown, onBlur, DOMRef, icon,
+    let {label, value, placeholder, onChange, readOnly, autoFocus, onKeyDown, onBlur, DOMRef, icon,
       onIconClick, inputType, dropdown} = this.props;
 
-    if (readOnly || !onChange) {
+    if (!onChange)
       readOnly = true;
-      onChange = null;
-    }
 
     if (value == undefined || value == null)
       value = ``;
@@ -24,8 +28,6 @@ export default class InputControl extends Component {
       inputType = `text`;
 
     let inputStyles = 'input';
-    if (type === 'big')
-      inputStyles = 'input-big';
     if (readOnly)
       inputStyles += ' input-readOnly';
     if (dropdown)
@@ -48,7 +50,7 @@ export default class InputControl extends Component {
                  value={value}
                  autoFocus={autoFocus}
                  placeholder={placeholder}
-                 onChange={onChange}
+                 onChange={this.onChange}
                  onBlur={onBlur}
                  onKeyDown={onKeyDown}
                  readOnly={readOnly}

@@ -90,7 +90,7 @@ export default class DynamicListComponent extends Component {
   }
   
   render() {
-    const {disableEmpty, readOnly, numeric, numericInt, titled} = this.props;
+    const {disableEmpty, readOnly, numeric, numericInt} = this.props;
     
     let values = disableEmpty ? [''] : [];
     if (this.state.values.length)
@@ -104,21 +104,17 @@ export default class DynamicListComponent extends Component {
       for (let i = 0; i < values.length; i++) {
         let input;
         if (numeric)
-          input = <InputNumberControl type="big"
-                                      isInt={numericInt}
+          input = <InputNumberControl isInt={numericInt}
                                       value={values[i]}
                                       readOnly={readOnly}
-                                      titled={titled}
                                       onChange={v => this.onChange(v, i)}
                                       DOMRef={inp => this.inputs[i] = inp}
                                       onKeyDown={e => this.onKeyDown(e, i)}/>;
         else
-          input = <InputControl type="big"
-                                value={values[i]}
+          input = <InputControl value={values[i]}
                                 readOnly={readOnly}
-                                titled={titled}
                                 DOMRef={inp => this.inputs[i] = inp}
-                                onChange={e => this.onChange(e.target.value, i)}
+                                onChange={v => this.onChange(v, i)}
                                 onKeyDown={e => this.onKeyDown(e, i)}/>;
         
         elements.push(

@@ -65,7 +65,7 @@ export default class DropdownControl extends Component {
   };
 
   render() {
-    const {label, type} = this.props;
+    const {label} = this.props;
 
     let value = this.state.suggestionValue;
     if (value == '')
@@ -79,11 +79,6 @@ export default class DropdownControl extends Component {
                            value={value}
                            dropdown={true}
                            readOnly={true} />;
-
-    const wrapperClasses = classNames({
-      'input-wrapper type-wrapper': true,
-      'dropdown-big': type === 'big'
-    });
 
     const inputClasses = classNames({
       'input': true,
@@ -112,11 +107,9 @@ export default class DropdownControl extends Component {
     });
 
     let icon = <InlineSVG styleName={arrowClasses} src={require("assets/images/arrow-down.svg")} />;
-    if (type === 'big')
-      icon = <InlineSVG styleName="arrows" src={require("assets/images/arrows.svg")} />;
 
     return (
-      <div styleName={wrapperClasses} onBlur={this.onSuggestionBlur}>
+      <div styleName='input-wrapper type-wrapper' onBlur={this.onSuggestionBlur}>
         {label &&
           <div styleName="label">{label}</div>
         }

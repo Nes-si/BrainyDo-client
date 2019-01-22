@@ -48,8 +48,7 @@ export default class InputNumberControl extends Component {
     return num;
   }
   
-  onChange = event => {
-    let {value} = event.target;
+  onChange = value => {
     value = value.replace(/[^\d\.,]/g, '');
     value = value.replace(/,/g, '.');
     this.setState({value});
@@ -67,12 +66,11 @@ export default class InputNumberControl extends Component {
   };
   
   render() {
-    let {type, label, placeholder, readOnly, autoFocus, onKeyDown, DOMRef, icon} = this.props;
+    let {label, placeholder, readOnly, autoFocus, onKeyDown, DOMRef, icon} = this.props;
     
     return <InputControl value={this.state.value}
                          onChange={this.onChange}
                          onBlur={this.onBlur}
-                         type={type}
                          label={label}
                          icon={icon}
                          onKeyDown={onKeyDown}

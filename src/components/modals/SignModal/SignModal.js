@@ -4,6 +4,7 @@ import CSSModules from 'react-css-modules';
 import ButtonControl from 'components/elements/ButtonControl/ButtonControl';
 import ModalContainer from 'components/elements/ModalContainer/ModalContainer';
 import CheckboxControl from 'components/elements/CheckboxControl/CheckboxControl';
+import InputControl from 'components/elements/InputControl/InputControl';
 import {ERROR_USER_EXISTS, ERROR_WRONG_PASS, ERROR_UNVERIF, ERROR_OTHER, OK} from 'ducks/user';
 
 import styles from './SignModal.sss';
@@ -82,23 +83,23 @@ export default class SignModal extends Component {
     });
   };
 
-  onEmailChange = event => {
+  onEmailChange = email => {
     this.setState({
-      email: event.target.value,
+      email,
       error: null
     });
   };
 
-  onPasswordChange = event => {
+  onPasswordChange = password => {
     this.setState({
-      password: event.target.value,
+      password,
       error: null
     });
   };
 
-  onPasswordConfirmChange = event => {
+  onPasswordConfirmChange = passwordConfirm => {
     this.setState({
-      passwordConfirm: event.target.value,
+      passwordConfirm,
       error: null
     });
   };
@@ -173,30 +174,26 @@ export default class SignModal extends Component {
   render() {
     this.elmEmail =
       <div styleName="input-wrapper">
-        Email
-        <input styleName="input"
-               type="text"
-               autoFocus
-               value={this.state.email}
-               onChange={this.onEmailChange} />
+        <InputControl label="Email"
+                      autoFocus
+                      value={this.state.email}
+                      onChange={this.onEmailChange} />
       </div>;
 
     this.elmPassword =
       <div styleName="input-wrapper">
-        Пароль
-        <input styleName="input"
-               type="password"
-               value={this.state.password}
-               onChange={this.onPasswordChange} />
+        <InputControl label="Пароль"
+                      type="password"
+                      value={this.state.password}
+                      onChange={this.onPasswordChange} />
       </div>;
 
     this.elmPasswordConfirm =
       <div styleName="input-wrapper">
-        Пароль (повторно)
-        <input styleName="input"
-               type="password"
-               value={this.state.passwordConfirm}
-               onChange={this.onPasswordConfirmChange} />
+        <InputControl label="Пароль (повторно)"
+                      type="password"
+                      value={this.state.passwordConfirm}
+                      onChange={this.onPasswordConfirmChange} />
       </div>;
 
     this.elmCheckbox =
@@ -204,7 +201,7 @@ export default class SignModal extends Component {
         <CheckboxControl title="Запомнить меня" />
       </div>;
 
-    let content, bottomContent, title, icon;
+    let content, bottomContent, title;
 
     switch (this.state.mode) {
       case MODE_LOGIN:
