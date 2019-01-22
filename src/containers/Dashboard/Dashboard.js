@@ -16,16 +16,23 @@ import styles from './Dashboard.sss';
 @CSSModules(styles, {allowMultiple: true})
 class Dashboard extends Component {
   render() {
+
     return (
       <div styleName="Dashboard">
         <Helmet>
           <title>Моя страница — Triple L</title>
         </Helmet>
-        <div styleName="title">ДАШБОАРД!</div>
-        <CalendarComponent />
-        <Link to="/event-creation">
-          <ButtonControl value="Создать событие" />
-        </Link>
+
+        <div styleName="background"></div>
+        <div styleName="header">
+          <div styleName="title">ДАШБОАРД!</div>
+        </div>
+        <div styleName='content'>
+          <CalendarComponent />
+          <Link to="/event-creation">
+            <ButtonControl value="Создать событие" />
+          </Link>
+        </div>
       </div>
     );
   }

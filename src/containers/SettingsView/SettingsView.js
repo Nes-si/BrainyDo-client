@@ -225,121 +225,127 @@ class SettingsView extends Component {
           <title>Настройки — Triple L</title>
         </Helmet>
 
-        <form styleName="section" onSubmit={this.onSaveData}>
-          <div styleName="section-header">Личные данные</div>
-          <div styleName="name-wrapper">
-            <div styleName="field">
-              <div styleName="field-title">Имя</div>
-              <div styleName="input-wrapper">
-                <InputControl type="big"
-                              titled
-                              value={this.state.nameFirst}
-                              onChange={this.onChangeNameFirst} />
-              </div>
-            </div>
-            <div styleName="field">
-              <div styleName="field-title">Фамилия</div>
-              <div styleName="input-wrapper">
-                <InputControl type="big"
-                              titled
-                              value={this.state.nameLast}
-                              onChange={this.onChangeNameLast} />
-              </div>
-            </div>
-          </div>
-          <div styleName="buttons-wrapper">
-            <ButtonControl color="purple"
-                           type="submit"
-                           titled
-                           disabled={!this.state.dirtyData || this.state.errorData}
-                           value="Обновить личные данные"/>
-          </div>
-          <div styleName="field-success">
-            {this.state.successData}
-          </div>
-          <div styleName="field-error">
-            {this.state.errorData}
-          </div>
-        </form>
+        <div styleName="background"></div>
+        <div styleName="header">
+          <div styleName="title">Настройки</div>
+        </div>
 
-        <form styleName="section" onSubmit={this.onSaveEmail}>
-          <div styleName="section-header">Email</div>
-          <div styleName="field">
-            <div styleName="field-title">Email</div>
-            <div styleName="input-wrapper">
-              <InputControl type="big"
-                            value={this.state.emailNew}
-                            titled
-                            onChange={this.onChangeEmail} />
+        <div styleName='content'>
+          <form styleName="section" onSubmit={this.onSaveData}>
+            <div styleName="section-header">Личные данные</div>
+            <div styleName="name-wrapper">
+              <div styleName="field">
+                <div styleName="field-title">Имя</div>
+                <div styleName="input-wrapper">
+                  <InputControl type="big"
+                                titled
+                                value={this.state.nameFirst}
+                                onChange={this.onChangeNameFirst} />
+                </div>
+              </div>
+              <div styleName="field">
+                <div styleName="field-title">Фамилия</div>
+                <div styleName="input-wrapper">
+                  <InputControl type="big"
+                                titled
+                                value={this.state.nameLast}
+                                onChange={this.onChangeNameLast} />
+                </div>
+              </div>
             </div>
-          </div>
-          <div styleName="buttons-wrapper">
-            <ButtonControl color="purple"
-                           type="submit"
-                           disabled={!this.state.dirtyEmail || this.state.errorEmail}
-                           value="Изменить email"/>
-          </div>
-          {this.state.successEmailState &&
+            <div styleName="buttons-wrapper">
+              <ButtonControl color="purple"
+                             type="submit"
+                             titled
+                             disabled={!this.state.dirtyData || this.state.errorData}
+                             value="Обновить личные данные"/>
+            </div>
             <div styleName="field-success">
-              <div>
-                Ваш email был изменён. Мы отправили вам письмо со ссылкой подтверждения. До подтверждения будет использовать ваш старый email <b>{this.state.email}</b>.
-              </div>
-              <div styleName="field-success-resend" onClick={this.resendVerification}>
-                Отправить подтверждение повторно
-              </div>
+              {this.state.successData}
             </div>
-          }
-          <div styleName="field-error">
-            {this.state.errorEmail}
-          </div>
-        </form>
+            <div styleName="field-error">
+              {this.state.errorData}
+            </div>
+          </form>
 
-        <form styleName="section" onSubmit={this.onSavePassword}>
-          <div styleName="section-header">Изменение пароля</div>
-          <div styleName="field">
-            <div styleName="field-title">Введите текущий пароль</div>
-            <div styleName="input-wrapper">
-              <InputControl type="big"
-                            inputType="password"
-                            titled
-                            value={this.state.passwordOld}
-                            onChange={this.onChangePasswordOld} />
+          <form styleName="section" onSubmit={this.onSaveEmail}>
+            <div styleName="section-header">Email</div>
+            <div styleName="field">
+              <div styleName="field-title">Email</div>
+              <div styleName="input-wrapper">
+                <InputControl type="big"
+                              value={this.state.emailNew}
+                              titled
+                              onChange={this.onChangeEmail} />
+              </div>
             </div>
-          </div>
-          <div styleName="field">
-            <div styleName="field-title">Введите новый пароль</div>
-            <div styleName="input-wrapper">
-              <InputControl type="big"
-                            inputType="password"
-                            titled
-                            value={this.state.password}
-                            onChange={this.onChangePassword} />
+            <div styleName="buttons-wrapper">
+              <ButtonControl color="purple"
+                             type="submit"
+                             disabled={!this.state.dirtyEmail || this.state.errorEmail}
+                             value="Изменить email"/>
             </div>
-          </div>
-          <div styleName="field">
-            <div styleName="field-title">Введите новый пароль повторно</div>
-            <div styleName="input-wrapper">
-              <InputControl type="big"
-                            inputType="password"
-                            titled
-                            value={this.state.passwordConfirm}
-                            onChange={this.onChangePasswordConfirm} />
+            {this.state.successEmailState &&
+              <div styleName="field-success">
+                <div>
+                  Ваш email был изменён. Мы отправили вам письмо со ссылкой подтверждения. До подтверждения будет использовать ваш старый email <b>{this.state.email}</b>.
+                </div>
+                <div styleName="field-success-resend" onClick={this.resendVerification}>
+                  Отправить подтверждение повторно
+                </div>
+              </div>
+            }
+            <div styleName="field-error">
+              {this.state.errorEmail}
             </div>
-          </div>
-          <div styleName="buttons-wrapper">
-            <ButtonControl color="purple"
-                           type="submit"
-                           disabled={!this.state.dirtyPassword || this.state.errorPassword}
-                           value="Изменить пароль"/>
-          </div>
-          <div styleName="field-success">
-            {this.state.successPassword}
-          </div>
-          <div styleName="field-error">
-            {this.state.errorPassword}
-          </div>
-        </form>
-        
+          </form>
+
+          <form styleName="section" onSubmit={this.onSavePassword}>
+            <div styleName="section-header">Изменение пароля</div>
+            <div styleName="field">
+              <div styleName="field-title">Введите текущий пароль</div>
+              <div styleName="input-wrapper">
+                <InputControl type="big"
+                              inputType="password"
+                              titled
+                              value={this.state.passwordOld}
+                              onChange={this.onChangePasswordOld} />
+              </div>
+            </div>
+            <div styleName="field">
+              <div styleName="field-title">Введите новый пароль</div>
+              <div styleName="input-wrapper">
+                <InputControl type="big"
+                              inputType="password"
+                              titled
+                              value={this.state.password}
+                              onChange={this.onChangePassword} />
+              </div>
+            </div>
+            <div styleName="field">
+              <div styleName="field-title">Введите новый пароль повторно</div>
+              <div styleName="input-wrapper">
+                <InputControl type="big"
+                              inputType="password"
+                              titled
+                              value={this.state.passwordConfirm}
+                              onChange={this.onChangePasswordConfirm} />
+              </div>
+            </div>
+            <div styleName="buttons-wrapper">
+              <ButtonControl color="purple"
+                             type="submit"
+                             disabled={!this.state.dirtyPassword || this.state.errorPassword}
+                             value="Изменить пароль"/>
+            </div>
+            <div styleName="field-success">
+              {this.state.successPassword}
+            </div>
+            <div styleName="field-error">
+              {this.state.errorPassword}
+            </div>
+          </form>
+        </div>
       </div>
     );
   }

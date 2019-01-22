@@ -1,54 +1,85 @@
 .EventView
-  margin-top: 70px
-  display: flex
-  padding: 15px
+  width: 700px
+  position: relative
+  margin-top: 40px
 
-  .image
-    width: 150px
-    height: 150px
-    margin-right: 30px
-    background-repeat: no-repeat
-    background-position: center
-    background-size: cover
+  .background
+    position: absolute
+    height: 100%
+    width: 100%
+    background: #fff
+    border-radius: 5px
+    box-shadow: 0 2px 4px 0 rgba(230, 230, 230, 1)
 
-  .content
-    flex-grow: 1
+  .header
+    position: relative
+    min-height: 55px
+
+    display: flex
+    flex-flow: column nowrap
+    justify-content: center
+    align-items: center
+
+    border-bottom: 1px solid #E5E5E5
+    text-align: center
 
     .title
-      font-size: 18px
-      font-weight: 600
-      color: #666666
-      margin-bottom: 10px
+      text-align: center
+      font-size: 20px
 
-    .expand
-      color: #999999
-      cursor: pointer
-      margin-bottom: 10px
-      font-style: italic
 
-    .description
-      color: #666666
-      margin-bottom: 10px
+  .content
+    width: 100%
+    position: relative
+    padding: 50px
+    display: flex
 
-    .cost
-      margin-bottom: 10px
+    .image
+      width: 150px
+      height: 150px
+      margin-right: 30px
+      background-repeat: no-repeat
+      background-position: center
+      background-size: cover
 
-    .date
-      margin-bottom: 10px
+    .text
+      flex-grow: 1
 
-    .tags
-      display: flex
-      flex-wrap: wrap
-      background: #fff
-      margin-bottom: 10px
-      padding: 2px 10px
+      .title
+        font-size: 18px
+        font-weight: 600
+        color: #666666
+        margin-bottom: 10px
 
-      .tag
-        background: #deeefc
-        border: 1px solid #c0d2f5
-        border-radius: 14px
-        margin-right: 10px
-        padding: 5px 10px
+      .expand
+        color: #999999
+        cursor: pointer
+        margin-bottom: 10px
+        font-style: italic
 
-    .button-wrapper
-      margin: 0
+      .description
+        color: #666666
+        margin-bottom: 10px
+
+      .cost
+        margin-bottom: 10px
+
+      .date
+        margin-bottom: 10px
+
+      .tags
+        display: flex
+        flex-wrap: wrap
+        background: #fff
+        margin-bottom: 10px
+        padding: 2px 10px
+
+        .tag
+          background: #deeefc
+          border: 1px solid #c0d2f5
+          border-radius: 14px
+          margin-right: 10px
+          padding: 5px 10px
+
+      .button-wrapper
+        margin: 0

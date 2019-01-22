@@ -68,30 +68,37 @@ class EventCreateView extends Component {
           <title>Новое событие — Triple L</title>
         </Helmet>
 
-        <div styleName="image"
-             style={{backgroundImage: `url(${imageSrc}`}} />
+        <div styleName="background"></div>
+        <div styleName="header">
+          <div styleName="title">Новое событие</div>
+        </div>
 
-        <div styleName="content">
-          <InputControl label="Название события"
-                        value={this.state.name}
-                        onChange={this.onChangeName} />
+        <div styleName='content'>
+          <div styleName="image"
+               style={{backgroundImage: `url(${imageSrc}`}} />
 
-          <div styleName="date">Описание события</div>
-          <textarea value={this.state.description}
-                    onChange={this.onChangeDescription} />
+          <div styleName="text">
+            <InputControl label="Название события"
+                          value={this.state.name}
+                          onChange={this.onChangeName} />
 
-          <InputControl label="Стоимость участия"
-                        value={this.state.price}
-                        onChange={this.onChangePrice} />
+            <div styleName="date">Описание события</div>
+            <textarea value={this.state.description}
+                      onChange={this.onChangeDescription} />
 
-          <DropdownControl label="Возрастное ограничение"
-                           suggestionsList={AGE_LIMITS}
-                           suggest={this.onChangeAgeLimit}
-                           current={this.state.ageLimit} />
+            <InputControl label="Стоимость участия"
+                          value={this.state.price}
+                          onChange={this.onChangePrice} />
 
-          <div styleName="button-wrapper">
-              <ButtonControl onClick={this.onCreate}
-                             value="Создать событие"/>
+            <DropdownControl label="Возрастное ограничение"
+                             suggestionsList={AGE_LIMITS}
+                             suggest={this.onChangeAgeLimit}
+                             current={this.state.ageLimit} />
+
+            <div styleName="button-wrapper">
+                <ButtonControl onClick={this.onCreate}
+                               value="Создать событие"/>
+            </div>
           </div>
         </div>
       </div>

@@ -57,55 +57,60 @@ class EventView extends Component {
           <title>{event.name} — Triple L</title>
         </Helmet>
 
-        <div styleName="image"
-             style={{backgroundImage: `url(${imageSrc}`}} />
-
-        <div styleName="content">
+        <div styleName="background"></div>
+        <div styleName="header">
           <div styleName="title">{event.name}</div>
+        </div>
 
-          {event.description &&
-            <div styleName="description">{event.description}</div>
-          }
+        <div styleName='content'>
+          <div styleName="image"
+               style={{backgroundImage: `url(${imageSrc}`}} />
 
-          {event.price ?
-            <div styleName="cost">{event.price} рублей</div>
-          :
-            <div styleName="cost">Бесплатно!</div>
-          }
+          <div styleName="text">
+            {event.description &&
+              <div styleName="description">{event.description}</div>
+            }
 
-          <div styleName="date">{dateStart}</div>
+            {event.price ?
+              <div styleName="cost">{event.price} рублей</div>
+            :
+              <div styleName="cost">Бесплатно!</div>
+            }
 
-          {dateEnd &&
-            <div styleName="date">{dateEnd}</div>
-          }
+            <div styleName="date">{dateStart}</div>
 
-          {event.ageLimit &&
-            <div styleName="date">{event.ageLimit}</div>
-          }
+            {dateEnd &&
+              <div styleName="date">{dateEnd}</div>
+            }
 
-          <div styleName="date">{event.place}</div>
+            {event.ageLimit &&
+              <div styleName="date">{event.ageLimit}</div>
+            }
 
-          {(event.tags && !!event.tags.length) &&
-            <div styleName="tags">
-              {event.tags.map((tag, i) =>
-                <div key={i} styleName="tag">{tag}</div>)}
-            </div>
-          }
+            <div styleName="date">{event.place}</div>
 
-          {isOwner ?
-            <div styleName="expand">Я создатель события, ёпта</div>
-          :
-            <div styleName="button-wrapper">
-              {isMember ?
-                <ButtonControl onClick={this.onLeave}
-                               color="red"
-                               value="Не пойду"/>
-              :
-                <ButtonControl onClick={this.onJoin}
-                               value="Пойду"/>
-              }
-            </div>
-          }
+            {(event.tags && !!event.tags.length) &&
+              <div styleName="tags">
+                {event.tags.map((tag, i) =>
+                  <div key={i} styleName="tag">{tag}</div>)}
+              </div>
+            }
+
+            {isOwner ?
+              <div styleName="expand">Я создатель события, ёпта</div>
+            :
+              <div styleName="button-wrapper">
+                {isMember ?
+                  <ButtonControl onClick={this.onLeave}
+                                 color="red"
+                                 value="Не пойду"/>
+                :
+                  <ButtonControl onClick={this.onJoin}
+                                 value="Пойду"/>
+                }
+              </div>
+            }
+          </div>
         </div>
       </div>
     );

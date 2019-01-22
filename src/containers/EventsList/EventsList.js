@@ -31,15 +31,22 @@ class EventsList extends Component {
         <Helmet>
           <title>Список событий — Triple L</title>
         </Helmet>
-        <div styleName="title">Список событий</div>
-        <EventFilterComponent />
-        {events.map(event =>
-          <EventCard key={event.origin.id}
-                     event={event}
-                     userData={userData}
-                     joinEvent={joinEvent}
-                     leaveEvent={leaveEvent} />)
-        }
+
+        <div styleName="background"></div>
+        <div styleName="header">
+          <div styleName="title">Список событий</div>
+        </div>
+
+        <div styleName='content'>
+          <EventFilterComponent />
+          {events.map(event =>
+            <EventCard key={event.origin.id}
+                       event={event}
+                       userData={userData}
+                       joinEvent={joinEvent}
+                       leaveEvent={leaveEvent} />)
+          }
+        </div>
       </div>
     );
   }
