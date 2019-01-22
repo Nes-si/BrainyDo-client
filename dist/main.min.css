@@ -1,0 +1,1909 @@
+@font-face {
+  font-family: 'Fira Sans';
+  src: url(/assets/fonts/FiraSans-Book.078b01e.otf);
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Fira Sans';
+  src: url(/assets/fonts/FiraSans-BookItalic.d295bf6.otf);
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Fira Sans';
+  src: url(/assets/fonts/FiraSans-SemiBold.2de4568.otf);
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Fira Sans';
+  src: url(/assets/fonts/FiraSans-SemiBoldItalic.d400bb1.otf);
+  font-weight: bold;
+  font-style: italic;
+}* {
+  box-sizing: border-box;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 14px;
+  color: #666666;
+  background: #fff;
+}
+
+a {
+  text-decoration: none;
+  outline: none;
+}
+
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+textarea {
+  line-height: 1.6;
+  resize: vertical;
+}
+
+p {
+  color: inherit;
+}
+
+
+.container {
+  position: relative;
+  margin: 0 auto;
+  padding: 0;
+  min-height: 100%;
+  overflow: hidden;
+  width: 100%;
+  text-align: left;
+}
+
+
+.container-inner {
+    position: relative;
+}
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}.app---wrapper---1EVg- {
+  width: 100%;
+}
+
+  .app---wrapper---1EVg- header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 50;
+}
+
+  .app---wrapper---1EVg- .app---container---9VVJ3 {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 60px;
+    background: #f9f9f9;
+    -js-display: flex;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.app---modal-enter---3qUs9 {
+  opacity: 0.01;
+}
+
+.app---modal-enter---3qUs9.app---modal-enter-active---38yt2 {
+  opacity: 1;
+  transition: opacity 200ms ease-in-out;
+}
+
+.app---modal-exit---33EuF {
+  opacity: 1;
+}
+
+.app---modal-exit---33EuF.app---modal-exit-active---sWJNS {
+  opacity: 0.01;
+  transition: opacity 200ms ease-in-out;
+}
+/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
+
+/* Document
+   ========================================================================== */
+
+/**
+ * 1. Correct the line height in all browsers.
+ * 2. Prevent adjustments of font size after orientation changes in iOS.
+ */
+
+html {
+  line-height: 1.15; /* 1 */
+  -webkit-text-size-adjust: 100%; /* 2 */
+}
+
+/* Sections
+   ========================================================================== */
+
+/**
+ * Remove the margin in all browsers.
+ */
+
+body {
+  margin: 0;
+}
+
+/**
+ * Render the `main` element consistently in IE.
+ */
+
+main {
+  display: block;
+}
+
+/**
+ * Correct the font size and margin on `h1` elements within `section` and
+ * `article` contexts in Chrome, Firefox, and Safari.
+ */
+
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+/* Grouping content
+   ========================================================================== */
+
+/**
+ * 1. Add the correct box sizing in Firefox.
+ * 2. Show the overflow in Edge and IE.
+ */
+
+hr {
+  box-sizing: content-box; /* 1 */
+  height: 0; /* 1 */
+  overflow: visible; /* 2 */
+}
+
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+
+pre {
+  font-family: monospace, monospace; /* 1 */
+  font-size: 1em; /* 2 */
+}
+
+/* Text-level semantics
+   ========================================================================== */
+
+/**
+ * Remove the gray background on active links in IE 10.
+ */
+
+a {
+  background-color: transparent;
+}
+
+/**
+ * 1. Remove the bottom border in Chrome 57-
+ * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+ */
+
+abbr[title] {
+  border-bottom: none; /* 1 */
+  text-decoration: underline; /* 2 */
+  -webkit-text-decoration: underline dotted;
+          text-decoration: underline dotted; /* 2 */
+}
+
+/**
+ * Add the correct font weight in Chrome, Edge, and Safari.
+ */
+
+b,
+strong {
+  font-weight: bolder;
+}
+
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+
+code,
+kbd,
+samp {
+  font-family: monospace, monospace; /* 1 */
+  font-size: 1em; /* 2 */
+}
+
+/**
+ * Add the correct font size in all browsers.
+ */
+
+small {
+  font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` elements from affecting the line height in
+ * all browsers.
+ */
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+/* Embedded content
+   ========================================================================== */
+
+/**
+ * Remove the border on images inside links in IE 10.
+ */
+
+img {
+  border-style: none;
+}
+
+/* Forms
+   ========================================================================== */
+
+/**
+ * 1. Change the font styles in all browsers.
+ * 2. Remove the margin in Firefox and Safari.
+ */
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit; /* 1 */
+  font-size: 100%; /* 1 */
+  line-height: 1.15; /* 1 */
+  margin: 0; /* 2 */
+}
+
+/**
+ * Show the overflow in IE.
+ * 1. Show the overflow in Edge.
+ */
+
+button,
+input { /* 1 */
+  overflow: visible;
+}
+
+/**
+ * Remove the inheritance of text transform in Edge, Firefox, and IE.
+ * 1. Remove the inheritance of text transform in Firefox.
+ */
+
+button,
+select { /* 1 */
+  text-transform: none;
+}
+
+/**
+ * Correct the inability to style clickable types in iOS and Safari.
+ */
+
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  -webkit-appearance: button;
+}
+
+/**
+ * Remove the inner border and padding in Firefox.
+ */
+
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+
+/**
+ * Restore the focus styles unset by the previous rule.
+ */
+
+button:-moz-focusring,
+[type="button"]:-moz-focusring,
+[type="reset"]:-moz-focusring,
+[type="submit"]:-moz-focusring {
+  outline: 1px dotted ButtonText;
+}
+
+/**
+ * Correct the padding in Firefox.
+ */
+
+fieldset {
+  padding: 0.35em 0.75em 0.625em;
+}
+
+/**
+ * 1. Correct the text wrapping in Edge and IE.
+ * 2. Correct the color inheritance from `fieldset` elements in IE.
+ * 3. Remove the padding so developers are not caught out when they zero out
+ *    `fieldset` elements in all browsers.
+ */
+
+legend {
+  box-sizing: border-box; /* 1 */
+  color: inherit; /* 2 */
+  display: table; /* 1 */
+  max-width: 100%; /* 1 */
+  padding: 0; /* 3 */
+  white-space: normal; /* 1 */
+}
+
+/**
+ * Add the correct vertical alignment in Chrome, Firefox, and Opera.
+ */
+
+progress {
+  vertical-align: baseline;
+}
+
+/**
+ * Remove the default vertical scrollbar in IE 10+.
+ */
+
+textarea {
+  overflow: auto;
+}
+
+/**
+ * 1. Add the correct box sizing in IE 10.
+ * 2. Remove the padding in IE 10.
+ */
+
+[type="checkbox"],
+[type="radio"] {
+  box-sizing: border-box; /* 1 */
+  padding: 0; /* 2 */
+}
+
+/**
+ * Correct the cursor style of increment and decrement buttons in Chrome.
+ */
+
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/**
+ * 1. Correct the odd appearance in Chrome and Safari.
+ * 2. Correct the outline style in Safari.
+ */
+
+[type="search"] {
+  -webkit-appearance: textfield; /* 1 */
+  outline-offset: -2px; /* 2 */
+}
+
+/**
+ * Remove the inner padding in Chrome and Safari on macOS.
+ */
+
+[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/**
+ * 1. Correct the inability to style clickable types in iOS and Safari.
+ * 2. Change font properties to `inherit` in Safari.
+ */
+
+::-webkit-file-upload-button {
+  -webkit-appearance: button; /* 1 */
+  font: inherit; /* 2 */
+}
+
+/* Interactive
+   ========================================================================== */
+
+/*
+ * Add the correct display in Edge, IE 10+, and Firefox.
+ */
+
+details {
+  display: block;
+}
+
+/*
+ * Add the correct display in all browsers.
+ */
+
+summary {
+  display: list-item;
+}
+
+/* Misc
+   ========================================================================== */
+
+/**
+ * Add the correct display in IE 10+.
+ */
+
+template {
+  display: none;
+}
+
+/**
+ * Add the correct display in IE 10.
+ */
+
+[hidden] {
+  display: none;
+}
+.Header---Header---2irb0 {
+  width: 100%;
+  min-height: 60px;
+  background: #fff;
+
+  -js-display: flex;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  box-shadow: 0px 4px 6px -2px rgba(0,0,0,0.10);
+}
+
+  .Header---Header---2irb0 .Header---logo---3355v {
+    position: absolute;
+    left: 30px;
+    top: 0;
+    -js-display: flex;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    height: 100%;
+}
+
+  .Header---Header---2irb0 .Header---logo---3355v img {
+      height: 30px;
+}
+
+  .Header---Header---2irb0 .Header---menu---vEB_t {
+    flex: 1 1;
+    -js-display: flex;
+    display: flex;
+    justify-content: center;
+}
+
+  .Header---Header---2irb0 .Header---menu---vEB_t .Header---item---1d2EE {
+      font-size: 13px;
+      color: #666666;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      -webkit-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
+      line-height: 60px;
+      padding: 0 30px;
+
+      transition: background 0.2s ease;
+      will-change: background;
+}
+
+  .Header---Header---2irb0 .Header---menu---vEB_t .Header---item---1d2EE:hover {
+  background: #f9f9f9;
+}
+
+  .Header---Header---2irb0 .Header---menu---vEB_t .Header---itemActive---3ab2n {
+      background: #F9F9F9;
+      color: #6D9EE1;
+}
+
+  .Header---Header---2irb0 .Header---location---3iNl6 {
+    position: absolute;
+    right: 30px;
+    top: 0;
+    font-size: 13px;
+    color: #666666;
+    line-height: 60px;
+    opacity: 0.7;
+    font-weight: 300;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    will-change: opacity;
+
+    -js-display: flex;
+
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+}
+
+  .Header---Header---2irb0 .Header---location-icon---Evnsr {
+      margin-left: 10px;
+}
+
+  .Header---Header---2irb0 .Header---location-icon---Evnsr svg {
+        opacity: 0.5;
+        height: 14px;
+}
+
+  .Header---Header---2irb0 .Header---location---3iNl6:hover {
+  opacity: 1;
+}
+.Footer---Footer---2QDmq {
+  margin-top: 40px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-top: 1px solid #cccccc;
+  text-align: center;
+  width: 90%;
+}
+
+  .Footer---Footer---2QDmq .Footer---point---3YpG_ {
+    display: inline-block;
+    margin-right: 40px;
+    cursor: pointer;
+    color: #fff;
+}.Dashboard---Dashboard---Lpw3E {
+  width: 1100px;
+  position: relative;
+  margin-top: 40px;
+}
+
+  .Dashboard---Dashboard---Lpw3E .Dashboard---background---3pkwZ {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px 0 rgba(230, 230, 230, 1);
+}
+
+  .Dashboard---Dashboard---Lpw3E .Dashboard---header---3nFjZ {
+    position: relative;
+    min-height: 55px;
+
+    -js-display: flex;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+
+    border-bottom: 1px solid #E5E5E5;
+    text-align: center;
+}
+
+  .Dashboard---Dashboard---Lpw3E .Dashboard---header---3nFjZ .Dashboard---title---2AxXH {
+      text-align: center;
+      font-size: 20px;
+}
+
+  .Dashboard---Dashboard---Lpw3E .Dashboard---content---3hW87 {
+    width: 100%;
+    position: relative;
+    padding: 50px;
+}.EventsList---EventsList---2LAsN {
+  width: 1000px;
+  position: relative;
+  margin-top: 40px;
+}
+
+  .EventsList---EventsList---2LAsN .EventsList---background---AZYs0 {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px 0 rgba(230, 230, 230, 1);
+}
+
+  .EventsList---EventsList---2LAsN .EventsList---header---3uOx- {
+    position: relative;
+    min-height: 55px;
+
+    -js-display: flex;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+
+    border-bottom: 1px solid #E5E5E5;
+    text-align: center;
+}
+
+  .EventsList---EventsList---2LAsN .EventsList---header---3uOx- .EventsList---title---c_ql3 {
+      text-align: center;
+      font-size: 20px;
+}
+
+  .EventsList---EventsList---2LAsN .EventsList---content---juVsR {
+    width: 100%;
+    position: relative;
+    padding: 50px;
+}.EventView---EventView---2o9Tm {
+  width: 700px;
+  position: relative;
+  margin-top: 40px;
+}
+
+  .EventView---EventView---2o9Tm .EventView---background---3KnOR {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px 0 rgba(230, 230, 230, 1);
+}
+
+  .EventView---EventView---2o9Tm .EventView---header---BqGCn {
+    position: relative;
+    min-height: 55px;
+
+    -js-display: flex;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+
+    border-bottom: 1px solid #E5E5E5;
+    text-align: center;
+}
+
+  .EventView---EventView---2o9Tm .EventView---header---BqGCn .EventView---title---3Z3jU {
+      text-align: center;
+      font-size: 20px;
+}
+
+  .EventView---EventView---2o9Tm .EventView---content---1ae-H {
+    width: 100%;
+    position: relative;
+    padding: 50px;
+    -js-display: flex;
+    display: flex;
+}
+
+  .EventView---EventView---2o9Tm .EventView---content---1ae-H .EventView---image---3f6mL {
+      width: 150px;
+      height: 150px;
+      margin-right: 30px;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+}
+
+  .EventView---EventView---2o9Tm .EventView---content---1ae-H .EventView---text---349wc {
+      flex-grow: 1;
+}
+
+  .EventView---EventView---2o9Tm .EventView---content---1ae-H .EventView---text---349wc .EventView---title---3Z3jU {
+        font-size: 18px;
+        font-weight: 600;
+        color: #666666;
+        margin-bottom: 10px;
+}
+
+  .EventView---EventView---2o9Tm .EventView---content---1ae-H .EventView---text---349wc .EventView---expand---dhpEI {
+        color: #999999;
+        cursor: pointer;
+        margin-bottom: 10px;
+        font-style: italic;
+}
+
+  .EventView---EventView---2o9Tm .EventView---content---1ae-H .EventView---text---349wc .EventView---description---BdQDb {
+        color: #666666;
+        margin-bottom: 10px;
+}
+
+  .EventView---EventView---2o9Tm .EventView---content---1ae-H .EventView---text---349wc .EventView---cost---2o4X3 {
+        margin-bottom: 10px;
+}
+
+  .EventView---EventView---2o9Tm .EventView---content---1ae-H .EventView---text---349wc .EventView---date---1bQ7w {
+        margin-bottom: 10px;
+}
+
+  .EventView---EventView---2o9Tm .EventView---content---1ae-H .EventView---text---349wc .EventView---tags---2OGzt {
+        -js-display: flex;
+        -js-display: flex;
+        display: flex;
+        flex-wrap: wrap;
+        background: #fff;
+        margin-bottom: 10px;
+        padding: 2px 10px;
+}
+
+  .EventView---EventView---2o9Tm .EventView---content---1ae-H .EventView---text---349wc .EventView---tags---2OGzt .EventView---tag---cs6C2 {
+          background: #deeefc;
+          border: 1px solid #c0d2f5;
+          border-radius: 14px;
+          margin-right: 10px;
+          padding: 5px 10px;
+}
+
+  .EventView---EventView---2o9Tm .EventView---content---1ae-H .EventView---text---349wc .EventView---button-wrapper---3Z-V4 {
+        margin: 0;
+}.SettingsView---SettingsView----0_9c {
+  width: 1000px;
+  position: relative;
+  margin-top: 40px;
+}
+
+  .SettingsView---SettingsView----0_9c .SettingsView---background---38MKx {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px 0 rgba(230, 230, 230, 1);
+}
+
+  .SettingsView---SettingsView----0_9c .SettingsView---header---DpgGk {
+    position: relative;
+    min-height: 55px;
+
+    -js-display: flex;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+
+    border-bottom: 1px solid #E5E5E5;
+    text-align: center;
+}
+
+  .SettingsView---SettingsView----0_9c .SettingsView---header---DpgGk .SettingsView---title---1rmmD {
+      text-align: center;
+      font-size: 20px;
+}
+
+  .SettingsView---SettingsView----0_9c .SettingsView---content---38lyg {
+    width: 100%;
+    position: relative;
+    padding: 50px;
+}
+
+  .SettingsView---SettingsView----0_9c .SettingsView---content---38lyg .SettingsView---section---2ajVe {
+      margin-bottom: 40px;
+      width: 100%;
+}
+
+  .SettingsView---SettingsView----0_9c .SettingsView---content---38lyg .SettingsView---section-header---24P65 {
+        font-size: 18px;
+        color: #313133;
+        font-weight: 600;
+}
+
+  .SettingsView---SettingsView----0_9c .SettingsView---content---38lyg .SettingsView---field---yt-3B {
+      margin-top: 15px;
+      width: 100%;
+      text-align: left;
+
+      -js-display: flex;
+
+      -js-display: flex;
+
+      display: flex;
+      flex-flow: column wrap;
+
+      transition: color 0.2s ease;
+      will-change: color;
+}
+
+  .SettingsView---SettingsView----0_9c .SettingsView---content---38lyg .SettingsView---field-title---17iba,
+      .SettingsView---SettingsView----0_9c .SettingsView---content---38lyg .SettingsView---field-error---j_JvK,
+      .SettingsView---SettingsView----0_9c .SettingsView---content---38lyg .SettingsView---field-success---aW_mV {
+        font-size: 14px;
+        color: #2C2C30;
+        letter-spacing: 0.5px;
+        line-height: 30px;
+
+        transition: color 0.2s ease;
+        will-change: color;
+}
+
+  .SettingsView---SettingsView----0_9c .SettingsView---content---38lyg .SettingsView---field-error---j_JvK {
+        color: #DD5555;
+}
+
+  .SettingsView---SettingsView----0_9c .SettingsView---content---38lyg .SettingsView---field-success---aW_mV {
+        color: #5DAD47;
+}
+
+  .SettingsView---SettingsView----0_9c .SettingsView---content---38lyg .SettingsView---field-success-resend---20-Wz {
+          cursor: pointer;
+          text-decoration: underline;
+}
+
+  .SettingsView---SettingsView----0_9c .SettingsView---content---38lyg .SettingsView---field-value---2m_ej {
+        font-size: 18px;
+        color: #666666;
+        margin-bottom: 10px;
+}
+
+  .SettingsView---SettingsView----0_9c .SettingsView---content---38lyg .SettingsView---field---yt-3B .SettingsView---input-wrapper---1TVlN {
+        -js-display: flex;
+        -js-display: flex;
+        display: flex;
+        flex-flow: column nowrap;
+}
+
+  .SettingsView---SettingsView----0_9c .SettingsView---content---38lyg .SettingsView---buttons-wrapper---3ja4V {
+      margin-top: 20px;
+      -js-display: flex;
+      -js-display: flex;
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: flex-end;
+}
+
+  .SettingsView---SettingsView----0_9c .SettingsView---content---38lyg .SettingsView---name-wrapper---1QktR {
+      -js-display: flex;
+      -js-display: flex;
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: space-between;
+      width: 100%;
+}
+
+  .SettingsView---SettingsView----0_9c .SettingsView---content---38lyg .SettingsView---name-wrapper---1QktR .SettingsView---field---yt-3B {
+        width: 49%;
+}
+.StartView---StartView---pJ8Km {
+  padding: 0;
+  width: 100%;
+}
+
+  .StartView---StartView---pJ8Km .StartView---page-open---1l8QZ {
+    height: 100vh;
+    width: 100%;
+    background: #ffffff;
+    position: relative;
+}
+
+  .StartView---StartView---pJ8Km .StartView---page-open---1l8QZ .StartView---back-images---3nhwA {
+      -js-display: flex;
+      -js-display: flex;
+      display: flex;
+      width: 100%;
+      height: 100%;
+}
+
+  .StartView---StartView---pJ8Km .StartView---page-open---1l8QZ .StartView---back-images---3nhwA .StartView---image-left----XXqA, .StartView---StartView---pJ8Km .StartView---page-open---1l8QZ .StartView---back-images---3nhwA .StartView---image-right---3EQ6p {
+        margin: 0;
+        height: 100%;
+        width: 50%;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center center;
+        opacity: 0.5;
+}
+
+  .StartView---StartView---pJ8Km .StartView---page-open---1l8QZ .StartView---back-images---3nhwA .StartView---image-left----XXqA {
+        background-image: url(/assets/images/кот1.jpg);
+}
+
+  .StartView---StartView---pJ8Km .StartView---page-open---1l8QZ .StartView---back-images---3nhwA .StartView---image-right---3EQ6p {
+        background-image: url(/assets/images/кот2.jpg);
+}
+
+  .StartView---StartView---pJ8Km .StartView---page-open---1l8QZ .StartView---title---2uZQc {
+      position: absolute;
+      top: 10%;
+      width: 100%;
+      text-align: center;
+      font-size: 40px;
+}
+
+  .StartView---StartView---pJ8Km .StartView---page-open---1l8QZ .StartView---events---2aV1k {
+      position: absolute;
+      bottom: 100px;
+      width: 100%;
+      -js-display: flex;
+      -js-display: flex;
+      display: flex;
+      justify-content: space-around;
+}
+
+  .StartView---StartView---pJ8Km .StartView---page-open---1l8QZ .StartView---events---2aV1k .StartView---item---agqMt {
+        margin: 0;
+        width: 33%;
+}
+
+  .StartView---StartView---pJ8Km .StartView---page-open---1l8QZ .StartView---events---2aV1k .StartView---item-title---1LnxN {
+          text-align: center;
+          font-size: 18px;
+          margin-bottom: 10px;
+}
+
+  .StartView---StartView---pJ8Km .StartView---page-open---1l8QZ .StartView---events---2aV1k .StartView---item---agqMt .StartView---image---ldzXO {
+          width: 120px;
+          height: 120px;
+          margin-left: auto;
+          margin-right: auto;
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-position: center center;
+          overflow: hidden;
+          border-radius: 50%;
+          box-shadow: 0 0 15px 0 #999999;
+}
+
+  .StartView---StartView---pJ8Km .StartView---page-open---1l8QZ .StartView---arrow-down-wrapper---3rNzC {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      -webkit-transform: translateX(-50%) translateY(0);
+              transform: translateX(-50%) translateY(0);
+      transition: -webkit-transform 0.5s;
+      transition: transform 0.5s;
+      transition: transform 0.5s, -webkit-transform 0.5s;
+      cursor: pointer;
+}
+
+  .StartView---StartView---pJ8Km .StartView---page-open---1l8QZ .StartView---arrow-down-wrapper---3rNzC:hover {
+  -webkit-transform: translateX(-50%) translateY(5px);
+  transform: translateX(-50%) translateY(5px);
+}
+
+  .StartView---StartView---pJ8Km .StartView---page-open---1l8QZ .StartView---arrow-down-wrapper---3rNzC .StartView---arrow-down---3QzM1 {
+        opacity: 1;
+}
+
+  .StartView---StartView---pJ8Km .StartView---page-open---1l8QZ .StartView---arrow-down-wrapper---3rNzC .StartView---arrow-down---3QzM1 svg {
+          height: 20px;
+}
+
+  .StartView---StartView---pJ8Km .StartView---page-about---18E6I {
+    padding: 0;
+}
+
+  .StartView---StartView---pJ8Km .StartView---page-about---18E6I .StartView---title---2uZQc {
+      margin-top: 40px;
+      margin-left: 40px;
+      font-size: 40px;
+}
+
+  .StartView---StartView---pJ8Km .StartView---page-about---18E6I .StartView---text---VVsRx {
+      margin-top: 40px;
+      margin-left: 40px;
+      margin-right: 40px;
+      font-size: 18px;
+}.EventCreateView---EventCreateView---3ky3j {
+  width: 1100px;
+  position: relative;
+  margin-top: 40px;
+}
+
+  .EventCreateView---EventCreateView---3ky3j .EventCreateView---background---197bm {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px 0 rgba(230, 230, 230, 1);
+}
+
+  .EventCreateView---EventCreateView---3ky3j .EventCreateView---header---3uXEk {
+    position: relative;
+    min-height: 55px;
+
+    -js-display: flex;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+
+    border-bottom: 1px solid #E5E5E5;
+    text-align: center;
+}
+
+  .EventCreateView---EventCreateView---3ky3j .EventCreateView---header---3uXEk .EventCreateView---title---k0WP_ {
+      text-align: center;
+      font-size: 20px;
+}
+
+  .EventCreateView---EventCreateView---3ky3j .EventCreateView---content---AyWHt {
+    width: 100%;
+    position: relative;
+    padding: 50px;
+    -js-display: flex;
+    display: flex;
+}
+
+  .EventCreateView---EventCreateView---3ky3j .EventCreateView---content---AyWHt .EventCreateView---image---2qHTH {
+      width: 150px;
+      height: 150px;
+      margin-right: 30px;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+}
+
+  .EventCreateView---EventCreateView---3ky3j .EventCreateView---content---AyWHt .EventCreateView---text---3aW6q {
+      flex-grow: 1;
+}
+
+  .EventCreateView---EventCreateView---3ky3j .EventCreateView---content---AyWHt .EventCreateView---text---3aW6q .EventCreateView---title---k0WP_ {
+        font-size: 18px;
+        font-weight: 600;
+        color: #666666;
+        margin-bottom: 10px;
+}
+
+  .EventCreateView---EventCreateView---3ky3j .EventCreateView---content---AyWHt .EventCreateView---text---3aW6q .EventCreateView---expand---1uaU3 {
+        color: #999999;
+        cursor: pointer;
+        margin-bottom: 10px;
+        font-style: italic;
+}
+
+  .EventCreateView---EventCreateView---3ky3j .EventCreateView---content---AyWHt .EventCreateView---text---3aW6q .EventCreateView---description---TOr_g {
+        color: #666666;
+        margin-bottom: 10px;
+}
+
+  .EventCreateView---EventCreateView---3ky3j .EventCreateView---content---AyWHt .EventCreateView---text---3aW6q .EventCreateView---cost---1OMo6 {
+        margin-bottom: 10px;
+}
+
+  .EventCreateView---EventCreateView---3ky3j .EventCreateView---content---AyWHt .EventCreateView---text---3aW6q .EventCreateView---date---1SefI {
+        margin-bottom: 10px;
+}
+
+  .EventCreateView---EventCreateView---3ky3j .EventCreateView---content---AyWHt .EventCreateView---text---3aW6q .EventCreateView---tags---20exD {
+        -js-display: flex;
+        -js-display: flex;
+        display: flex;
+        flex-wrap: wrap;
+        background: #fff;
+        margin-bottom: 10px;
+        padding: 2px 10px;
+}
+
+  .EventCreateView---EventCreateView---3ky3j .EventCreateView---content---AyWHt .EventCreateView---text---3aW6q .EventCreateView---tags---20exD .EventCreateView---tag---3mwpu {
+          background: #deeefc;
+          border: 1px solid #c0d2f5;
+          border-radius: 14px;
+          margin-right: 10px;
+          padding: 5px 10px;
+}
+
+  .EventCreateView---EventCreateView---3ky3j .EventCreateView---content---AyWHt .EventCreateView---button-wrapper---3Kj-P {
+      margin: 0;
+}.LoaderComponent---loader---1Jt2_ {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border: 4px solid #666666;
+  -webkit-animation: LoaderComponent---loader---1Jt2_ 2s infinite ease;
+          animation: LoaderComponent---loader---1Jt2_ 2s infinite ease;
+}
+
+  .LoaderComponent---loader---1Jt2_ .LoaderComponent---loader-inner---hE6kx {
+    vertical-align: top;
+    display: inline-block;
+    width: 100%;
+    background-color: #666666;
+    -webkit-animation: LoaderComponent---loader-inner---hE6kx 2s infinite ease-in;
+            animation: LoaderComponent---loader-inner---hE6kx 2s infinite ease-in;
+}
+
+
+@-webkit-keyframes LoaderComponent---loader---1Jt2_ {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  25% {
+    -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+  }
+  50% {
+    -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+  }
+  75% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+
+@keyframes LoaderComponent---loader---1Jt2_ {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  25% {
+    -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+  }
+  50% {
+    -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+  }
+  75% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+
+@-webkit-keyframes LoaderComponent---loader-inner---hE6kx {
+  0% {
+    height: 0%;
+  }
+  25% {
+    height: 0%;
+  }
+  50% {
+    height: 100%;
+  }
+  75% {
+    height: 100%;
+  }
+  100% {
+    height: 0%;
+  }
+}
+
+
+@keyframes LoaderComponent---loader-inner---hE6kx {
+  0% {
+    height: 0%;
+  }
+  25% {
+    height: 0%;
+  }
+  50% {
+    height: 100%;
+  }
+  75% {
+    height: 100%;
+  }
+  100% {
+    height: 0%;
+  }
+}
+.SiteLoader---loader-wrapper---1aWeA {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.5);
+  -js-display: flex;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  z-index: 100
+}
+.ButtonControl---ButtonControl---W6bNo {
+  border-radius: 2px;
+  border: none;
+  outline: none;
+
+  font-weight: 600;
+  font-size: 13px;
+  color: #FFFFFF;
+  letter-spacing: 0.5px;
+  height: 40px;
+
+  cursor: pointer;
+
+  padding: 0 15px;
+  text-align: center;
+
+  background-image: linear-gradient(-180deg, #658ad2 0%, #476a9e 150%);
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.15);
+
+  -js-display: flex;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+  .ButtonControl---ButtonControl-red---3RZN3 {
+    background-image: linear-gradient(-180deg, #F5897C 0%, #B44A2F 150%);
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.15);
+}
+
+  .ButtonControl---ButtonControl-green---3IRx1 {
+    background-image: linear-gradient(-180deg, #57C95A 0%, #388E3C 150%);
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.10);
+}
+
+  .ButtonControl---ButtonControl-gray---10PYP {
+    background-image: linear-gradient(-180deg, #607D8B 0%, #3E5059 150%);
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.20);
+}
+
+  .ButtonControl---ButtonControl-disabled---3attr {
+    background-image: linear-gradient(-180deg, #929fab 0%, #7b848d 150%);
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.20);
+}
+
+  .ButtonControl---ButtonControl---W6bNo .ButtonControl---loader-wrapper---2IRaM {
+    margin-left: 15px;
+}
+.ModalContainer---ModalContainer---ccpD9 {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 80;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+  .ModalContainer---ModalContainer---ccpD9 .ModalContainer---modal-inner---6qj98 {
+    position: absolute;
+    left: 50%;
+    width: 70%;
+    -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+    margin: 70px 0;
+    -js-display: flex;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    background: #F9F9F9;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.10);
+    border-radius: 5px;
+}.CheckboxControl---CheckboxControl---kLRku {
+  -js-display: flex;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+
+.CheckboxControl---checkbox---4lbDT {
+  display: none;
+}
+
+.CheckboxControl---checkbox-button---3QY-_ {
+    margin-right: 26px;
+}
+
+.CheckboxControl---checkbox-label---1ctNj {
+    cursor: pointer;
+    position: relative;
+    padding-left: 30px;
+
+    font-size: 13px;
+    color: #666666;
+    letter-spacing: 0.5px;
+}
+
+.CheckboxControl---checkbox-label---1ctNj:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+    height: 20px;
+    width: 20px;
+    border-radius: 10%;
+    background: #fff;
+    border: 1px solid #979797;
+}
+
+.CheckboxControl---checkbox---4lbDT:checked + .CheckboxControl---checkbox-label---1ctNj:before {
+    content: '\2713';
+    color: #ffffff;
+    font-size: 21px;
+    text-indent: 2px;
+    line-height: 20px;
+    background: #5CA6DC;
+}
+
+.CheckboxControl---checkbox---4lbDT + .CheckboxControl---checkbox-label---1ctNj:before,
+  .CheckboxControl---checkbox---4lbDT:checked + .CheckboxControl---checkbox-label---1ctNj:before {
+    transition: background 0.1s ease;
+}
+
+.CheckboxControl---disabled---ps5xb .CheckboxControl---checkbox-label---1ctNj {
+    color: #999999;
+}
+
+.CheckboxControl---disabled---ps5xb .CheckboxControl---checkbox-label---1ctNj:before {
+    border: 1px solid #bfbfbf;
+}
+
+.CheckboxControl---disabled---ps5xb .CheckboxControl---checkbox---4lbDT:checked + .CheckboxControl---checkbox-label---1ctNj:before {
+    background: #dbdbdb;
+}
+
+.InputControl---InputControl---BkKKu {
+  width: 100%;
+}
+
+  .InputControl---InputControl---BkKKu .InputControl---label---33xoX {
+    position: relative;
+
+    font-size: 14px;
+    color: #2C2C30;
+    letter-spacing: 0.5px;
+    line-height: 30px;
+
+    transition: color 0.2s ease;
+    will-change: color;
+}
+
+  .InputControl---InputControl---BkKKu .InputControl---input-wrapper---ip7Sn {
+    position: relative;
+    width: 100%;
+    -js-display: flex;
+    display: flex;
+    flex-flow: column nowrap;
+    text-align: left;
+}
+
+  .InputControl---InputControl---BkKKu .InputControl---input-wrapper---ip7Sn .InputControl---input---2pUgF {
+      padding: 8px 16px;
+      margin-top: 0;
+      order: 2;
+
+      background: #FFFFFF;
+      outline: none;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 20px;
+      box-shadow: inset 0 1px 5px 0 rgba(0,0,0,0.05);
+
+      font-size: 14px;
+      color: #2C2C30;
+      line-height: 24px;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+}
+
+  .InputControl---InputControl---BkKKu .InputControl---input-wrapper---ip7Sn .InputControl---input---2pUgF::-webkit-input-placeholder {
+  color: #bbbbbb;
+}
+
+  .InputControl---InputControl---BkKKu .InputControl---input-wrapper---ip7Sn .InputControl---input---2pUgF:-ms-input-placeholder {
+  color: #bbbbbb;
+}
+
+  .InputControl---InputControl---BkKKu .InputControl---input-wrapper---ip7Sn .InputControl---input---2pUgF::-ms-input-placeholder {
+  color: #bbbbbb;
+}
+
+  .InputControl---InputControl---BkKKu .InputControl---input-wrapper---ip7Sn .InputControl---input---2pUgF::placeholder {
+  color: #bbbbbb;
+}
+
+  .InputControl---InputControl---BkKKu .InputControl---input-wrapper---ip7Sn .InputControl---input-readOnly---34kc4 {
+        background: #f1f1f1;
+}
+
+  .InputControl---InputControl---BkKKu .InputControl---input-wrapper---ip7Sn .InputControl---input-disabled---2wnBH {
+        cursor: default;
+}
+
+  .InputControl---InputControl---BkKKu .InputControl---input-wrapper---ip7Sn .InputControl---icon---3Zb66 {
+      position: absolute;
+      top: 50%;
+      -webkit-transform: translateY(-50%);
+              transform: translateY(-50%);
+      right: 15px;
+      width: 18px;
+      height: 18px;
+}
+
+  .InputControl---InputControl---BkKKu .InputControl---input-wrapper---ip7Sn .InputControl---lock---3xfG7 {
+      right: 12px;
+      height: 24px;
+      width: 16px;
+}
+
+  .InputControl---InputControl---BkKKu .InputControl---input-wrapper---ip7Sn .InputControl---plus---1FKlK {
+      cursor: pointer;
+}
+
+  .InputControl---InputControl---BkKKu .InputControl---input-wrapper---ip7Sn .InputControl---users---36XIF {
+      width: 15px;
+      height: 16px;
+      cursor: pointer;
+}
+
+  .InputControl---InputControl---BkKKu .InputControl---input-wrapper---ip7Sn .InputControl---search---2_LX2 {
+      height: 14px;
+}
+
+  .InputControl---InputControl---BkKKu .InputControl---input-wrapper---ip7Sn .InputControl---cross---3ebJz {
+      cursor: pointer;
+}
+
+
+.SignModal---Sign---3JRIx {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+  .SignModal---Sign---3JRIx .SignModal---title---2sfR3 {
+    font-size: 18px;
+    color: #2C2C30;
+    text-align: center;
+    line-height: 28px;
+}
+
+  .SignModal---Sign---3JRIx .SignModal---form---19EBo {
+    margin-top: 30px;
+    -js-display: flex;
+    display: flex;
+    flex-flow: column nowrap;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+  .SignModal---Sign---3JRIx .SignModal---form---19EBo .SignModal---description---39jVQ {
+      color: #666666;
+      font-size: 12px;
+      text-align: center;
+}
+
+  .SignModal---Sign---3JRIx .SignModal---form---19EBo .SignModal---checkbox-wrapper---e7ju3 {
+      -js-display: flex;
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      margin-top: 30px;
+}
+
+  .SignModal---Sign---3JRIx .SignModal---form---19EBo .SignModal---checkbox-wrapper---e7ju3 .SignModal---input-wrapper---wW2v1 {
+        width: auto;
+}
+
+  .SignModal---Sign---3JRIx .SignModal---form---19EBo .SignModal---input-wrapper---wW2v1 {
+      margin-top: 20px;
+      width: 100%;
+      font-size: 14px;
+}
+
+  .SignModal---Sign---3JRIx .SignModal---form---19EBo .SignModal---input-wrapper---wW2v1:first-child {
+  margin-top: 0;
+}
+
+  .SignModal---Sign---3JRIx .SignModal---form---19EBo .SignModal---button---38Spf {
+      margin-top: 30px;
+}
+
+  .SignModal---Sign---3JRIx .SignModal---form---19EBo .SignModal---errors---son4D {
+      min-height: 35px;
+      margin-top: 15px;
+}
+
+  .SignModal---Sign---3JRIx .SignModal---form---19EBo .SignModal---errors---son4D .SignModal---error---pvYME {
+        color: #ff5656;
+        font-size: 12px;
+        text-align: center;
+}
+
+  .SignModal---Sign---3JRIx .SignModal---form---19EBo .SignModal---forgot---3fxcm {
+      cursor: pointer;
+      font-size: 13px;
+      color: #297AD6;
+      line-height: 18px;
+      text-decoration: underline;
+}
+
+.SignModal---image---p6cEI {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 45%;
+}
+
+.SignModal---image---p6cEI img {
+    display: block;
+    width: 100%;
+}
+
+.SignModal---bottom-content---2VCAV {
+  -js-display: flex;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+
+  margin-top: 24px;
+
+  font-size: 14px;
+  color: #2C2C30;
+  text-align: center;
+}
+
+.SignModal---button-wrapper---3RP1x {
+  margin-top: 16px;
+  -js-display: flex;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+}
+
+.SignModal---reg-info---2netf {
+  font-size: 12px;
+  line-height: 18px;
+  color: #A4A4AE;
+  text-align: center;
+}
+
+.SignModal---reg-info---2netf a {
+    color: #8B5FBF;
+    text-decoration: underline;
+}
+
+.SignModal---reg-text---y79Li {
+  margin-top: 16px;
+  font-size: 14px;
+  color: #2C2C30;
+  text-align: center;
+}.DropdownControl---label---1njqz {
+  font-size: 13px;
+  font-weight: 600;
+  color: #666666;
+  letter-spacing: 0.5px;
+  line-height: 30px;
+  position: relative;
+  cursor: default;
+
+  transition: color 0.2s ease;
+  will-change: color;
+}
+
+.DropdownControl---arrow-down---3YUpK {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  width: 17px;
+  height: 12px;
+  pointer-events: none;
+}
+
+.DropdownControl---arrow-rotated---2no1g {
+  -webkit-transform: rotateX(180deg);
+          transform: rotateX(180deg);
+  top: 16px;
+}
+
+
+.DropdownControl---input---swQdi {
+  background: #FFFFFF;
+  border: 1px solid #CCCCCC;
+  box-shadow: inset 0px 1px 2px 0px rgba(0,0,0,0.10);
+  border-radius: 3px;
+  font-weight: 400;
+  line-height: 33px;
+  width: 100%;
+  padding: 0px 40px 1px 9px;
+  outline: none;
+  cursor: pointer;
+
+  font-size: 13px;
+  color: #666666;
+  letter-spacing: 0.5px;
+}
+
+
+.DropdownControl---input-readonly---wxdky {
+    background: #EFEFEF;
+}
+
+
+.DropdownControl---input-wrapper---xMdXX {
+    width: 100%;
+    position: relative;
+}
+
+.DropdownControl---type-wrapper---2WiIj {
+  position: relative;
+}
+
+.DropdownControl---suggestions-visible---2IDfi + .DropdownControl---suggestions---3jpYc {
+  display: block;
+}
+
+.DropdownControl---suggestions---3jpYc {
+  position: absolute;
+  top: calc(100% - 2px);
+  background: #fff;
+  z-index: 90;
+  width: 100%;
+  border: 1px solid #CCCCCC;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  overflow-y: scroll;
+  max-height: 160px;
+
+  display: none;
+}
+
+.DropdownControl---suggestions---3jpYc .DropdownControl---input-wrapper---xMdXX {
+    position: relative;
+}
+
+.DropdownControl---suggestions---3jpYc .DropdownControl---suggestion---2eOuh {
+    font-weight: 400;
+    line-height: 34px;
+    width: 100%;
+    cursor: pointer;
+    padding: 0 9px;
+    outline: none;
+
+    font-size: 13px;
+    color: #333333;
+    letter-spacing: 0.5px;
+}
+
+.DropdownControl---suggestions---3jpYc .DropdownControl---suggestion---2eOuh:hover {
+  background: #efefef;
+}
+
+
+.DropdownControl---empty---9xzOB {
+  color: #bbbbbb !important;
+}
+.AlertModal---Modal---1UVcG {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  overflow-y: scroll;
+  
+  z-index: 80;
+
+  background: rgba(0, 0, 0, 0.5);
+}
+
+  .AlertModal---Modal---1UVcG .AlertModal---modal-inner---X6cHT {
+    position: absolute;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+    margin: 70px 0;
+    background: #F9F9F9;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.10);
+    border-radius: 5px;
+    width: 70%;
+    -js-display: flex;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+
+  .AlertModal---Modal---1UVcG .AlertModal---modal-header---m1sdw {
+    border-bottom: 1px solid #E5E5E5;
+
+    width: 100%;
+    line-height: 55px;
+
+    -js-display: flex;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+  .AlertModal---Modal---1UVcG .AlertModal---content---599oH {
+    flex: 0 0 30%;
+    padding: 32px 0;
+
+    -js-display: flex;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+  .AlertModal---Modal---1UVcG .AlertModal---title---3Q1Uh {
+    font-size: 20px;
+    color: #666666;
+    letter-spacing: 0.83px;
+}
+
+  .AlertModal---Modal---1UVcG .AlertModal---description---2AJM7 {
+    font-size: 13px;
+    color: #666666;
+    letter-spacing: 0.5px;
+    text-align: center;
+}
+
+  .AlertModal---Modal---1UVcG .AlertModal---button---3VkTM {
+    margin-top: 30px;
+}
+
+  .AlertModal---Modal---1UVcG .AlertModal---buttons-wrapper---2D8Q5 {
+    -js-display: flex;
+    display: flex;
+    flex-flow: row nowrap;
+    margin-top: 30px;
+    justify-content: center;
+}
+
+  .AlertModal---Modal---1UVcG .AlertModal---buttons-inner---39czI:first-child {
+    margin-right: 25px;
+}
+
+  .AlertModal---Modal---1UVcG .AlertModal---input-wrapper---3K_ue {
+    width: 50%;
+    margin-top: 30px;
+}
+.CalendarComponent---CalendarComponent---iKD_O {
+  padding: 0;
+}
+
+  .CalendarComponent---CalendarComponent---iKD_O .CalendarComponent---title---1Qepf {
+    font-weight: bold;
+}
+
+  .CalendarComponent---CalendarComponent---iKD_O .CalendarComponent---month-control---34Q8i {
+    -js-display: flex;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+  .CalendarComponent---CalendarComponent---iKD_O .CalendarComponent---month-control---34Q8i .CalendarComponent---prev---C7evn {
+      padding: 0;
+}
+
+  .CalendarComponent---CalendarComponent---iKD_O .CalendarComponent---month-control---34Q8i .CalendarComponent---month---2219Z {
+      padding: 0;
+}
+
+  .CalendarComponent---CalendarComponent---iKD_O .CalendarComponent---month-control---34Q8i .CalendarComponent---next---25cPT {
+      padding: 0;
+}
+
+  .CalendarComponent---CalendarComponent---iKD_O .CalendarComponent---table---3dh8W {
+    padding: 10px;
+    border: 1px solid grey;
+    border-collapse: collapse;
+}
+
+  .CalendarComponent---CalendarComponent---iKD_O .CalendarComponent---table---3dh8W th {
+      padding: 20px;
+      border: 1px solid grey;
+}
+
+
+.EventCard---EventCard---380se {
+  width: 100%;
+  margin-top: 20px;
+  border: 2px solid #cccccc;
+  border-radius: 5px;
+  -js-display: flex;
+  display: flex;
+  padding: 15px;
+}
+
+  .EventCard---EventCard---380se .EventCard---icon---1keCk,
+  .EventCard---EventCard---380se .EventCard---icon-img---3n3CI {
+    width: 150px;
+    height: 150px;
+    margin-right: 30px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+  .EventCard---EventCard---380se .EventCard---content---18HMj {
+    flex-grow: 1;
+}
+
+  .EventCard---EventCard---380se .EventCard---content---18HMj .EventCard---title---3gdLb {
+      font-size: 18px;
+      font-weight: 600;
+      color: #666666;
+      margin-bottom: 10px;
+}
+
+  .EventCard---EventCard---380se .EventCard---content---18HMj .EventCard---expand---o3HjO {
+      color: #999999;
+      cursor: pointer;
+      margin-bottom: 10px;
+      font-style: italic;
+}
+
+  .EventCard---EventCard---380se .EventCard---content---18HMj .EventCard---description---bRwmY {
+      color: #666666;
+      margin-bottom: 10px;
+}
+
+  .EventCard---EventCard---380se .EventCard---content---18HMj .EventCard---cost---10UWK {
+      margin-bottom: 10px;
+}
+
+  .EventCard---EventCard---380se .EventCard---content---18HMj .EventCard---date---2luuF {
+      margin-bottom: 10px;
+}
+
+  .EventCard---EventCard---380se .EventCard---content---18HMj .EventCard---tags---NYmvX {
+      -js-display: flex;
+      -js-display: flex;
+      display: flex;
+      flex-wrap: wrap;
+      background: #fff;
+      margin-bottom: 10px;
+      padding: 2px 10px;
+}
+
+  .EventCard---EventCard---380se .EventCard---content---18HMj .EventCard---tags---NYmvX .EventCard---tag---2Hvo1 {
+        background: #deeefc;
+        border: 1px solid #c0d2f5;
+        border-radius: 14px;
+        margin-right: 10px;
+        padding: 5px 10px;
+}
+
+  .EventCard---EventCard---380se .EventCard---content---18HMj .EventCard---button-wrapper---auzDM {
+      margin: 0;
+}.EventFilterComponent---EventFilterComponent---3NAlR {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background: #8B5FBF;
+  text-align: center;
+  width: 100%;
+  -js-display: flex;
+  display: flex;
+}
+
+  .EventFilterComponent---EventFilterComponent---3NAlR .EventFilterComponent---dropdown-wrapper---3bV8E {
+    padding: 0;
+}
