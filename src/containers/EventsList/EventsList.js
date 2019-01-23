@@ -10,6 +10,7 @@ import {FilterEventData, FILTER_DATE_FUTURE} from "models/EventData";
 
 import EventCard from 'components/main/EventsList/EventCard/EventCard';
 import EventFilterComponent from 'components/main/EventsList/EventFilterComponent/EventFilterComponent';
+import LoaderComponent from "components/elements/LoaderComponent/LoaderComponent";
 
 import styles from './EventsList.sss';
 
@@ -29,6 +30,7 @@ class EventsList extends Component {
   };
 
   render() {
+    const {pending} = this.props.events;
     const events = this.props.events.currentEvents;
     const {userData} = this.props.user;
     const {joinEvent, leaveEvent} = this.props.eventsActions;
@@ -47,15 +49,20 @@ class EventsList extends Component {
         <div styleName='content'>
           <EventFilterComponent onChange={this.onFilterChange}
                                 hasAge={userData.birthdate} />
-          {!!events.length ?
-            events.map(event =>
-              <EventCard key={event.origin.id}
-                         event={event}
-                         userData={userData}
-                         joinEvent={joinEvent}
-                         leaveEvent={leaveEvent} />)
+          {pending ?
+            <div styleName="loader">
+              <LoaderComponent />
+            </div>
           :
-            <div styleName="caption-not-found">События не найдены</div>
+            (!!events.length ?
+              events.map(event =>
+                <EventCard key={event.origin.id}
+                           event={event}
+                           userData={userData}
+                           joinEvent={joinEvent}
+                           leaveEvent={leaveEvent} />)
+            :
+              <div styleName="caption-not-found">События не найдены</div>)
           }
 
         </div>

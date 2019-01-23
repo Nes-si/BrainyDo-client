@@ -17,6 +17,7 @@ export const LEAVE_EVENT        = 'app/events/LEAVE_EVENT';
 export const CREATE_EVENT       = 'app/events/CREATE_EVENT';
 export const UPDATE_EVENT       = 'app/events/UPDATE_EVENT';
 export const DELETE_EVENT       = 'app/events/DELETE_EVENT';
+export const PENDING_START      = 'app/events/PENDING_START';
 
 
 
@@ -199,6 +200,9 @@ export function init() {
 export function showEvents(filter = {}) {
   console.log(filter);
   return async dispatch => {
+    dispatch({
+      type: PENDING_START
+    });
     const events = await requestEvents(filter);
     dispatch({
       type: SHOW_EVENTS,
@@ -293,6 +297,8 @@ const initialState = {
 
   currentEvents: [],
 
+  pending: false,
+
   currentEvent: null
 };
 
@@ -319,7 +325,8 @@ export default function eventsReducer(state = initialState, action) {
     case SHOW_EVENTS:
       return {
         ...state,
-        currentEvents: action.events
+        currentEvents: action.events,
+        pending: false
       };
 
     case SHOW_EVENT:
@@ -372,6 +379,12 @@ export default function eventsReducer(state = initialState, action) {
       return {
         ...state,
         event
+      };
+
+    case PENDING_START:
+      return {
+        ...state,
+        pending: true
       };
 
     default:
