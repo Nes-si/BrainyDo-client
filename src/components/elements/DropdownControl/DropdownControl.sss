@@ -1,12 +1,7 @@
 .label
-  font-size: 13px
-  font-weight: 600
-  color: #666666
-  letter-spacing: 0.5px
-  line-height: 30px
   position: relative
+  line-height: 30px
   cursor: default
-
   transition: color 0.2s ease
   will-change: color
 
@@ -24,27 +19,23 @@
 
 
 .input
+  width: 100%
+  padding: 0px 40px 1px 9px
+  line-height: 33px
+
   background: #FFFFFF
   border: 1px solid #CCCCCC
   box-shadow: inset 0px 1px 2px 0px rgba(0,0,0,0.10)
   border-radius: 3px
-  font-weight: 400
-  line-height: 33px
-  width: 100%
-  padding: 0px 40px 1px 9px
   outline: none
   cursor: pointer
-
-  font-size: 13px
-  color: #666666
-  letter-spacing: 0.5px
 
   &-readonly
     background: #EFEFEF
 
   &-wrapper
-    width: 100%
     position: relative
+    width: 100%
 
 .type-wrapper
   position: relative
@@ -55,14 +46,15 @@
 .suggestions
   position: absolute
   top: calc(100% - 2px)
-  background: #fff
-  z-index: 90
   width: 100%
+  max-height: 160px
+  z-index: 90
+  overflow-y: scroll
+
+  background: #fff
   border: 1px solid #CCCCCC
   border-bottom-left-radius: 3px
   border-bottom-right-radius: 3px
-  overflow-y: scroll
-  max-height: 160px
 
   display: none
 
@@ -70,16 +62,13 @@
     position: relative
 
   .suggestion
-    font-weight: 400
-    line-height: 34px
     width: 100%
-    cursor: pointer
     padding: 0 9px
-    outline: none
+    line-height: 34px
 
-    font-size: 13px
+    cursor: pointer
+    outline: none
     color: #333333
-    letter-spacing: 0.5px
 
     &:hover
       background: #efefef

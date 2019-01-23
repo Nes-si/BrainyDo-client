@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import CSSModules from 'react-css-modules';
-import {Link, NavLink, withRouter} from "react-router-dom";
+import {NavLink, withRouter} from "react-router-dom";
 
 import {showModal, MODAL_TYPE_SIGN} from "ducks/nav";
 import {logout} from "ducks/user";

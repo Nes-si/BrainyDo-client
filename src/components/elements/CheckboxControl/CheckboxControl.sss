@@ -10,32 +10,32 @@
     margin-right: 26px
 
   &-label
-    cursor: pointer
     position: relative
     padding-left: 30px
-
-    font-size: 13px
-    color: #666666
-    letter-spacing: 0.5px
+    cursor: pointer
 
   &-label:before
     content: ''
+
     position: absolute
     left: 0
     top: 50%
-    transform: translateY(-50%)
     height: 20px
     width: 20px
+    transform: translateY(-50%)
+
     border-radius: 10%
     background: #fff
     border: 1px solid #979797
 
   &:checked + &-label:before
     content: '✓'
+
+    line-height: 20px
+
     color: #ffffff
     font-size: 21px
     text-indent: 2px
-    line-height: 20px
     background: #5CA6DC
 
   & + &-label:before,

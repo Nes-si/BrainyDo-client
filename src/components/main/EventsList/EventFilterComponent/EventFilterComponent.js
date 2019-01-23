@@ -133,6 +133,7 @@ export default class EventFilterComponent extends Component {
                 <div styleName="date-picker">
                   <Flatpickr value={this.state.dateFrom}
                              options={{
+                               clickOpens: this.state.dateType == FILTER_DATE_VALUES,
                                locale: Russian,
                                formatDate: getTextDate
                              }}
@@ -144,6 +145,7 @@ export default class EventFilterComponent extends Component {
                 <div styleName="date-picker">
                   <Flatpickr value={this.state.dateTo}
                              options={{
+                               clickOpens: this.state.dateType == FILTER_DATE_VALUES,
                                minDate: this.state.dateFrom,
                                locale: Russian,
                                formatDate: getTextDate

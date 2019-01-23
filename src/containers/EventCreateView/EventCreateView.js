@@ -81,6 +81,7 @@ class EventCreateView extends Component {
 
             <div styleName="date">Описание события</div>
             <textarea value={this.state.description}
+                      styleName="area-description"
                       onChange={this.onChangeDescription} />
 
             <InputControl label="Стоимость участия"
