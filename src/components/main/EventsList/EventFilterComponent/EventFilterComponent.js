@@ -192,7 +192,7 @@ export default class EventFilterComponent extends Component {
             </div>
 
             <div styleName="dropdown-wrapper">
-              <DropdownControl suggestionsList={AGE_LIMITS}
+              <DropdownControl list={AGE_LIMITS}
                                onSuggest={this.onChangeAgeLimit}
                                disabled={this.state.ageType != AGE_VALUE}
                                current={this.state.ageLimit} />
