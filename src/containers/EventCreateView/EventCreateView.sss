@@ -36,14 +36,44 @@
     padding: 50px
     display: flex
 
-    .image
-      width: 150px
-      height: 150px
+    .image-container
       margin-right: 30px
 
-      background-repeat: no-repeat
-      background-position: center
-      background-size: cover
+      .image
+        width: 150px
+        height: 150px
+        background-repeat: no-repeat
+        background-position: center
+        background-size: cover
+
+      .upload-button
+        position: relative
+        height: 40px
+        padding: 0 15px
+
+        display: flex
+        justify-content: center
+        align-items: center
+
+        background-image: linear-gradient(-180deg, #658ad2 0%, #476a9e 150%)
+        box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.15)
+        border-radius: 2px
+        border: none
+
+        text-align: center
+        font-weight: bold
+        color: #FFFFFF
+
+        cursor: pointer
+
+      .upload-hidden
+        position: absolute
+        left: 0
+        top: 0
+        width: 100%
+        height: 100%
+        opacity: 0
+        cursor: pointer
 
     .text
       flex-grow: 1
@@ -62,7 +92,7 @@
 
       .area-description
         width: 100%
-        height: 100px
+        height: 200px
         padding: 8px 16px
         margin-top: 10px
 
@@ -79,24 +109,20 @@
         justify-content: space-between
         flex-wrap: wrap
 
-        .price
+        .price, .age
           display: flex
           align-items: center
 
-          .price-input
-            margin-left: 15px
-            width: 100px
+        .price-input
+          margin-left: 15px
+          width: 100px
 
-          .price-units
-            margin-left: 15px
+        .price-units
+          margin-left: 15px
 
-        .age
-          display: flex
-          align-items: center
-
-          .age-dropdown
-            margin-left: 15px
-            width: 100px
+        .age-dropdown
+          margin-left: 15px
+          width: 100px
 
       .date
         margin-top: 30px
@@ -104,19 +130,21 @@
         justify-content: space-between
         flex-wrap: wrap
 
-        .date-start
+        .date-start, .date-end
           display: flex
           align-items: center
 
-          .date-picker
-            margin-left: 15px
+        .date-picker
+          margin-left: 15px
 
-        .date-end
+        .date-wrapper
           display: flex
+          flex-wrap: wrap
           align-items: center
 
-          .date-picker
-            margin-left: 15px
+        .date-disabled
+          opacity: .5
+          pointer-events: none
 
       .tags
         margin-bottom: 10px
@@ -134,5 +162,9 @@
           border: 1px solid #c0d2f5
           border-radius: 14px
 
-    .button-wrapper
+    .buttons
       margin-top: 40px
+      display: flex
+
+      .button-wrapper
+        margin-right: 30px

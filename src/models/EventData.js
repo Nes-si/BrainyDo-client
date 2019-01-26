@@ -57,6 +57,9 @@ export class EventData {
   }
 
   updateOrigin() {
+    if (!this.origin)
+      this.origin = new EventData.OriginClass;
+
     this.origin.set(`name`,       this.name);
     this.origin.set(`description`,this.description);
     this.origin.set(`dateStart`,  this.dateStart);
