@@ -16,7 +16,7 @@ export default class InputControl extends Component {
 
   render() {
     let {label, value, placeholder, onChange, readOnly, autoFocus, onKeyDown, onBlur, DOMRef, icon,
-      onIconClick, inputType, dropdown} = this.props;
+      onIconClick, inputType, dropdown, red} = this.props;
 
     if (!onChange)
       readOnly = true;
@@ -32,6 +32,8 @@ export default class InputControl extends Component {
       inputStyles += ' input-readOnly';
     if (dropdown)
       inputStyles += ' input-disabled';
+    if (red)
+      inputStyles += ' input-red';
 
     let iconEl;
     if (icon)
