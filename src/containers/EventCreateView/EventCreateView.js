@@ -4,6 +4,7 @@ import {bindActionCreators} from "redux";
 import CSSModules from 'react-css-modules';
 import {Helmet} from "react-helmet";
 import {Parse} from 'parse';
+import {Link} from 'react-router-dom';
 
 import 'flatpickr/dist/flatpickr.min.css';
 import {Russian} from "flatpickr/dist/l10n/ru";
@@ -19,6 +20,7 @@ import ButtonControl from "components/elements/ButtonControl/ButtonControl";
 import InputControl from "components/elements/InputControl/InputControl";
 import DropdownControl from "components/elements/DropdownControl/DropdownControl";
 import CheckboxControl from 'components/elements/CheckboxControl/CheckboxControl';
+import LoaderComponent from 'components/elements/LoaderComponent/LoaderComponent';
 
 import styles from './EventCreateView.sss';
 
@@ -35,10 +37,17 @@ class EventCreateView extends Component {
     price: 0,
     ageLimit: AGE_LIMIT_NO_LIMIT,
 
+    errorRequired: false,
+
     image: null,
     imageLoading: false,
-    imageError: null
+    imageError: null,
+
+    creating: false
   };
+
+  event = new EventData();
+
 
   constructor(props) {
     super(props);
@@ -50,25 +59,13 @@ class EventCreateView extends Component {
     this.state.dateEnd.setHours(19, 0, 0, 0);
   }
 
-  onCreate = () => {
-    const event = new EventData();
-
-    event.name        = this.state.name;
-    event.description = this.state.description;
-    event.dateStart   = this.state.dateStart;
-    event.dateEnd     = this.state.dateEndEnabled ? this.state.dateEnd : undefined;
-    event.tags        = this.state.tags;
-    event.price       = this.state.price;
-    event.ageLimit    = this.state.ageLimit;
-    event.image       = this.state.image;
-    event.owner       = this.props.user.userData;
-
-    const {createEvent} = this.props.eventsActions;
-    createEvent(event);
-  };
+  componentWillReceiveProps(nextProps) {
+    if (this.event.origin && this.event.origin.id)
+      this.props.history.push(`/event${this.event.origin.id}`);
+  }
 
   onChangeName = name => {
-    this.setState({name});
+    this.setState({name, errorRequired: false});
   };
 
   onChangeDescription = event => {
@@ -106,12 +103,12 @@ class EventCreateView extends Component {
     if (file.size > FILE_SIZE_MAX) {
       const max = convertDataUnits(FILE_SIZE_MAX, BYTES, M_BYTES);
       const size = convertDataUnits(size, BYTES, M_BYTES);
-      this.setState({imageError: `Объём файла (${size} ${M_BYTES}) превышает допустимый (${max} ${M_BYTES})!`});
+      this.setState({imageError: `Размер файла (${size} ${M_BYTES}) превышает допустимый (${max} ${M_BYTES})!`});
       return;
     }
 
     if (checkFileType(file.type) != TYPE_IMAGE) {
-      this.setState({imageError: `Необходимо загрузить файл с изображением!`});
+      this.setState({imageError: `Необходимо выбрать файл с изображением!`});
       return;
     }
 
@@ -124,8 +121,33 @@ class EventCreateView extends Component {
   };
 
   validate() {
+    if (!this.state.name) {
+      this.setState({errorRequired: true});
+      return false;
+    }
 
+    return true;
   }
+
+  onCreate = () => {
+    if (!this.validate())
+      return;
+
+    this.event.name        = this.state.name;
+    this.event.description = this.state.description;
+    this.event.dateStart   = this.state.dateStart;
+    this.event.dateEnd     = this.state.dateEndEnabled ? this.state.dateEnd : undefined;
+    this.event.tags        = this.state.tags;
+    this.event.price       = this.state.price;
+    this.event.ageLimit    = this.state.ageLimit;
+    this.event.image       = this.state.image;
+    this.event.owner       = this.props.user.userData;
+
+    const {createEvent} = this.props.eventsActions;
+    createEvent(this.event);
+
+    this.setState({creating: true});
+  };
 
   render() {
     const imageSrc = this.state.image ? this.state.image.url() : require('assets/images/event-empty.png');
@@ -151,6 +173,11 @@ class EventCreateView extends Component {
                      type="file"
                      onChange={this.onImageUpload}/>
             </div>
+            {this.state.imageLoading &&
+              <div styleName="image-loading">
+                <LoaderComponent/>
+              </div>
+            }
           </div>
 
           <div styleName="text">
@@ -158,6 +185,8 @@ class EventCreateView extends Component {
               <div>Название события:</div>
               <div styleName="name-input">
                 <InputControl value={this.state.name}
+                              autoFocus
+                              red={this.state.errorRequired}
                               onChange={this.onChangeName} />
               </div>
             </div>
@@ -226,13 +255,25 @@ class EventCreateView extends Component {
                                value="Создать событие"/>
               </div>
               <div styleName="button-wrapper">
-                <ButtonControl color="red"
-                               onClick={this.validate}
-                               value="Отмена"/>
+                <Link to="/dashboard">
+                  <ButtonControl color="red"
+                                 value="Отмена" />
+                </Link>
               </div>
             </div>
+
+            {this.state.errorRequired &&
+              <div styleName="error">Необходимо заполнить обязательные поля!</div>
+            }
+
           </div>
         </div>
+
+        {this.state.creating &&
+          <div styleName="loader">
+            <LoaderComponent/>
+          </div>
+        }
       </div>
     );
   }

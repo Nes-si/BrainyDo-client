@@ -34,9 +34,13 @@
     position: relative
     width: 100%
     padding: 50px
+
     display: flex
+    align-items: flex-start
+    flex-wrap: wrap
 
     .image-container
+      position: relative
       margin-right: 30px
 
       .image
@@ -74,6 +78,18 @@
         height: 100%
         opacity: 0
         cursor: pointer
+
+      .image-loading
+        position: absolute
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+        display: flex
+        justify-content: center
+        align-items: center
+
+        background: rgba(255, 255, 255, .6)
 
     .text
       flex-grow: 1
@@ -168,3 +184,22 @@
 
       .button-wrapper
         margin-right: 30px
+
+    .error
+      margin-top: 10px
+      color: #B44A2F
+
+
+  .loader
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    z-index: 100
+
+    display: flex
+    justify-content: center
+    align-items: center
+
+    background: rgba(255, 255, 255, .6)
