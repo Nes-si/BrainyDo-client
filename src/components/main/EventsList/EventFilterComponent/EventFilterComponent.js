@@ -93,7 +93,7 @@ export default class EventFilterComponent extends Component {
     this.setState({ageLimit});
   };
 
-  onChange = () => {
+  onApply = () => {
     this.filter.date.type         = this.state.dateType;
     this.filter.date.greaterThan  = this.state.dateFrom;
     this.filter.date.lessThan     = this.state.dateTo;
@@ -104,7 +104,7 @@ export default class EventFilterComponent extends Component {
     this.filter.ageLimit.my = this.state.ageType == AGE_MY;
     this.filter.ageLimit.ageLimit = this.state.ageType == AGE_VALUE ? this.state.ageLimit : undefined;
 
-    this.props.onChange(this.filter);
+    this.props.onApply(this.filter);
   };
 
   onReset = () => {
@@ -116,7 +116,7 @@ export default class EventFilterComponent extends Component {
 
     this.filter = new FilterEventData();
     this.filter.date.type = FILTER_DATE_FUTURE;
-    this.props.onChange(this.filter);
+    this.props.onApply(this.filter);
   };
 
   render() {
@@ -224,7 +224,7 @@ export default class EventFilterComponent extends Component {
         <div styleName="buttons">
           <div styleName="button">
             <ButtonControl value="Применить"
-                           onClick={this.onChange} />
+                           onClick={this.onApply} />
           </div>
           <div styleName="button">
             <ButtonControl value="Сбросить фильтр"

@@ -29,15 +29,13 @@ async function requestEvents(filter = {}) {
   if (filter.date && filter.date.type != FILTER_DATE_OFF) {
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
-
-    const todayEnd = new Date();
-    todayEnd.setHours(23, 59, 59);
-
     const todayDOW = todayStart.getDay() ? todayStart.getDay() : 7;
 
-    const weekEnd = new Date();
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999);
+
+    const weekEnd = new Date(todayEnd);
     weekEnd.setDate(todayStart.getDate() + (7 - todayDOW));
-    weekEnd.setHours(23, 59, 59);
 
     const query2 = new Parse.Query(EventData.OriginClass);
     query2.doesNotExist("dateEnd");
@@ -65,7 +63,7 @@ async function requestEvents(filter = {}) {
         tomorrowStart.setDate(todayStart.getDate() + 1);
 
         const tomorrowEnd = new Date(tomorrowStart);
-        tomorrowEnd.setHours(23, 59, 59);
+        tomorrowEnd.setHours(23, 59, 59, 999);
 
         query.greaterThan("dateEnd", tomorrowStart);
         query.lessThan("dateStart", tomorrowEnd);
@@ -107,14 +105,18 @@ async function requestEvents(filter = {}) {
         break;
 
       case FILTER_DATE_VALUES:
-        if (filter.date.greaterThan) {
-          query.greaterThan("dateEnd", filter.date.greaterThan);
-          query2.greaterThan("dateStart", filter.date.greaterThan);
-          query = Parse.Query.or(query, query2);
+        if (filter.date.lessThan) {
+          filter.date.lessThan.setHours(23, 59, 59, 999);
+          query.lessThanOrEqualTo("dateStart", filter.date.lessThan);
+          query2.lessThanOrEqualTo("dateStart", filter.date.lessThan);
         }
 
-        if (filter.date.lessThan)
-          query.lessThan("dateStart", filter.date.lessThan);
+        if (filter.date.greaterThan) {
+          filter.date.greaterThan.setHours(0, 0, 0, 0);
+          query.greaterThanOrEqualTo("dateEnd", filter.date.greaterThan);
+          query2.greaterThanOrEqualTo("dateStart", filter.date.greaterThan);
+          query = Parse.Query.or(query, query2);
+        }
 
         break;
     }

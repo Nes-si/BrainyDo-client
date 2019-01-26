@@ -47,7 +47,7 @@ class EventsList extends Component {
         </div>
 
         <div styleName='content'>
-          <EventFilterComponent onChange={this.onFilterChange}
+          <EventFilterComponent onApply={this.onFilterChange}
                                 hasAge={userData.birthdate} />
           {pending ?
             <div styleName="loader">
