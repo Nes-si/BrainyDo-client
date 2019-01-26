@@ -371,7 +371,7 @@ export default function eventsReducer(state = initialState, action) {
       return state;
 
     case CREATE_EVENT:
-      userEvents = state.userEvents;
+      userEvents = state.userEvents.slice();
       userEvents.push(action.event);
       return {
         ...state,
@@ -382,7 +382,7 @@ export default function eventsReducer(state = initialState, action) {
       return state;
 
     case DELETE_EVENT:
-      userEvents = state.userEvents;
+      userEvents = state.userEvents.slice();
       userEvents.splice(userEvents.indexOf(action.event), 1);
 
       return {
