@@ -102,11 +102,25 @@ export default class EventFilterComponent extends Component {
     this.filter.price.lessThan = this.state.priceType == PRICE_LESS ? this.state.price : undefined;
 
     this.filter.ageLimit.my = this.state.ageType == AGE_MY;
+    this.filter.ageLimit.ageLimit = this.state.ageType == AGE_VALUE ? this.state.ageLimit : undefined;
 
     this.props.onChange(this.filter);
   };
 
+  onReset = () => {
+    this.setState({
+      dateType: FILTER_DATE_FUTURE,
+      priceType: PRICE_OFF,
+      ageType: AGE_OFF
+    });
+
+    this.filter = new FilterEventData();
+    this.filter.date.type = FILTER_DATE_FUTURE;
+    this.props.onChange(this.filter);
+  };
+
   render() {
+    console.log(this.state.dateType);
     return (
       <div styleName="EventFilterComponent">
         <div styleName="title">Фильтр</div>
@@ -133,7 +147,6 @@ export default class EventFilterComponent extends Component {
                 <div styleName="date-picker">
                   <Flatpickr value={this.state.dateFrom}
                              options={{
-                               clickOpens: this.state.dateType == FILTER_DATE_VALUES,
                                locale: Russian,
                                formatDate: getTextDate
                              }}
@@ -171,9 +184,14 @@ export default class EventFilterComponent extends Component {
               )}
             </div>
 
-            <InputControl onChange={this.onChangePrice}
-                          readOnly={this.state.priceType != PRICE_LESS}
-                          value={this.state.price} />
+            <div styleName="price">
+              <div styleName="price-input">
+                <InputControl onChange={this.onChangePrice}
+                              readOnly={this.state.priceType != PRICE_LESS}
+                              value={this.state.price} />
+              </div>
+              <div styleName="price-unit">рублей</div>
+            </div>
           </div>
 
           <div styleName="filter">
@@ -201,9 +219,15 @@ export default class EventFilterComponent extends Component {
           </div>
         </div>
 
-        <div styleName="button-apply">
-          <ButtonControl value="Применить"
-                         onClick={this.onChange} />
+        <div styleName="buttons">
+          <div styleName="button">
+            <ButtonControl value="Применить"
+                           onClick={this.onChange} />
+          </div>
+          <div styleName="button">
+            <ButtonControl value="Сбросить фильтр"
+                           onClick={this.onReset} />
+          </div>
         </div>
       </div>
     );

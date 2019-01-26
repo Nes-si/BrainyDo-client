@@ -45,7 +45,7 @@ export class UserData {
     if (!this.birthdate)
       return 0;
 
-    const ageMs = Date.now() - birthdate;
+    const ageMs = Date.now() - this.birthdate;
     const ageDate = new Date(ageMs);
     return ageDate.getUTCFullYear() - 1970;
   }

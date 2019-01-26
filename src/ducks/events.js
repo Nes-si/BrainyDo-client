@@ -4,7 +4,7 @@ import {EventData, FilterEventData, FILTER_DATE_OFF, FILTER_DATE_FUTURE, FILTER_
   FILTER_DATE_WEEK, FILTER_DATE_WEEKEND} from 'models/EventData';
 import {store} from 'index';
 import {send, getAllObjects} from 'utils/server';
-import {getPermissibleAgeLimits} from 'utils/data';
+import {getPermissibleAgeLimits, getAgeLimitsByLimit} from 'utils/data';
 import {UserData} from "models/UserData";
 
 
@@ -134,11 +134,11 @@ async function requestEvents(filter = {}) {
 
   if (filter.ageLimit) {
     if (filter.ageLimit.my)
-      query.containsIn("ageLimit", getPermissibleAgeLimits(userData.age));
+      query.containedIn("ageLimit", getPermissibleAgeLimits(userData.age));
     if (filter.ageLimit.age)
-      query.containsIn("ageLimit", getPermissibleAgeLimits(filter.age.age));
+      query.containedIn("ageLimit", getPermissibleAgeLimits(filter.age.age));
     if (filter.ageLimit.ageLimit)
-      query.equalTo("ageLimit", filter.ageLimit.ageLimit);
+      query.containedIn("ageLimit", getAgeLimitsByLimit(filter.ageLimit.ageLimit));
   }
 
   const events_o = await send(getAllObjects(query));

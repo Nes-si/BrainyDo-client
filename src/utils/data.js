@@ -31,6 +31,18 @@ export function getPermissibleAgeLimits(age) {
   return limits;
 }
 
+export function getAgeLimitsByLimit(ageLimit) {
+  switch (ageLimit) {
+    case AGE_LIMIT_6_PLUS:    return [AGE_LIMIT_NO_LIMIT, AGE_LIMIT_6_PLUS];
+    case AGE_LIMIT_12_PLUS:   return [AGE_LIMIT_NO_LIMIT, AGE_LIMIT_6_PLUS, AGE_LIMIT_12_PLUS];
+    case AGE_LIMIT_18_PLUS:   return [AGE_LIMIT_NO_LIMIT, AGE_LIMIT_6_PLUS, AGE_LIMIT_12_PLUS, AGE_LIMIT_18_PLUS];
+    case AGE_LIMIT_6_MINUS:   return [AGE_LIMIT_NO_LIMIT, AGE_LIMIT_6_MINUS];
+    case AGE_LIMIT_12_MINUS:  return [AGE_LIMIT_NO_LIMIT, AGE_LIMIT_12_MINUS];
+    case AGE_LIMIT_18_MINUS:  return [AGE_LIMIT_NO_LIMIT, AGE_LIMIT_18_MINUS];
+  }
+  return [AGE_LIMIT_NO_LIMIT];
+}
+
 export function checkPassword(password) {
   return send(
     Parse.Cloud.run('checkPassword', {password})
