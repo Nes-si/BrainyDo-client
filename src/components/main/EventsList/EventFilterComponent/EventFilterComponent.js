@@ -120,7 +120,10 @@ export default class EventFilterComponent extends Component {
   };
 
   render() {
-    console.log(this.state.dateType);
+    let dateStyle = 'date-picker';
+    if (this.state.dateType != FILTER_DATE_VALUES)
+      dateStyle += ' date-disabled';
+
     return (
       <div styleName="EventFilterComponent">
         <div styleName="title">Фильтр</div>
@@ -144,26 +147,25 @@ export default class EventFilterComponent extends Component {
             <div styleName="date-group">
               <div styleName="date-component">
                 <div styleName="date-title">от:</div>
-                <div styleName="date-picker">
+                <div styleName={dateStyle}>
                   <Flatpickr value={this.state.dateFrom}
                              options={{
                                locale: Russian,
                                formatDate: getTextDate
                              }}
-                             onChange={this.onChangeDateFrom}/>
+                             onChange={this.onChangeDateFrom} />
                 </div>
               </div>
               <div styleName="date-component">
                 <div styleName="date-title">до:</div>
-                <div styleName="date-picker">
+                <div styleName={dateStyle}>
                   <Flatpickr value={this.state.dateTo}
                              options={{
-                               clickOpens: this.state.dateType == FILTER_DATE_VALUES,
                                minDate: this.state.dateFrom,
                                locale: Russian,
                                formatDate: getTextDate
                              }}
-                             onChange={this.onChangeDateTo}/>
+                             onChange={this.onChangeDateTo} />
                 </div>
               </div>
             </div>
