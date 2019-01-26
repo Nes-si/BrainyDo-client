@@ -32,7 +32,7 @@ export default class EventCard extends Component {
   };
 
   render() {
-    const {event, userData} = this.props;
+    const {event, userData, onTagClick} = this.props;
     if (!event)
       return <LoaderComponent />;
 
@@ -98,7 +98,7 @@ export default class EventCard extends Component {
           {(event.tags && !!event.tags.length) &&
             <div styleName="tags">
               {event.tags.map((tag, i) =>
-                <div key={i} styleName="tag">{tag}</div>)}
+                <div key={i} styleName="tag" onClick={() => onTagClick(tag)}>{tag}</div>)}
             </div>
           }
 

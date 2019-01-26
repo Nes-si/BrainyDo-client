@@ -50,7 +50,9 @@ export default class EventFilterComponent extends Component {
     price: 0,
 
     ageType: AGE_OFF,
-    ageLimit: AGE_LIMIT_NO_LIMIT
+    ageLimit: AGE_LIMIT_NO_LIMIT,
+
+    tags: []
   };
   filter = new FilterEventData();
 
@@ -93,6 +95,9 @@ export default class EventFilterComponent extends Component {
     this.setState({ageLimit});
   };
 
+  onTagAdd = tag => {
+  };
+
   onApply = () => {
     this.filter.date.type         = this.state.dateType;
     this.filter.date.greaterThan  = this.state.dateFrom;
@@ -103,6 +108,8 @@ export default class EventFilterComponent extends Component {
 
     this.filter.ageLimit.my = this.state.ageType == AGE_MY;
     this.filter.ageLimit.ageLimit = this.state.ageType == AGE_VALUE ? this.state.ageLimit : undefined;
+
+    this.filter.tags = this.state.tags;
 
     this.props.onApply(this.filter);
   };

@@ -143,6 +143,10 @@ async function requestEvents(filter = {}) {
       query.containedIn("ageLimit", getAgeLimitsByLimit(filter.ageLimit.ageLimit));
   }
 
+  if (filter.tags && filter.tags.length) {
+    query.containedIn("tags", filter.tags);
+  }
+
   const events_o = await send(getAllObjects(query));
 
   const events = [];

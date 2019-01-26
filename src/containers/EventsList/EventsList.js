@@ -17,6 +17,8 @@ import styles from './EventsList.sss';
 
 @CSSModules(styles, {allowMultiple: true})
 class EventsList extends Component {
+  filterComp = null;
+
   constructor(props) {
     super(props);
 
@@ -27,6 +29,10 @@ class EventsList extends Component {
 
   onFilterChange = filter => {
     this.props.eventsActions.showEvents(filter);
+  };
+
+  onTagClick = tag => {
+
   };
 
   render() {
@@ -47,7 +53,8 @@ class EventsList extends Component {
         </div>
 
         <div styleName='content'>
-          <EventFilterComponent onApply={this.onFilterChange}
+          <EventFilterComponent ref={elm => this.filterComp = elm}
+                                onApply={this.onFilterChange}
                                 hasAge={userData.birthdate} />
           {pending ?
             <div styleName="loader">
@@ -60,7 +67,8 @@ class EventsList extends Component {
                            event={event}
                            userData={userData}
                            joinEvent={joinEvent}
-                           leaveEvent={leaveEvent} />)
+                           leaveEvent={leaveEvent}
+                           onTagClick={this.onTagClick} />)
             :
               <div styleName="caption-not-found">События не найдены</div>)
           }

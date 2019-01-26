@@ -101,5 +101,7 @@ export class FilterEventData {
 
   members = {
     onlyMy: false
-  }
+  };
+
+  tags = [];
 }
