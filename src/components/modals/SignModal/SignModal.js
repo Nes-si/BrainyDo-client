@@ -42,6 +42,26 @@ export default class SignModal extends Component {
       this.state.mode = props.mode;
   }
 
+  componentDidMount() {
+    document.addEventListener('keydown', this.onKeyDown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onKeyDown);
+  }
+
+  onKeyDown = event => {
+    if (!event)
+      event = window.event;
+    event.stopPropagation();
+
+    //Enter or Esc pressed
+    /*if (event.keyCode == 13)
+      setTimeout(this.close, 1);
+    else*/ if (event.keyCode == 27)
+      setTimeout(this.close, 1);
+  };
+
   componentWillReceiveProps(nextProps) {
     const {user, serverStatus} = nextProps;
 
