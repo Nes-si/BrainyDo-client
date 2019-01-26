@@ -8,7 +8,9 @@ export const SHOW_MODAL   = 'app/nav/SHOW_MODAL';
 export const CLOSE_MODAL  = 'app/nav/CLOSE_MODAL';
 
 
-export const MODAL_TYPE_SIGN    = 'app/nav/modals/MODAL_TYPE_SIGN';
+export const MODAL_TYPE_SIGN = 'app/nav/modals/MODAL_TYPE_SIGN';
+export const MODAL_TYPE_CITY = 'app/nav/modals/MODAL_TYPE_CITY';
+
 
 
 export function initEnd() {
