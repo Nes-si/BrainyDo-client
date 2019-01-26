@@ -288,3 +288,46 @@ export function checkFileType(type) {
   
   return TYPE_OTHER;
 }
+
+
+export function convertObjectToURL(obj) {
+  return Object.keys(obj).map(key =>
+    key + '=' + encodeURIComponent(obj[key])
+  ).join('&');
+}
+
+export function JSONPrequest(URL, params) {
+  let res, rej;
+  const result = new Promise((resolve, reject) => {
+    res = resolve;
+    rej = reject;
+  });
+
+  const node = document.createElement('script');
+  node.type = 'text/javascript';
+  node.id = (new Date()).getTime() + Math.random();
+  node.onerror = () => {
+    node.parentNode.removeChild(node);
+    rej();
+  };
+  node.onload = () => node.parentNode.removeChild(node);
+
+  let src = URL + '?';
+  if (typeof params == 'string')
+    src += ['?', '&'].indexOf(params.substr(0, 1)) > -1  ?  params.substr(1)  :  params;
+  else if (typeof params == 'object')
+    src += Object.keys(params).map(key =>
+      key + '=' + encodeURIComponent(params[key])
+    ).join('&');
+
+  const callback = '__jsonp_dynamic_callback_' + node.id.toString().replace('.', '');
+  window[callback] = json => {
+    res(json);
+    delete window[callback];
+  };
+
+  node.src = src + (!params ? '' : '&') + 'callback=' + callback;
+  document.body.appendChild(node);
+
+  return result;
+}
