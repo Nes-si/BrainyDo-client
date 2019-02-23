@@ -12,11 +12,8 @@ async function requestConfig() {
   config.serverURL  = process.env.REACT_APP_SERVER_URL  || _config.serverURL;
   config.appId      = process.env.REACT_APP_APP_ID      || _config.appId;
 
-  const response = await fetch('/triplel-config.json');
-  if (!response.ok)
-    return;
-
   try {
+    const response = await fetch('/triplel-config.json');
     const result = await response.json();
     config.serverURL = result.configServerURL || config.serverURL;
     config.appId = result.configAppId || config.appId;
