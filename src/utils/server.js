@@ -1,5 +1,54 @@
 import {store} from 'index';
-import {logRequest, logResponse, setProblemB} from "ducks/serverStatus";
+import {setServerProblemA, setServerProblemB} from "ducks/nav";
+
+
+export const PARSE_ERROR_CODE__CONNECTION_FAILED      = 100;
+export const PARSE_ERROR_CODE__OBJECT_NOT_FOUND       = 101;
+export const PARSE_ERROR_CODE__CLOUD_FAIL             = 141;
+export const PARSE_ERROR_CODE__USERNAME_TAKEN         = 202;
+export const PARSE_ERROR_CODE__EMAIL_TAKEN            = 203;
+export const PARSE_ERROR_CODE__EMAIL_NOT_FOUND        = 205;
+export const PARSE_ERROR_CODE__INVALID_SESSION_TOKEN  = 209;
+
+
+
+const TIME_A = 7 * 1000;
+const TIME_B = 30 * 1000;
+
+let timer = 0;
+let requests = [];
+
+
+function logRequest (time) {
+  if (!timer)
+    timer = setInterval(timerTick, 1000);
+  requests.push(time);
+}
+
+function logResponse (time) {
+  requests.splice(requests.indexOf(time), 1);
+  if (!requests.length) {
+    clearInterval(timer);
+    timer = 0;
+
+    const {serverProblemA, serverProblemB} = store.getState().nav;
+    if (serverProblemA)
+      store.dispatch(setServerProblemA(false));
+    if (serverProblemB)
+      store.dispatch(setServerProblemB(false));
+  }
+}
+
+function timerTick () {
+  const delta = Date.now() - requests[0];
+
+  if (delta > TIME_B) {
+    clearInterval(timer);
+    store.dispatch(setServerProblemB());
+  } else if (delta > TIME_A) {
+    store.dispatch(setServerProblemA());
+  }
+}
 
 
 export function halt () {
@@ -10,22 +59,24 @@ export function halt () {
 
 export async function send (req) {
   const time = Date.now();
-  store.dispatch(logRequest(time));
+  logRequest(time);
 
   try {
     let result = await req;
-    store.dispatch(logResponse(time));
+    logResponse(time);
     return result;
-  
+
   } catch (error) {
-    if (error.code == 209)
+    if (error.code == PARSE_ERROR_CODE__INVALID_SESSION_TOKEN)
       halt();
 
-    if (error.code == 100)
-      store.dispatch(setProblemB());
-    else
-      store.dispatch(logResponse(time));
-    
+    if (error.code == PARSE_ERROR_CODE__CONNECTION_FAILED) {
+      clearInterval(timer);
+      store.dispatch(setServerProblemB());
+    } else {
+      logResponse(time);
+    }
+
     throw error;
   }
 }

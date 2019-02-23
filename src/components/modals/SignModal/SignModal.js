@@ -63,9 +63,9 @@ export default class SignModal extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    const {user, serverStatus} = nextProps;
+    const {user, nav} = nextProps;
 
-    if (serverStatus.problemB) {
+    if (nav.serverProblemB) {
       this.setState({
         error: null,
         lock: false,

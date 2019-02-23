@@ -101,8 +101,7 @@ class StartView extends Component {
 
 function mapStateToProps(state) {
   return {
-    events:       state.events,
-    serverStatus: state.serverStatus
+    events: state.events,
   };
 }
 

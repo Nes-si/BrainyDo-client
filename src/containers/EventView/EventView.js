@@ -120,9 +120,8 @@ class EventView extends Component {
 
 function mapStateToProps(state) {
   return {
-    events:       state.events,
-    user:         state.user,
-    serverStatus: state.serverStatus
+    events: state.events,
+    user:   state.user
   };
 }
 

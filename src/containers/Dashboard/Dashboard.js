@@ -41,8 +41,7 @@ class Dashboard extends Component {
 
 function mapStateToProps(state) {
   return {
-    user:         state.user,
-    serverStatus: state.serverStatus
+    user: state.user
   };
 }
 

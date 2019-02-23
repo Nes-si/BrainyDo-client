@@ -39,9 +39,9 @@ class App extends React.Component {
 
 
   getAlarm = () => {
-    const {serverStatus} = this.props;
+    const {nav} = this.props;
 
-    if (serverStatus.problemA && !serverStatus.problemB)
+    if (nav.serverProblemA && !nav.serverProblemB)
       return (
         <div styleName="alarm">
           Возникла проблема с сервисом. Пожалуйста, подождите...
@@ -51,14 +51,14 @@ class App extends React.Component {
   };
 
   getModal = () => {
-    const {nav, serverStatus, user} = this.props;
+    const {nav, user} = this.props;
     const {closeAlert, closeModal} = this.props.navActions;
 
     if (nav.alertShowing)
       return <AlertModal params={nav.alertParams} onClose={closeAlert}/>;
 
     if (!nav.modalShowing) {
-      if (!serverStatus.problemB || !nav.initEnded)
+      if (!nav.serverProblemB || !nav.initEnded)
         return null;
 
       const params = {
@@ -77,7 +77,7 @@ class App extends React.Component {
       case MODAL_TYPE_SIGN:
         return <SignModal params={nav.modalParams}
                           user={user}
-                          serverStatus={serverStatus}
+                          nav={nav}
                           login={login}
                           register={register}
                           restorePassword={restorePassword}
@@ -92,7 +92,7 @@ class App extends React.Component {
 
 
   render() {
-    const {nav, user, serverStatus} = this.props;
+    const {nav, user} = this.props;
 
     const modal = this.getModal();
     if (modal)
@@ -100,7 +100,7 @@ class App extends React.Component {
 
     const showModalLoader =
       (user.pending || user.authorized && !nav.initEnded) &&
-      !serverStatus.problemB;
+      !nav.serverProblemB;
 
     let res = (
       <div styleName="wrapper">
@@ -155,7 +155,6 @@ class App extends React.Component {
 function mapStateToProps(state) {
   return {
     nav:          state.nav,
-    serverStatus: state.serverStatus,
     user:         state.user
   };
 }

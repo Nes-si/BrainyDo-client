@@ -3,7 +3,8 @@ import {Parse} from 'parse';
 import {store} from 'index';
 import {UserData} from 'models/UserData';
 import {config} from 'utils/initialize';
-import {send} from 'utils/server';
+import {send, PARSE_ERROR_CODE__USERNAME_TAKEN, PARSE_ERROR_CODE__OBJECT_NOT_FOUND, PARSE_ERROR_CODE__EMAIL_NOT_FOUND,
+  PARSE_ERROR_CODE__EMAIL_TAKEN} from 'utils/server';
 
 
 export const LOGIN_REQUEST      = 'app/user/LOGIN_REQUEST';
@@ -50,8 +51,8 @@ export function register(email, password) {
       .catch(error => {
         let status = ERROR_OTHER;
         switch (error.code) {
-          case 202:
-          case 203:
+          case PARSE_ERROR_CODE__USERNAME_TAKEN:
+          case PARSE_ERROR_CODE__EMAIL_TAKEN:
             status = ERROR_USER_EXISTS; break;
         }
 
@@ -86,8 +87,8 @@ export function login(email, password) {
       .catch(error => {
         let status = ERROR_OTHER;
         switch (error.code) {
-          case 101: status = ERROR_WRONG_PASS; break;
-          case 205: status = ERROR_UNVERIF;    break;
+          case PARSE_ERROR_CODE__OBJECT_NOT_FOUND:  status = ERROR_WRONG_PASS; break;
+          case PARSE_ERROR_CODE__EMAIL_NOT_FOUND:   status = ERROR_UNVERIF;    break;
         }
   
         dispatch({
@@ -153,7 +154,10 @@ export function updateEmail(email) {
       .catch(error => {
         let status = ERROR_OTHER;
         switch (error.code) {
-          case 202: status = ERROR_USER_EXISTS; break;
+          case PARSE_ERROR_CODE__USERNAME_TAKEN:
+          case PARSE_ERROR_CODE__EMAIL_TAKEN:
+            status = ERROR_USER_EXISTS;
+            break;
         }
         dispatch({
           type: UPDATE_EMAIL,
