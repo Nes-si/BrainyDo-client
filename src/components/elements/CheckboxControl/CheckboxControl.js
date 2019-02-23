@@ -1,20 +1,14 @@
 import React, {Component} from 'react';
 import CSSModules from 'react-css-modules';
 
+import {getUniqueId} from 'utils/common';
+
 import styles from './CheckboxControl.sss';
 
 
-let checkBoxId = 0;
-
 @CSSModules(styles, {allowMultiple: true})
 export default class CheckboxControl extends Component {
-  id = 0;
-
-  constructor(props) {
-    super(props);
-
-    this.id = ++checkBoxId;
-  }
+  id = getUniqueId();
 
   onChange = e => {
     const {onChange, disabled} = this.props;

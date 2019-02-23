@@ -331,3 +331,8 @@ export function JSONPrequest(URL, params) {
 
   return result;
 }
+
+let id = 0;
+export function getUniqueId() {
+  return id++;
+}
