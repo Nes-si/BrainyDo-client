@@ -88,20 +88,6 @@ export default class DropdownControl extends Component {
       'arrow-rotated': this.state.listVis
     });
 
-    const suggestions = this.list.map((item, key) => {
-      const styleName = classNames({
-        'item': true,
-        'empty': !item
-      });
-      return (
-        <div onMouseDown={() => this.onItemClick(item)}
-             styleName={styleName}
-             key={key}>
-          {item ? item : '(empty)'}
-        </div>
-      );
-    });
-
     return (
       <div styleName='DropdownControl' onBlur={this.onBlur}>
         {label &&
@@ -114,7 +100,19 @@ export default class DropdownControl extends Component {
                readOnly />
         {this.state.listVis &&
           <div styleName="items">
-            {suggestions}
+            {this.list.map((item, key) => {
+              const styleName = classNames({
+                'item': true,
+                'empty': !item
+              });
+              return (
+                <div onMouseDown={() => this.onItemClick(item)}
+                     styleName={styleName}
+                     key={key}>
+                  {item ? item : '(empty)'}
+                </div>
+              );
+            })}
           </div>
         }
       </div>
