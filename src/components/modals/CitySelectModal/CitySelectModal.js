@@ -1,10 +1,7 @@
 import React, {Component} from 'react';
 import CSSModules from 'react-css-modules';
 
-import {JSONPrequest, convertObjectToURL} from 'utils/common';
-
 import ModalContainer from 'components/elements/ModalContainer/ModalContainer';
-import InputControl from 'components/elements/InputControl/InputControl';
 
 import styles from './CitySelectModal.sss';
 
@@ -49,7 +46,7 @@ export default class CitySelectModal extends Component {
 
   onItemClick = item => {
     this.setState({
-      value: item,
+      value: item.main,
       listVis: false,
       confirmed: true
     });
@@ -111,7 +108,44 @@ export default class CitySelectModal extends Component {
 
     const resJson = await res.json();
     const {suggestions} = resJson;
-    this.list = suggestions.map(item => item.value);
+
+    const addDot = type => {
+      if (type == 'г') return 'г.';
+      if (type == 'с') return 'с.';
+      if (type == 'обл') return 'обл.';
+      if (type == 'респ') return 'респ.';
+      return type;
+    };
+
+    this.list = [];
+    for (let suggestion of suggestions) {
+      const {data} = suggestion;
+
+      if (data.city && data.settlement)
+        continue;
+
+      let main;
+      if (data.city)
+        main = `${addDot(data.city_type)} ${data.city}`;
+      else if (data.settlement)
+        main = `${data.settlement_type_full} ${data.settlement}`;
+
+      let details = ``;
+      if (data.area)
+        details = `${data.area} ${data.area_type}, `;
+
+      const regType = addDot(data.region_type);
+      if (regType == 'респ.')
+        details += `${regType} ${data.region}`;
+      else
+        details += `${data.region} ${regType}`;
+
+      this.list.push({
+        main,
+        details
+      });
+    }
+
     this.setState({
       listVis: !!this.list.length,
       confirmed: false
@@ -136,7 +170,9 @@ export default class CitySelectModal extends Component {
                   <div onMouseDown={() => this.onItemClick(item)}
                        styleName="item"
                        key={key}>
-                    {item}
+                    <span>{item.main}, </span>
+                    <span styleName="item-details">{item.details}</span>
+                    <div styleName="ending"></div>
                   </div>
                 )}
               </div>
