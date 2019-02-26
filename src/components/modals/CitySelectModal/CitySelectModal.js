@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import CSSModules from 'react-css-modules';
 
 import ModalContainer from 'components/elements/ModalContainer/ModalContainer';
+import ButtonControl from 'components/elements/ButtonControl/ButtonControl';
 
 import styles from './CitySelectModal.sss';
 
@@ -11,18 +12,10 @@ export default class CitySelectModal extends Component {
   state = {
     value: '',
     listVis: false,
-    confirmed: false
+    data: null
   };
   list = [];
 
-
-  componentDidMount() {
-    document.addEventListener('keydown', this.onKeyDown);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.onKeyDown);
-  }
 
   close = () => {
     this.props.onClose();
@@ -35,7 +28,7 @@ export default class CitySelectModal extends Component {
 
     //Enter or Esc pressed
     if (event.keyCode == 13) {
-      setTimeout(this.close, 1);
+      setTimeout(this.onOK, 1);
     } else if (event.keyCode == 27) {
       if (this.state.listVis)
         this.setState({listVis: false});
@@ -44,11 +37,11 @@ export default class CitySelectModal extends Component {
     }
   };
 
-  onItemClick = item => {
+  onItemClick = data => {
     this.setState({
-      value: item.main,
+      value: data.main,
       listVis: false,
-      confirmed: true
+      data
     });
   };
 
@@ -142,19 +135,27 @@ export default class CitySelectModal extends Component {
 
       this.list.push({
         main,
-        details
+        details,
+        fias: data.fias_id
       });
     }
 
     this.setState({
       listVis: !!this.list.length,
-      confirmed: false
+      data: null
     });
+  };
+
+  onOK = () => {
+    if (!this.state.data)
+      return;
+
+    this.close();
   };
 
   render() {
     return (
-      <ModalContainer onClose={this.close}>
+      <ModalContainer onClose={this.close} onKeyDown={this.onKeyDown}>
         <div styleName="CitySelectModal">
           <div styleName="title">Выбор города</div>
 
@@ -177,6 +178,15 @@ export default class CitySelectModal extends Component {
                 )}
               </div>
             }
+          </div>
+
+          <div styleName="button-wrapper">
+            <ButtonControl value="ОК"
+                           disabled={!this.state.data}
+                           onClick={this.onOK} />
+            <ButtonControl value="Отмена"
+                           color="red"
+                           onClick={this.close} />
           </div>
         </div>
       </ModalContainer>
