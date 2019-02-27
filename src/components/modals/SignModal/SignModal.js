@@ -203,7 +203,7 @@ export default class SignModal extends Component {
     this.elmPassword =
       <div styleName="input-wrapper">
         <InputControl label="Пароль"
-                      type="password"
+                      inputType="password"
                       value={this.state.password}
                       onChange={this.onPasswordChange} />
       </div>;
@@ -211,7 +211,7 @@ export default class SignModal extends Component {
     this.elmPasswordConfirm =
       <div styleName="input-wrapper">
         <InputControl label="Пароль (повторно)"
-                      type="password"
+                      inputType="password"
                       value={this.state.passwordConfirm}
                       onChange={this.onPasswordConfirmChange} />
       </div>;
