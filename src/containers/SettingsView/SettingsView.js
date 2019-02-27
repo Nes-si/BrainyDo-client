@@ -4,13 +4,18 @@ import {connect} from "react-redux";
 import CSSModules from 'react-css-modules';
 import {Helmet} from "react-helmet";
 
+import 'flatpickr/dist/flatpickr.min.css';
+import {Russian} from "flatpickr/dist/l10n/ru";
+import Flatpickr from 'react-flatpickr';
+
 import {MODAL_TYPE_CITY, showAlert, showModal} from "ducks/nav";
 import {update, updateEmail, updatePassword, resendVerEmail, updateLocation, ERROR_USER_EXISTS, ERROR_OTHER} from 'ducks/user';
-import {checkEmail} from 'utils/common';
+import {checkEmail, getTextDate} from 'utils/common';
 import {checkPassword} from 'utils/data';
 
 import InputControl from 'components/elements/InputControl/InputControl';
 import ButtonControl from 'components/elements/ButtonControl/ButtonControl';
+import RadioControl from "components/elements/RadioControl/RadioControl";
 
 import styles from './SettingsView.sss';
 
@@ -26,6 +31,8 @@ class SettingsView extends Component {
   state = {
     nameFirst: '',
     nameLast: '',
+    sex: `male`,
+    birthdate: null,
     dirtyData: false,
     errorData: null,
     successData: ``,
@@ -54,9 +61,11 @@ class SettingsView extends Component {
 
     this.userData = user.userData;
 
-    this.state.nameFirst = this.userData.nameFirst;
-    this.state.nameLast = this.userData.nameLast;
-    this.state.email = this.userData.email;
+    this.state.nameFirst  = this.userData.nameFirst;
+    this.state.nameLast   = this.userData.nameLast;
+    this.state.sex        = this.userData.sex;
+    this.state.birthdate  = this.userData.birthdate;
+    this.state.email      = this.userData.email;
 
     if (this.userData.emailNew) {
       this.state.emailNew = this.userData.emailNew;
@@ -71,7 +80,7 @@ class SettingsView extends Component {
 
     switch (this.lastChange) {
       case CHG_DATA:
-        this.setState({successData: `Данные были успешно именены!`});
+        this.setState({successData: `Данные были успешно изменены!`});
         setTimeout(() => this.setState({successData: ``}), 2500);
         break;
 
@@ -111,7 +120,9 @@ class SettingsView extends Component {
       this.lastChange = CHG_DATA;
 
       this.userData.nameFirst = this.state.nameFirst;
-      this.userData.nameLast = this.state.nameLast;
+      this.userData.nameLast  = this.state.nameLast;
+      this.userData.sex       = this.state.sex;
+      this.userData.birthdate = this.state.birthdate;
 
       const {update} = this.props.userActions;
       update(this.userData);
@@ -184,6 +195,15 @@ class SettingsView extends Component {
     this.setState({nameLast, dirtyData: true, errorData: null});
   };
 
+  onChangeSex = sex => {
+    this.setState({sex, dirtyData: true});
+  };
+
+  onChangeBirthdate = _date => {
+    const birthdate = _date[0];
+    this.setState({birthdate, dirtyData: true});
+  };
+
   onChangeLocation = () => {
     const {showModal} = this.props.navActions;
     showModal(MODAL_TYPE_CITY, {callback: loc => {
@@ -254,6 +274,35 @@ class SettingsView extends Component {
                   <InputControl value={this.state.nameLast}
                                 onChange={this.onChangeNameLast} />
                 </div>
+              </div>
+            </div>
+            <div styleName="field">
+              <div styleName="field-title">Пол</div>
+              <div styleName="radio-wrapper">
+                <RadioControl name="sex"
+                              data="male"
+                              value={this.state.sex}
+                              label="мужской"
+                              onChange={this.onChangeSex} />
+              </div>
+              <div styleName="radio-wrapper">
+                <RadioControl name="sex"
+                              data="female"
+                              value={this.state.sex}
+                              label="женский"
+                              onChange={this.onChangeSex} />
+              </div>
+            </div>
+            <div styleName="field">
+              <div styleName="field-title">Дата рождения</div>
+              <div styleName="date-picker">
+                <Flatpickr value={this.state.birthdate}
+                           options={{
+                             locale: Russian,
+                             formatDate: getTextDate,
+                             maxDate: new Date(),
+                           }}
+                           onChange={this.onChangeBirthdate} />
               </div>
             </div>
             <div styleName="buttons-wrapper">
