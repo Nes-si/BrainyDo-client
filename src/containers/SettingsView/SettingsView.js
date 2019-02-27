@@ -4,8 +4,8 @@ import {connect} from "react-redux";
 import CSSModules from 'react-css-modules';
 import {Helmet} from "react-helmet";
 
-import {showAlert, showModal} from "ducks/nav";
-import {update, updateEmail, updatePassword, resendVerEmail, ERROR_USER_EXISTS, ERROR_OTHER} from 'ducks/user';
+import {MODAL_TYPE_CITY, showAlert, showModal} from "ducks/nav";
+import {update, updateEmail, updatePassword, resendVerEmail, updateLocation, ERROR_USER_EXISTS, ERROR_OTHER} from 'ducks/user';
 import {checkEmail} from 'utils/common';
 import {checkPassword} from 'utils/data';
 
@@ -45,6 +45,7 @@ class SettingsView extends Component {
   };
   userData = null;
   lastChange = null;
+
 
   constructor(props) {
     super(props);
@@ -183,6 +184,16 @@ class SettingsView extends Component {
     this.setState({nameLast, dirtyData: true, errorData: null});
   };
 
+  onChangeLocation = () => {
+    const {showModal} = this.props.navActions;
+    showModal(MODAL_TYPE_CITY, {callback: loc => {
+        const {update, updateLocation} = this.props.userActions;
+        updateLocation(loc);
+        this.userData.location = loc;
+        update(this.userData);
+      }});
+  };
+
   onChangeEmail = emailNew => {
     this.setState({
       emailNew,
@@ -213,6 +224,8 @@ class SettingsView extends Component {
 
 
   render() {
+    const {location} = this.props.user.userData;
+
     return (
       <div styleName="SettingsView">
         <Helmet>
@@ -255,6 +268,18 @@ class SettingsView extends Component {
               {this.state.errorData}
             </div>
           </form>
+
+          <div styleName="section">
+            <div styleName="section-header">Населённый пункт</div>
+            <div styleName="input-wrapper">
+              <InputControl value={location ? location.main : "Не выбран"}
+                            disabled={true} />
+            </div>
+            <div styleName="buttons-wrapper">
+              <ButtonControl onClick={this.onChangeLocation}
+                             value="Изменить"/>
+            </div>
+          </div>
 
           <form styleName="section" onSubmit={this.onSaveEmail}>
             <div styleName="section-header">Email</div>
@@ -339,7 +364,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     navActions:  bindActionCreators({showModal, showAlert}, dispatch),
-    userActions: bindActionCreators({update, updateEmail, updatePassword, resendVerEmail}, dispatch)
+    userActions: bindActionCreators({update, updateEmail, updatePassword, resendVerEmail, updateLocation}, dispatch)
   };
 }
 
