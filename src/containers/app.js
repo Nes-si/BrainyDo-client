@@ -75,18 +75,19 @@ class App extends React.Component {
 
     switch (nav.modalType) {
       case MODAL_TYPE_SIGN:
-        return <SignModal params={nav.modalParams}
+        return <SignModal onClose={closeModal}
+                          params={nav.modalParams}
                           user={user}
                           nav={nav}
                           login={login}
                           register={register}
                           restorePassword={restorePassword}
                           resendVerEmail={resendVerEmail}
-                          resetStatus={resetStatus}
-                          onClose={closeModal} />;
+                          resetStatus={resetStatus} />;
 
       case MODAL_TYPE_CITY:
-        return <CitySelectModal onClose={closeModal} />;
+        return <CitySelectModal onClose={closeModal}
+                                params={nav.modalParams} />;
     }
   };
 
