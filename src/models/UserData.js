@@ -11,6 +11,7 @@ export class UserData {
   image = null;
   sex = `male`;
   birthdate = null;
+  location = null;
 
 
   constructor(origin) {
@@ -29,6 +30,7 @@ export class UserData {
     if (origin.get(`image`))      this.image      = origin.get(`image`);
     if (origin.get(`sex`))        this.sex        = origin.get(`sex`);
     if (origin.get(`birthdate`))  this.birthdate  = origin.get(`birthdate`);
+    if (origin.get(`location`))   this.location   = origin.get(`location`);
 
     return this;
   }
@@ -39,6 +41,7 @@ export class UserData {
     this.origin.set(`image`,      this.image);
     this.origin.set(`sex`,        this.sex);
     this.origin.set(`birthdate`,  this.birthdate);
+    this.origin.set(`location`,   this.location);
   }
 
   get age() {
