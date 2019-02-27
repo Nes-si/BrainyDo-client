@@ -295,7 +295,7 @@ export default function userReducer(state = initialState, action) {
         authorized: action.authorized,
         status: action.status,
         userData: action.userData,
-        location: action.userData.location,
+        location: action.userData ? action.userData.location : state.location,
         localStorageReady: true,
         password: ``,
         pending: false
