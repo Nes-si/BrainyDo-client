@@ -20,13 +20,13 @@ async function requestConfig() {
   } catch (e) {}
 }
 
-async function initParse() {
+function initParse() {
   Parse.initialize(config.appId);
   Parse.serverURL = config.serverURL;
 }
 
 export async function initApp() {
   await requestConfig();
-  await initParse();
+  initParse();
   store.dispatch(getLocalStorage());
 }
