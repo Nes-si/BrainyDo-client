@@ -57,3 +57,64 @@ export function isMeEventMember(event) {
   }
   return false;
 }
+
+
+export function shortLocType(type) {
+  switch (type) {
+    case 'г': return 'г.';
+    case 'с': return 'с.';
+    case 'поселок городского типа': return 'ПГТ';
+    case 'деревня': return 'дер.';
+    case 'хутор': return 'хут.';
+    case 'поселок': return 'пос.';
+    case 'обл': return 'обл.';
+    case 'респ': return 'респ.';
+  }
+  return type;
+}
+
+export function prepareLocData(data) {
+  if (data.city && data.settlement)
+    return null;
+
+  let main;
+  if (data.city)
+    main = `${shortLocType(data.city_type)} ${data.city}`;
+  else if (data.settlement)
+    main = `${shortLocType(data.settlement_type_full)} ${data.settlement}`;
+
+  let details = ``;
+  if (data.area)
+    details = `${data.area} ${data.area_type}, `;
+
+  if (data.city_with_type != data.region_with_type) {
+    const regType = shortLocType(data.region_type);
+    if (regType == 'респ.' || regType == 'г.')
+      details += `${regType} ${data.region}`;
+    else
+      details += `${data.region} ${regType}`;
+  }
+
+  return {
+    main,
+    details,
+    fias: data.fias_id
+  };
+}
+
+export async function detectLocation() {
+  const URL = `https://suggestions.dadata.ru/suggestions/api/4_1/rs/detectAddressByIp`;
+
+  try {
+    const res = await fetch(URL, {
+      headers: {
+        Accept: "application/json",
+        Authorization: "Token b53aed1c17af2ad242dfec5cb6ab6065ff9789ea"
+      }
+    });
+
+    const resJson = await res.json();
+    return prepareLocData(resJson.location.data);
+
+  } catch (e) {}
+}

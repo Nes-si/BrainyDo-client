@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import CSSModules from 'react-css-modules';
 
+import {prepareLocData} from 'utils/data';
+
 import ModalContainer from 'components/elements/ModalContainer/ModalContainer';
 import ButtonControl from 'components/elements/ButtonControl/ButtonControl';
 
@@ -45,20 +47,6 @@ export default class CitySelectModal extends Component {
     });
   };
 
-  detect = async () => {
-    let URL = `https://suggestions.dadata.ru/suggestions/api/4_1/rs/detectAddressByIp`;
-
-    const res = await fetch(URL, {
-      headers: {
-        Accept: "application/json",
-        Authorization: "Token b53aed1c17af2ad242dfec5cb6ab6065ff9789ea"
-      }
-    });
-
-    const resJson = await res.json();
-    console.log(resJson);
-  };
-  
   onBlur = () => {
     this.setState({listVis: false});
   };
@@ -67,17 +55,6 @@ export default class CitySelectModal extends Component {
     const value = event.target.value;
 
     this.setState({value});
-
-    /*
-    const res = await JSONPrequest('//kladr-api.ru/api.php', {
-      query: value,
-      contentType: 'city',
-      withParent: 1,
-      limit: 15
-    });
-    */
-
-    this.detect();
 
     let URL = `https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address`;
 
@@ -102,42 +79,11 @@ export default class CitySelectModal extends Component {
     const resJson = await res.json();
     const {suggestions} = resJson;
 
-    const addDot = type => {
-      if (type == 'г') return 'г.';
-      if (type == 'с') return 'с.';
-      if (type == 'обл') return 'обл.';
-      if (type == 'респ') return 'респ.';
-      return type;
-    };
-
     this.list = [];
     for (let suggestion of suggestions) {
-      const {data} = suggestion;
-
-      if (data.city && data.settlement)
-        continue;
-
-      let main;
-      if (data.city)
-        main = `${addDot(data.city_type)} ${data.city}`;
-      else if (data.settlement)
-        main = `${data.settlement_type_full} ${data.settlement}`;
-
-      let details = ``;
-      if (data.area)
-        details = `${data.area} ${data.area_type}, `;
-
-      const regType = addDot(data.region_type);
-      if (regType == 'респ.')
-        details += `${regType} ${data.region}`;
-      else
-        details += `${data.region} ${regType}`;
-
-      this.list.push({
-        main,
-        details,
-        fias: data.fias_id
-      });
+      const data = prepareLocData(suggestion.data);
+      if (data)
+        this.list.push(data);
     }
 
     this.setState({
@@ -150,6 +96,8 @@ export default class CitySelectModal extends Component {
     if (!this.state.data)
       return;
 
+    if (this.props.params.callback)
+      this.props.params.callback(this.state.data);
     this.close();
   };
 
@@ -171,8 +119,10 @@ export default class CitySelectModal extends Component {
                   <div onMouseDown={() => this.onItemClick(item)}
                        styleName="item"
                        key={key}>
-                    <span>{item.main}, </span>
-                    <span styleName="item-details">{item.details}</span>
+                    <span>{item.main}</span>
+                    {item.details &&
+                      <span styleName="item-details">, {item.details}</span>
+                    }
                     <div styleName="ending"></div>
                   </div>
                 )}
