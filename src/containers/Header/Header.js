@@ -4,8 +4,10 @@ import {connect} from "react-redux";
 import CSSModules from 'react-css-modules';
 import {NavLink, withRouter} from "react-router-dom";
 
+import {detectLocation} from 'utils/data';
 import {showModal, MODAL_TYPE_SIGN, MODAL_TYPE_CITY} from "ducks/nav";
-import {logout} from "ducks/user";
+import {logout, updateLocation} from "ducks/user";
+
 import {MODE_LOGIN, MODE_REG} from "components/modals/SignModal/SignModal";
 
 import styles from './Header.sss';
@@ -13,6 +15,14 @@ import styles from './Header.sss';
 
 @CSSModules(styles, {allowMultiple: true})
 class Header extends Component {
+  constructor(props) {
+    super(props);
+
+    if (!props.user.location)
+      detectLocation()
+        .then(props.userActions.updateLocation);
+  }
+
   onLogin = () => {
     const {showModal} = this.props.navActions;
     showModal(MODAL_TYPE_SIGN, {mode: MODE_LOGIN});
@@ -27,13 +37,15 @@ class Header extends Component {
     this.props.userActions.logout();
   };
 
-  onCityClick = () => {
+  onLocationClick = () => {
     const {showModal} = this.props.navActions;
-    showModal(MODAL_TYPE_CITY);
+    showModal(MODAL_TYPE_CITY, {callback: loc =>
+      this.props.userActions.updateLocation(loc)
+    });
   };
 
   render() {
-    const {authorized} = this.props.user;
+    const {authorized, location} = this.props.user;
 
     let menu = (
       <div styleName="menu">
@@ -70,8 +82,8 @@ class Header extends Component {
           <img src={require("assets/images/logo.png")} />
         </div>
         {menu}
-        <div styleName="location" onClick={this.onCityClick}>
-          Ростов-на-Дону
+        <div styleName="location" onClick={this.onLocationClick}>
+          {location ? location.main : `Выбрать город`}
         </div>
       </div>
     );
@@ -89,7 +101,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     navActions:   bindActionCreators({showModal}, dispatch),
-    userActions:  bindActionCreators({logout}, dispatch)
+    userActions:  bindActionCreators({logout, updateLocation}, dispatch)
   };
 }
 
