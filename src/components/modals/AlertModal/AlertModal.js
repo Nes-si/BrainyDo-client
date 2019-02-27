@@ -111,8 +111,7 @@ export default class AlertModal extends Component {
             }
             {this.type == ALERT_TYPE_ALERT &&
               <div styleName="button">
-                <ButtonControl color="purple"
-                               value={confirmLabel ? confirmLabel : "OK"}
+                <ButtonControl value={confirmLabel ? confirmLabel : "OK"}
                                DOMRef={btn => this.focusBtn = btn}
                                onClick={this.close} />
               </div>

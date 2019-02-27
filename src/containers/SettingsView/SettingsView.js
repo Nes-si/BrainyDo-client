@@ -244,8 +244,7 @@ class SettingsView extends Component {
               </div>
             </div>
             <div styleName="buttons-wrapper">
-              <ButtonControl color="purple"
-                             type="submit"
+              <ButtonControl type="submit"
                              disabled={!this.state.dirtyData || this.state.errorData}
                              value="Обновить личные данные"/>
             </div>
@@ -267,8 +266,7 @@ class SettingsView extends Component {
               </div>
             </div>
             <div styleName="buttons-wrapper">
-              <ButtonControl color="purple"
-                             type="submit"
+              <ButtonControl type="submit"
                              disabled={!this.state.dirtyEmail || this.state.errorEmail}
                              value="Изменить email"/>
             </div>
@@ -314,8 +312,7 @@ class SettingsView extends Component {
               </div>
             </div>
             <div styleName="buttons-wrapper">
-              <ButtonControl color="purple"
-                             type="submit"
+              <ButtonControl type="submit"
                              disabled={!this.state.dirtyPassword || this.state.errorPassword}
                              value="Изменить пароль"/>
             </div>
