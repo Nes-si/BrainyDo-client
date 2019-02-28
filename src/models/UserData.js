@@ -9,7 +9,7 @@ export class UserData {
   nameFirst = ``;
   nameLast = ``;
   image = null;
-  sex = `male`;
+  sex = ``;
   birthdate = null;
   location = null;
 

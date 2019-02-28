@@ -31,7 +31,7 @@ class SettingsView extends Component {
   state = {
     nameFirst: '',
     nameLast: '',
-    sex: `male`,
+    sex: ``,
     birthdate: null,
     dirtyData: false,
     errorData: null,
@@ -52,6 +52,8 @@ class SettingsView extends Component {
   };
   userData = null;
   lastChange = null;
+
+  now = new Date();
 
 
   constructor(props) {
@@ -298,7 +300,7 @@ class SettingsView extends Component {
                            options={{
                              locale: Russian,
                              formatDate: getTextDate,
-                             maxDate: new Date(),
+                             maxDate: this.now
                            }}
                            onChange={this.onChangeBirthdate} />
               </div>
