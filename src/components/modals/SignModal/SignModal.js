@@ -38,8 +38,8 @@ export default class SignModal extends Component {
   constructor(props) {
     super(props);
 
-    if (props.mode)
-      this.state.mode = props.mode;
+    if (props.params && props.params.mode)
+      this.state.mode = props.params.mode;
   }
 
   componentDidMount() {
