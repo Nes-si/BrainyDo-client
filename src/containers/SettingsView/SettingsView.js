@@ -9,7 +9,7 @@ import {Russian} from "flatpickr/dist/l10n/ru";
 import Flatpickr from 'react-flatpickr';
 
 import {MODAL_TYPE_CITY, showAlert, showModal} from "ducks/nav";
-import {update, updateEmail, updatePassword, resendVerEmail, updateLocation, ERROR_USER_EXISTS, ERROR_OTHER} from 'ducks/user';
+import {update, updateEmail, updatePassword, resendVerEmail, ERROR_USER_EXISTS, ERROR_OTHER} from 'ducks/user';
 import {checkEmail, getTextDate} from 'utils/common';
 import {checkPassword} from 'utils/data';
 
@@ -207,10 +207,8 @@ class SettingsView extends Component {
   onChangeLocation = () => {
     const {showModal} = this.props.navActions;
     showModal(MODAL_TYPE_CITY, {callback: loc => {
-        const {update, updateLocation} = this.props.userActions;
-        updateLocation(loc);
         this.userData.location = loc;
-        update(this.userData);
+        this.props.userActions.update(this.userData);
       }});
   };
 
@@ -413,7 +411,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     navActions:  bindActionCreators({showModal, showAlert}, dispatch),
-    userActions: bindActionCreators({update, updateEmail, updatePassword, resendVerEmail, updateLocation}, dispatch)
+    userActions: bindActionCreators({update, updateEmail, updatePassword, resendVerEmail}, dispatch)
   };
 }
 
