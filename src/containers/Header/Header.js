@@ -6,7 +6,7 @@ import {NavLink, withRouter} from "react-router-dom";
 
 import {detectLocation} from 'utils/data';
 import {showModal, MODAL_TYPE_SIGN, MODAL_TYPE_CITY} from "ducks/nav";
-import {logout, updateLocation} from "ducks/user";
+import {logout} from "ducks/user";
 
 import {MODE_LOGIN, MODE_REG} from "components/modals/SignModal/SignModal";
 
@@ -15,12 +15,18 @@ import styles from './Header.sss';
 
 @CSSModules(styles, {allowMultiple: true})
 class Header extends Component {
+  state = {
+    location: null
+  };
+
   constructor(props) {
     super(props);
 
-    if (!props.user.location)
+    if (!props.user.authorized)
       detectLocation()
-        .then(props.userActions.updateLocation);
+        .then(location => {
+          this.setState({location});
+        });
   }
 
   onLogin = () => {
@@ -39,13 +45,13 @@ class Header extends Component {
 
   onLocationClick = () => {
     const {showModal} = this.props.navActions;
-    showModal(MODAL_TYPE_CITY, {callback: loc =>
-      this.props.userActions.updateLocation(loc)
+    showModal(MODAL_TYPE_CITY, {callback: location =>
+      this.setState({location})
     });
   };
 
   render() {
-    const {authorized, location} = this.props.user;
+    const {authorized} = this.props.user;
 
     let menu = (
       <div styleName="menu">
@@ -82,9 +88,11 @@ class Header extends Component {
           <img src={require("assets/images/logo.png")} />
         </div>
         {menu}
-        <div styleName="location" onClick={this.onLocationClick}>
-          {location ? location.main : `Выбрать город`}
-        </div>
+        {!authorized && !!this.state.location &&
+          <div styleName="location" onClick={this.onLocationClick}>
+            Ваш город — {this.state.location.main}, верно?
+          </div>
+        }
       </div>
     );
   }
@@ -101,7 +109,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     navActions:   bindActionCreators({showModal}, dispatch),
-    userActions:  bindActionCreators({logout, updateLocation}, dispatch)
+    userActions:  bindActionCreators({logout}, dispatch)
   };
 }
 

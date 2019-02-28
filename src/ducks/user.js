@@ -15,7 +15,6 @@ export const LOGOUT             = 'app/user/LOGOUT';
 export const UPDATE             = 'app/user/UPDATE';
 export const UPDATE_EMAIL       = 'app/user/UPDATE_EMAIL';
 export const UPDATE_PASSWORD    = 'app/user/UPDATE_PASSWORD';
-export const UPDATE_LOCATION    = 'app/user/UPDATE_LOCATION';
 export const RESTORE_PASSWORD   = 'app/user/RESTORE_PASSWORD';
 export const RESEND_VERIF       = 'app/user/RESEND_VERIF';
 export const RESET_STATUS       = 'app/user/RESET_STATUS';
@@ -180,13 +179,6 @@ export function updatePassword(password) {
   return {type: UPDATE_PASSWORD};
 }
 
-export function updateLocation(location) {
-  return {
-    type: UPDATE_LOCATION,
-    location
-  };
-}
-
 export function restorePassword(email) {
   if (!email)
     return null;
@@ -259,8 +251,6 @@ const initialState = {
 
   userData: null,
 
-  location: null,
-  
   pending: false
 };
 
@@ -330,12 +320,6 @@ export default function userReducer(state = initialState, action) {
         ...state,
         userData,
         status: action.status
-      };
-
-    case UPDATE_LOCATION:
-      return {
-        ...state,
-        location: action.location
       };
       
     case RESTORE_PASSWORD:
