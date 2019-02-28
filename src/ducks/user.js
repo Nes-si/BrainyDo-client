@@ -26,7 +26,7 @@ export const ERROR_OTHER        = 'app/user/ERROR_OTHER';
 export const OK                 = 'app/user/OK';
 
 
-export function register(email, password) {
+export function register(email, password, location) {
   return dispatch => {
     dispatch({
       type: REGISTER_REQUEST,
@@ -38,7 +38,7 @@ export function register(email, password) {
     user.set("username", email);
     user.set("email", email);
     user.set("password", password);
-    user.set("location", store.getState().user.location);
+    user.set("location", location);
 
     send(user.signUp())
 
@@ -285,7 +285,6 @@ export default function userReducer(state = initialState, action) {
         authorized: action.authorized,
         status: action.status,
         userData: action.userData,
-        location: action.userData ? action.userData.location : state.location,
         localStorageReady: true,
         password: ``,
         pending: false

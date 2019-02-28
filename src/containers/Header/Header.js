@@ -31,12 +31,18 @@ class Header extends Component {
 
   onLogin = () => {
     const {showModal} = this.props.navActions;
-    showModal(MODAL_TYPE_SIGN, {mode: MODE_LOGIN});
+    showModal(MODAL_TYPE_SIGN, {
+      mode: MODE_LOGIN,
+      location: this.state.location
+    });
   };
 
   onReg = () => {
     const {showModal} = this.props.navActions;
-    showModal(MODAL_TYPE_SIGN, {mode: MODE_REG});
+    showModal(MODAL_TYPE_SIGN, {
+      mode: MODE_REG,
+      location: this.state.location
+    });
   };
 
   onLogout = () => {
