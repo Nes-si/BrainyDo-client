@@ -336,3 +336,49 @@ let id = 0;
 export function getUniqueId() {
   return id++;
 }
+
+export function debounce(func, threshold = 100, execAsap = false) {
+  let timeout;
+
+  return function debounced () {
+    const obj = this, args = arguments;
+    const delayed = () => {
+      if (!execAsap)
+        func.apply(obj, args);
+      timeout = null;
+    };
+
+    if (timeout)
+      clearTimeout(timeout);
+    else if (execAsap)
+      func.apply(obj, args);
+
+    timeout = setTimeout(delayed, threshold);
+  };
+}
+
+export function throttle(func, ms) {
+  let isThrottled = false,
+    savedArgs,
+    savedThis;
+
+  return function wrapper() {
+    if (isThrottled) {
+      savedArgs = arguments;
+      savedThis = this;
+      return;
+    }
+
+    func.apply(this, arguments);
+
+    isThrottled = true;
+
+    setTimeout(() => {
+      isThrottled = false;
+      if (savedArgs) {
+        wrapper.apply(savedThis, savedArgs);
+        savedArgs = savedThis = null;
+      }
+    }, ms);
+  };
+}
