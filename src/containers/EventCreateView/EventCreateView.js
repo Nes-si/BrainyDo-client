@@ -14,7 +14,7 @@ import {FILE_SIZE_MAX} from 'ConnectConstants';
 import {EventData, AGE_LIMITS, AGE_LIMIT_NO_LIMIT, FILTER_DATE_VALUES} from "models/EventData";
 import {showAlert, showModal} from "ducks/nav";
 import {createEvent} from "ducks/events";
-import {getTextDateTime, convertDataUnits, BYTES, M_BYTES, checkFileType, TYPE_IMAGE, filterSpecials} from "utils/common";
+import {getTextDateTime, convertDataUnits, BYTES, M_BYTES, checkFileType, TYPE_IMAGE, filterSpecials, throttle} from "utils/common";
 
 import ButtonControl from "components/elements/ButtonControl/ButtonControl";
 import InputControl from "components/elements/InputControl/InputControl";
@@ -23,6 +23,69 @@ import CheckboxControl from 'components/elements/CheckboxControl/CheckboxControl
 import LoaderComponent from 'components/elements/LoaderComponent/LoaderComponent';
 
 import styles from './EventCreateView.sss';
+
+
+
+class RightDrag {
+  options = new ymaps.option.Manager();
+  events = new ymaps.event.Manager();
+
+  mapElm;
+
+  mousePushed = false;
+  oldCoords = [0, 0];
+
+  constructor() {
+    setTimeout(() => this.mapElm = this.options.get('mapElm'), 1);
+  }
+
+  setParent(parent) {
+    this.parent = parent;
+  }
+  getParent() {
+    return this.parent;
+  }
+
+  enable() {
+    this.parent.getMap().events.add('mousedown', this.onDown, this);
+    this.parent.getMap().events.add('mousemove', this.onMove, this);
+    this.parent.getMap().events.add('mouseup', this.onUp, this);
+  }
+
+  disable() {
+    this.parent.getMap().events.remove('mousedown', this.onDown, this);
+    this.parent.getMap().events.remove('mousemove', this.onMove, this);
+    this.parent.getMap().events.remove('mouseup', this.onUp, this);
+  }
+
+  onDown = event => {
+    if (event.get('which') != 3)
+      return;
+
+    this.mousePushed = true;
+    this.oldCoords = event.get('globalPixels');
+    this.mapElm.style.cursor = 'grab';
+  };
+
+  onMove = event => {
+    if (this.mousePushed)
+      throttle(this.setMapPos, 300)(event);
+  };
+
+  setMapPos = event => {
+    const coords = event.get('globalPixels');
+    const delta = [coords[0] - this.oldCoords[0], coords[1] - this.oldCoords[1]];
+    const map = this.parent.getMap();
+    const mapCoords = map.getGlobalPixelCenter();
+    const mapCoordsNew = [mapCoords[0] - delta[0], mapCoords[1] - delta[1]];
+    map.setGlobalPixelCenter(mapCoordsNew);
+  };
+
+  onUp = event => {
+    this.mousePushed = false;
+    this.mapElm.style.cursor = 'default';
+  };
+}
 
 
 @CSSModules(styles, {allowMultiple: true})
@@ -36,6 +99,7 @@ class EventCreateView extends Component {
     tags: [],
     price: 0,
     ageLimit: AGE_LIMIT_NO_LIMIT,
+    location: null,
 
     errorRequired: false,
 
@@ -47,6 +111,7 @@ class EventCreateView extends Component {
   };
 
   event = new EventData();
+  mapElm = null;
 
 
   constructor(props) {
@@ -59,10 +124,79 @@ class EventCreateView extends Component {
     this.state.dateEnd.setHours(19, 0, 0, 0);
   }
 
+  componentDidMount() {
+    ymaps.ready(this.setupYMaps);
+  }
+
   componentWillReceiveProps(nextProps) {
     if (this.event.origin && this.event.origin.id)
       this.props.history.push(`/event${this.event.origin.id}`);
   }
+
+  setupYMaps = () => {
+    const {location} = this.props.user.userData;
+    let center = [55.76, 37.64]; // Москва
+    if (location && location.geoLat && location.geoLon)
+      center = [location.geoLat, location.geoLon];
+
+    let placemark;
+    const map = new ymaps.Map(this.mapElm, {
+      center,
+      zoom: 12,
+      controls: ['fullscreenControl', 'geolocationControl', 'zoomControl', 'searchControl']
+    }, {
+      searchControlProvider: 'yandex#search',
+      searchControlFitMaxWidth: true,
+      searchControlSize: 'large',
+      searchControlMaxWidth: 540,
+      geolocationControlPosition: {top: 10, right: 50}
+    });
+
+    map.behaviors
+      .disable(['drag', 'rightMouseButtonMagnifier']);
+
+    ymaps.behavior.storage.add('RightDrag', RightDrag);
+    map.behaviors.enable('RightDrag');
+    map.behaviors.get('RightDrag').options.set({mapElm: this.mapElm});
+
+    const getAddress = async coords => {
+      placemark.properties.set('iconCaption', 'поиск...');
+      const res = await ymaps.geocode(coords);
+      const obj = res.geoObjects.get(0);
+
+      placemark.properties.set({
+        iconCaption: [
+          // Название населенного пункта или вышестоящее административно-территориальное образование.
+          obj.getLocalities().length ? obj.getLocalities() : obj.getAdministrativeAreas(),
+          // Получаем путь до топонима, если метод вернул null, запрашиваем наименование здания.
+          obj.getThoroughfare() || obj.getPremise()
+        ].filter(Boolean).join(', '),
+
+        balloonContent: obj.getAddressLine()
+      });
+    };
+
+    map.events.add('click', async e => {
+      let coords = e.get('coords');
+
+      if (placemark) {
+        placemark.geometry.setCoordinates(coords);
+
+      } else {
+        placemark = new ymaps.Placemark(coords, {
+          iconCaption: 'поиск...'
+        }, {
+          preset: 'islands#violetDotIconWithCaption',
+          draggable: true
+        });
+        map.geoObjects.add(placemark);
+        placemark.events.add('dragend', () =>
+          getAddress(placemark.geometry.getCoordinates())
+        );
+      }
+      return getAddress(coords);
+    });
+  };
 
   onChangeName = name => {
     this.setState({name, errorRequired: false});
@@ -246,6 +380,14 @@ class EventCreateView extends Component {
                                onChange={this.onChangeDateEnd}/>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            <div styleName="location">
+              <div>Место проведения:</div>
+              <div styleName="map" ref={elm => this.mapElm = elm}></div>
+              <div styleName="location-input">
+                <InputControl value={this.location ? this.location.name : ''}/>
               </div>
             </div>
 
