@@ -31,7 +31,7 @@ export default class GeoSearchControl extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.value)
+    if (nextProps.value !== undefined && nextProps.value !== null)
       this.setState({value: nextProps.value});
   }
 
@@ -64,6 +64,7 @@ export default class GeoSearchControl extends Component {
     }
 
     try {
+      // узнаём по адресу геокоординаты
       const URL = `https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address`;
       const res = await fetch(URL, {
         method: 'POST',

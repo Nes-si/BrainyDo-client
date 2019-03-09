@@ -121,6 +121,7 @@ class EventCreateView extends Component {
   map = null;
   marker = null;
   geocoder = null;
+  placesService = null;
 
 
   constructor(props) {
@@ -145,6 +146,18 @@ class EventCreateView extends Component {
       this.props.history.push(`/event${this.event.origin.id}`);
   }
 
+  getAddressFromPlaces = aComps => {
+    let num;
+    let street;
+    for (let comp of aComps) {
+      switch (comp.types[0]) {
+        case 'street_number': num = comp.short_name; break;
+        case 'route': street = comp.short_name; break;
+      }
+    }
+    return `${street}, ${num}`;
+  };
+
   setupGMaps = () => {
     let center = {lat: 55.76, lng: 37.64}; // Москва
     const {city} = this.state;
@@ -161,33 +174,48 @@ class EventCreateView extends Component {
 
     this.geocoder = new google.maps.Geocoder();
 
+    this.placesService = new google.maps.places.PlacesService(this.map);
+
     this.map.addListener('click', async event => {
       if (event.placeId) {
-        console.log('You clicked on place:' + event.placeId);
+        event.stop();
 
+        this.placesService.getDetails({placeId: event.placeId}, (place, status) => {
+          if (status != 'OK')
+            return;
+
+          this.setMarker(place.geometry.location.lat(), place.geometry.location.lng());
+          this.setState({place: place.name});
+        });
+
+      } else {
+        this.setMarker(event.latLng.lat(), event.latLng.lng());
+        this.setState({place: ''});
       }
-
-      this.setMarker(event.latLng.lat(), event.latLng.lng());
-      this.onMarkerChange(event.latLng.lat(), event.latLng.lng());
     });
   };
 
-  setMarker = (lat, lng) => {
+  setMarker = (lat, lng, setAddress = true) => {
     if (!this.marker) {
       this.marker = new google.maps.Marker({
         position: {lat, lng},
         map: this.map,
         draggable: true
       });
-      this.marker.addListener('dragend', e =>
-        this.onMarkerChange(e.latLng.lat(), e.latLng.lng())
-      );
+      this.marker.addListener('dragend', e => {
+        this.setState({place: ''});
+        this.setAddressByCoords(e.latLng.lat(), e.latLng.lng());
+      });
+
     } else {
       this.marker.setPosition({lat, lng});
     }
+
+    if (setAddress)
+      this.setAddressByCoords(lat, lng);
   };
 
-  onMarkerChange = async (lat, lng) => {
+  setAddressByCoords = async (lat, lng) => {
     const URL = `https://suggestions.dadata.ru/suggestions/api/4_1/rs/geolocate/address`;
     const res = await fetch(URL, {
       method: 'POST',
@@ -264,7 +292,7 @@ class EventCreateView extends Component {
     if (address.house) {
       this.map.setCenter({lat: address.geoLat, lng: address.geoLon});
       this.map.setZoom(17);
-      this.setMarker(address.geoLat, address.geoLon);
+      this.setMarker(address.geoLat, address.geoLon, false);
     }
   };
 
@@ -450,7 +478,8 @@ class EventCreateView extends Component {
               <div styleName="inline top-margin">
                 <div>Место:</div>
                 <div styleName="input-wrapper">
-                  <GeoSearchControl onChange={this.onChangePlace} />
+                  <GeoSearchControl onChange={this.onChangePlace}
+                                    value={this.state.place} />
                 </div>
               </div>
 
