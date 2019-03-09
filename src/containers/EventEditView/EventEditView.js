@@ -24,74 +24,11 @@ import CheckboxControl from 'components/elements/CheckboxControl/CheckboxControl
 import LoaderComponent from 'components/elements/LoaderComponent/LoaderComponent';
 import GeoSearchControl, {TYPE_ADDRESS} from "components/elements/GeoSearchControl/GeoSearchControl";
 
-import styles from './EventCreateView.sss';
-
-
-
-class RightDrag {
-  options = new ymaps.option.Manager();
-  events = new ymaps.event.Manager();
-
-  mapElm;
-
-  mousePushed = false;
-  oldCoords = [0, 0];
-
-  constructor() {
-    setTimeout(() => this.mapElm = this.options.get('mapElm'), 1);
-  }
-
-  setParent(parent) {
-    this.parent = parent;
-  }
-  getParent() {
-    return this.parent;
-  }
-
-  enable() {
-    this.parent.getMap().events.add('mousedown', this.onDown, this);
-    this.parent.getMap().events.add('mousemove', this.onMove, this);
-    this.parent.getMap().events.add('mouseup', this.onUp, this);
-  }
-
-  disable() {
-    this.parent.getMap().events.remove('mousedown', this.onDown, this);
-    this.parent.getMap().events.remove('mousemove', this.onMove, this);
-    this.parent.getMap().events.remove('mouseup', this.onUp, this);
-  }
-
-  onDown = event => {
-    if (event.get('which') != 3)
-      return;
-
-    this.mousePushed = true;
-    this.oldCoords = event.get('globalPixels');
-    this.mapElm.style.cursor = 'grab';
-  };
-
-  onMove = event => {
-    if (this.mousePushed)
-      throttle(this.setMapPos, 300)(event);
-  };
-
-  setMapPos = event => {
-    const coords = event.get('globalPixels');
-    const delta = [coords[0] - this.oldCoords[0], coords[1] - this.oldCoords[1]];
-    const map = this.parent.getMap();
-    const mapCoords = map.getGlobalPixelCenter();
-    const mapCoordsNew = [mapCoords[0] - delta[0], mapCoords[1] - delta[1]];
-    map.setGlobalPixelCenter(mapCoordsNew);
-  };
-
-  onUp = event => {
-    this.mousePushed = false;
-    this.mapElm.style.cursor = 'default';
-  };
-}
+import styles from './EventEditView.sss';
 
 
 @CSSModules(styles, {allowMultiple: true})
-class EventCreateView extends Component {
+class EventEditView extends Component {
   state = {
     name: '',
     description: '',
@@ -358,7 +295,7 @@ class EventCreateView extends Component {
     const imageSrc = this.state.image ? this.state.image.url() : require('assets/images/event-empty.png');
 
     return (
-      <div styleName="EventCreateView">
+      <div styleName="EventEditView">
         <Helmet>
           <title>Новое событие — Triple L</title>
         </Helmet>
@@ -531,4 +468,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EventCreateView);
+export default connect(mapStateToProps, mapDispatchToProps)(EventEditView);
