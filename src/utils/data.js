@@ -59,21 +59,27 @@ export function isMeEventMember(event) {
 }
 
 
+const shortLocTypes = ['вл', 'г', 'д', 'двлд', 'днп', 'дор', 'дп', 'жт', 'им', 'к', 'кв', 'км', 'комн', 'кп', 'лпх', 'м',
+  'мкр', 'наб', 'нп', 'обл', 'оф', 'п', 'пгт', 'пер', 'пл', 'платф', 'респ', 'рзд', 'рп', 'с', 'сл', 'снт', 'ст', 'стр',
+  'тер', 'туп', 'ул', 'х', 'ш'];
+
 export function shortLocType(type) {
   switch (type) {
-    case 'г': return 'г.';
-    case 'с': return 'с.';
     case 'поселок городского типа': return 'ПГТ';
     case 'деревня': return 'дер.';
     case 'хутор': return 'хут.';
     case 'поселок': return 'пос.';
-    case 'обл': return 'обл.';
-    case 'респ': return 'респ.';
+    case 'аобл': return 'авт. обл.';
   }
+
+  if (shortLocTypes.indexOf(type) != -1)
+    return type + '.';
+
   return type;
 }
 
-export function prepareLocData(data) {
+export function transformDadataCity(location) {
+  const {data} = location;
   if (data.city && data.settlement)
     return null;
 
@@ -98,7 +104,26 @@ export function prepareLocData(data) {
   return {
     main,
     details,
-    fias: data.fias_id
+    isSettlement: data.fias_id == data.settlement_fias_id,
+    fias: data.fias_id,
+    unrestricted: location.unrestricted_value
+  };
+}
+
+export function transformDadataAddress(location) {
+  const {data} = location;
+  let main = `${shortLocType(data.street_type)} ${data.street}`;
+  let house = null;
+  if (data.house) {
+    house = data.house;
+    main += `, ${data.house}`;
+  }
+
+  return {
+    main,
+    house,
+    fias: data.fias_id,
+    unrestricted: location.unrestricted_value
   };
 }
 
@@ -114,7 +139,7 @@ export async function detectLocation() {
     });
 
     const resJson = await res.json();
-    return prepareLocData(resJson.location.data);
+    return transformDadataCity(resJson.location);
 
   } catch (e) {}
 }

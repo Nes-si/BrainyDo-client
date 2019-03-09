@@ -11,16 +11,18 @@ import {Russian} from "flatpickr/dist/l10n/ru";
 import Flatpickr from 'react-flatpickr';
 
 import {FILE_SIZE_MAX} from 'ConnectConstants';
-import {EventData, AGE_LIMITS, AGE_LIMIT_NO_LIMIT, FILTER_DATE_VALUES} from "models/EventData";
+import {EventData, AGE_LIMITS, AGE_LIMIT_NO_LIMIT} from "models/EventData";
 import {showAlert, showModal} from "ducks/nav";
 import {createEvent} from "ducks/events";
 import {getTextDateTime, convertDataUnits, BYTES, M_BYTES, checkFileType, TYPE_IMAGE, filterSpecials, throttle} from "utils/common";
+import {transformDadataAddress} from 'utils/data';
 
 import ButtonControl from "components/elements/ButtonControl/ButtonControl";
 import InputControl from "components/elements/InputControl/InputControl";
 import DropdownControl from "components/elements/DropdownControl/DropdownControl";
 import CheckboxControl from 'components/elements/CheckboxControl/CheckboxControl';
 import LoaderComponent from 'components/elements/LoaderComponent/LoaderComponent';
+import GeoSearchControl, {TYPE_ADDRESS} from "components/elements/GeoSearchControl/GeoSearchControl";
 
 import styles from './EventCreateView.sss';
 
@@ -101,6 +103,10 @@ class EventCreateView extends Component {
     ageLimit: AGE_LIMIT_NO_LIMIT,
     location: null,
 
+    city: null,
+    address: null,
+    place: null,
+
     errorRequired: false,
 
     image: null,
@@ -112,6 +118,9 @@ class EventCreateView extends Component {
 
   event = new EventData();
   mapElm = null;
+  map = null;
+  marker = null;
+  geocoder = null;
 
 
   constructor(props) {
@@ -122,10 +131,13 @@ class EventCreateView extends Component {
 
     this.state.dateEnd.setDate(this.state.dateEnd.getDate() + 1);
     this.state.dateEnd.setHours(19, 0, 0, 0);
+
+    this.state.city = props.user.userData.location;
   }
 
   componentDidMount() {
-    ymaps.ready(this.setupYMaps);
+    //ymaps.ready(this.setupYMaps);
+    this.setupGMaps();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -133,69 +145,74 @@ class EventCreateView extends Component {
       this.props.history.push(`/event${this.event.origin.id}`);
   }
 
-  setupYMaps = () => {
-    const {location} = this.props.user.userData;
-    let center = [55.76, 37.64]; // Москва
-    if (location && location.geoLat && location.geoLon)
-      center = [location.geoLat, location.geoLon];
+  setupGMaps = () => {
+    let center = {lat: 55.76, lng: 37.64}; // Москва
+    const {city} = this.state;
+    if (city && city.geoLat && city.geoLon)
+      center = {lat: city.geoLat, lng: city.geoLon};
 
-    let placemark;
-    const map = new ymaps.Map(this.mapElm, {
+    this.map = new google.maps.Map(this.mapElm, {
       center,
-      zoom: 12,
-      controls: ['fullscreenControl', 'geolocationControl', 'zoomControl', 'searchControl']
-    }, {
-      searchControlProvider: 'yandex#search',
-      searchControlFitMaxWidth: true,
-      searchControlSize: 'large',
-      searchControlMaxWidth: 540,
-      geolocationControlPosition: {top: 10, right: 50}
+      zoom: 11,
+      mapTypeControl: false,
+      streetViewControl: false,
+      gestureHandling: 'greedy'
     });
 
-    map.behaviors
-      .disable(['drag', 'rightMouseButtonMagnifier']);
+    this.geocoder = new google.maps.Geocoder();
 
-    ymaps.behavior.storage.add('RightDrag', RightDrag);
-    map.behaviors.enable('RightDrag');
-    map.behaviors.get('RightDrag').options.set({mapElm: this.mapElm});
+    this.map.addListener('click', async event => {
+      if (event.placeId) {
+        console.log('You clicked on place:' + event.placeId);
 
-    const getAddress = async coords => {
-      placemark.properties.set('iconCaption', 'поиск...');
-      const res = await ymaps.geocode(coords);
-      const obj = res.geoObjects.get(0);
-
-      placemark.properties.set({
-        iconCaption: [
-          // Название населенного пункта или вышестоящее административно-территориальное образование.
-          obj.getLocalities().length ? obj.getLocalities() : obj.getAdministrativeAreas(),
-          // Получаем путь до топонима, если метод вернул null, запрашиваем наименование здания.
-          obj.getThoroughfare() || obj.getPremise()
-        ].filter(Boolean).join(', '),
-
-        balloonContent: obj.getAddressLine()
-      });
-    };
-
-    map.events.add('click', async e => {
-      let coords = e.get('coords');
-
-      if (placemark) {
-        placemark.geometry.setCoordinates(coords);
-
-      } else {
-        placemark = new ymaps.Placemark(coords, {
-          iconCaption: 'поиск...'
-        }, {
-          preset: 'islands#violetDotIconWithCaption',
-          draggable: true
-        });
-        map.geoObjects.add(placemark);
-        placemark.events.add('dragend', () =>
-          getAddress(placemark.geometry.getCoordinates())
-        );
       }
-      return getAddress(coords);
+
+      this.setMarker(event.latLng.lat(), event.latLng.lng());
+      this.onMarkerChange(event.latLng.lat(), event.latLng.lng());
     });
+  };
+
+  setMarker = (lat, lng) => {
+    if (!this.marker) {
+      this.marker = new google.maps.Marker({
+        position: {lat, lng},
+        map: this.map,
+        draggable: true
+      });
+      this.marker.addListener('dragend', e =>
+        this.onMarkerChange(e.latLng.lat(), e.latLng.lng())
+      );
+    } else {
+      this.marker.setPosition({lat, lng});
+    }
+  };
+
+  onMarkerChange = async (lat, lng) => {
+    const URL = `https://suggestions.dadata.ru/suggestions/api/4_1/rs/geolocate/address`;
+    const res = await fetch(URL, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Token b53aed1c17af2ad242dfec5cb6ab6065ff9789ea"
+      },
+      body: JSON.stringify({
+        lat,
+        lon: lng
+      })
+    });
+
+    const resJson = await res.json();
+    const address = transformDadataAddress(resJson.suggestions[0]);
+    this.setState({address});
+
+    /*
+    this.geocoder.geocode({location: {lat, lng}}, (results, status) => {
+      if (status != 'OK')
+        return;
+      console.log(results);
+    });
+    */
   };
 
   onChangeName = name => {
@@ -227,6 +244,32 @@ class EventCreateView extends Component {
 
   onChangeDateEndEnabled = dateEndEnabled => {
     this.setState({dateEndEnabled});
+  };
+
+  onChangeCity = city => {
+    this.setState({city});
+
+    if (city) {
+      this.map.setCenter({lat: city.geoLat, lng: city.geoLon});
+      this.map.setZoom(11);
+    }
+  };
+
+  onChangeAddress = address => {
+    if (!address)
+      return;
+
+    this.setState({address});
+
+    if (address.house) {
+      this.map.setCenter({lat: address.geoLat, lng: address.geoLon});
+      this.map.setZoom(17);
+      this.setMarker(address.geoLat, address.geoLon);
+    }
+  };
+
+  onChangePlace = place => {
+
   };
 
   onImageUpload = async event => {
@@ -315,9 +358,9 @@ class EventCreateView extends Component {
           </div>
 
           <div styleName="text">
-            <div styleName="name">
-              <div>Название события:</div>
-              <div styleName="name-input">
+            <div styleName="inline">
+              <div>Название:</div>
+              <div styleName="input-wrapper">
                 <InputControl value={this.state.name}
                               autoFocus
                               red={this.state.errorRequired}
@@ -325,13 +368,13 @@ class EventCreateView extends Component {
               </div>
             </div>
 
-            <div styleName="caption">Описание события:</div>
+            <div styleName="caption">Описание:</div>
             <textarea value={this.state.description}
                       styleName="area-description"
                       onChange={this.onChangeDescription} />
 
             <div styleName="price-and-age">
-              <div styleName="price">
+              <div styleName="inline">
                 <div>Стоимость участия:</div>
                 <div styleName="price-input">
                   <InputControl value={this.state.price}
@@ -340,7 +383,7 @@ class EventCreateView extends Component {
                 <div styleName="price-units">рублей</div>
               </div>
 
-              <div styleName="age">
+              <div styleName="inline">
                 <div>Возрастное ограничение:</div>
                 <div styleName="age-dropdown">
                   <DropdownControl list={AGE_LIMITS}
@@ -351,7 +394,7 @@ class EventCreateView extends Component {
             </div>
 
             <div styleName="date">
-              <div styleName="date-start">
+              <div styleName="inline">
                 <div>Начало:</div>
                 <div styleName="date-picker">
                   <Flatpickr value={this.state.dateStart}
@@ -364,7 +407,7 @@ class EventCreateView extends Component {
                              onChange={this.onChangeDateStart}/>
                 </div>
               </div>
-              <div styleName="date-end">
+              <div styleName="inline">
                 <CheckboxControl onChange={this.onChangeDateEndEnabled}
                                  checked={this.state.dateEndEnabled} />
                 <div styleName={`date-wrapper ${this.state.dateEndEnabled ? '' : 'date-disabled'}`}>
@@ -384,11 +427,34 @@ class EventCreateView extends Component {
             </div>
 
             <div styleName="location">
-              <div>Место проведения:</div>
-              <div styleName="map" ref={elm => this.mapElm = elm}></div>
-              <div styleName="location-input">
-                <InputControl value={this.location ? this.location.name : ''}/>
+              <div styleName="title">Место проведения</div>
+              <div styleName="inline top-margin">
+                <div>Город:</div>
+                <div styleName="input-wrapper">
+                  <GeoSearchControl placeholder="Введите первые буквы города"
+                                    value={this.state.city ? this.state.city.main : null}
+                                    onChange={this.onChangeCity} />
+                </div>
               </div>
+
+              <div styleName="inline top-margin">
+                <div>Адрес:</div>
+                <div styleName="input-wrapper">
+                  <GeoSearchControl value={this.state.address ? this.state.address.main : null}
+                                    type={TYPE_ADDRESS}
+                                    city={this.state.city}
+                                    onChange={this.onChangeAddress} />
+                </div>
+              </div>
+
+              <div styleName="inline top-margin">
+                <div>Место:</div>
+                <div styleName="input-wrapper">
+                  <GeoSearchControl onChange={this.onChangePlace} />
+                </div>
+              </div>
+
+              <div styleName="map" ref={elm => this.mapElm = elm}></div>
             </div>
 
             <div styleName="buttons">
