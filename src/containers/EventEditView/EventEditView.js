@@ -43,8 +43,11 @@ class EventEditView extends Component {
     city: null,
     address: null,
     place: null,
+    placeAdd: null,
 
-    errorRequired: false,
+    errorNameRequired: false,
+    errorCityRequired: false,
+    errorMarkerNull: false,
 
     image: null,
     imageLoading: false,
@@ -86,18 +89,6 @@ class EventEditView extends Component {
     if (this.event.origin && this.event.origin.id)
       this.props.history.push(`/event${this.event.origin.id}`);
   }
-
-  getAddressFromPlaces = aComps => {
-    let num;
-    let street;
-    for (let comp of aComps) {
-      switch (comp.types[0]) {
-        case 'street_number': num = comp.short_name; break;
-        case 'route': street = comp.short_name; break;
-      }
-    }
-    return `${street}, ${num}`;
-  };
 
   setupGMaps = () => {
     let center = {lat: 55.76, lng: 37.64}; // Москва
@@ -147,7 +138,7 @@ class EventEditView extends Component {
         this.setState({place: ''});
         this.setAddressByCoords(e.latLng.lat(), e.latLng.lng());
       });
-
+      this.setState({errorMarkerNull: false});
     } else {
       this.marker.setPosition({lat, lng});
     }
@@ -192,7 +183,7 @@ class EventEditView extends Component {
   };
 
   onChangeName = name => {
-    this.setState({name, errorRequired: false});
+    this.setState({name, errorNameRequired: false});
   };
 
   onChangeDescription = event => {
@@ -223,7 +214,7 @@ class EventEditView extends Component {
   };
 
   onChangeCity = city => {
-    this.setState({city, address: '', place: ''});
+    this.setState({city, address: '', place: '', errorCityRequired: false});
     this.addressElm.updateValue('');
 
     if (city) {
@@ -247,6 +238,10 @@ class EventEditView extends Component {
 
   onChangePlace = place => {
     this.setState({place});
+  };
+
+  onChangePlaceAdd = placeAdd => {
+    this.setState({placeAdd});
   };
 
   onImageUpload = async event => {
@@ -276,7 +271,17 @@ class EventEditView extends Component {
 
   validate() {
     if (!this.state.name) {
-      this.setState({errorRequired: true});
+      this.setState({errorNameRequired: true});
+      return false;
+    }
+
+    if (!this.state.city) {
+      this.setState({errorCityRequired: true});
+      return false;
+    }
+
+    if (!this.marker) {
+      this.setState({errorMarkerNull: true});
       return false;
     }
 
@@ -305,6 +310,8 @@ class EventEditView extends Component {
 
   render() {
     const imageSrc = this.state.image ? this.state.image.url() : require('assets/images/event-empty.png');
+
+    const errorRequired = this.state.errorNameRequired || this.state.errorCityRequired;
 
     return (
       <div styleName="EventEditView">
@@ -340,7 +347,7 @@ class EventEditView extends Component {
               <div styleName="input-wrapper">
                 <InputControl value={this.state.name}
                               autoFocus
-                              red={this.state.errorRequired}
+                              red={this.state.errorNameRequired}
                               onChange={this.onChangeName} />
               </div>
             </div>
@@ -435,6 +442,14 @@ class EventEditView extends Component {
               </div>
 
               <div styleName="map" ref={elm => this.mapElm = elm}></div>
+
+              <div styleName="top-margin">
+                <div>Дополнительная информация:</div>
+                <div styleName="input-wrapper">
+                  <InputControl onChange={this.onChangePlaceAdd}
+                                value={this.state.placeAdd} />
+                </div>
+              </div>
             </div>
 
             <div styleName="buttons">
@@ -450,8 +465,11 @@ class EventEditView extends Component {
               </div>
             </div>
 
-            {this.state.errorRequired &&
+            {errorRequired &&
               <div styleName="error">Необходимо заполнить обязательные поля!</div>
+            }
+            {this.state.errorMarkerNull &&
+              <div styleName="error">Необходимо выбрать место проведения!</div>
             }
 
           </div>
