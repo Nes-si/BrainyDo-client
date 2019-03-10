@@ -24,15 +24,15 @@ export default class GeoSearchControl extends Component {
 
   constructor(props) {
     super(props);
+
     if (props.value)
       this.state.value = props.value;
     if (props.type)
       this.type = props.type;
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.value !== undefined && nextProps.value !== null)
-      this.setState({value: nextProps.value});
+  updateValue(value) {
+    this.setState({value});
   }
 
   onKeyDown = event => {

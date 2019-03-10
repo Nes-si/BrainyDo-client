@@ -15,14 +15,14 @@ import {EventData, AGE_LIMITS, AGE_LIMIT_NO_LIMIT} from "models/EventData";
 import {showAlert, showModal} from "ducks/nav";
 import {createEvent} from "ducks/events";
 import {getTextDateTime, convertDataUnits, BYTES, M_BYTES, checkFileType, TYPE_IMAGE, filterSpecials, throttle} from "utils/common";
-import {transformDadataAddress} from 'utils/data';
+import {transformDadataAddress, transformDadataCity} from 'utils/data';
 
 import ButtonControl from "components/elements/ButtonControl/ButtonControl";
 import InputControl from "components/elements/InputControl/InputControl";
 import DropdownControl from "components/elements/DropdownControl/DropdownControl";
 import CheckboxControl from 'components/elements/CheckboxControl/CheckboxControl';
 import LoaderComponent from 'components/elements/LoaderComponent/LoaderComponent';
-import GeoSearchControl, {TYPE_ADDRESS} from "components/elements/GeoSearchControl/GeoSearchControl";
+import GeoSearchControl, {TYPE_ADDRESS, TYPE_PLACE} from "components/elements/GeoSearchControl/GeoSearchControl";
 
 import styles from './EventEditView.sss';
 
@@ -54,7 +54,11 @@ class EventEditView extends Component {
   };
 
   event = new EventData();
+
   mapElm = null;
+  cityElm = null;
+  addressElm = null;
+
   map = null;
   marker = null;
   geocoder = null;
@@ -163,13 +167,20 @@ class EventEditView extends Component {
       },
       body: JSON.stringify({
         lat,
-        lon: lng
+        lon: lng,
+        radius_meters: 1000
       })
     });
 
     const resJson = await res.json();
-    const address = transformDadataAddress(resJson.suggestions[0]);
-    this.setState({address});
+    const suggestion = resJson.suggestions[0];
+    if (!suggestion)
+      return;
+    const city = transformDadataCity(suggestion);
+    const address = transformDadataAddress(suggestion);
+    this.setState({city, address});
+    this.cityElm.updateValue(city.main);
+    this.addressElm.updateValue(address.main);
 
     /*
     this.geocoder.geocode({location: {lat, lng}}, (results, status) => {
@@ -212,7 +223,8 @@ class EventEditView extends Component {
   };
 
   onChangeCity = city => {
-    this.setState({city});
+    this.setState({city, address: '', place: ''});
+    this.addressElm.updateValue('');
 
     if (city) {
       this.map.setCenter({lat: city.geoLat, lng: city.geoLon});
@@ -224,7 +236,7 @@ class EventEditView extends Component {
     if (!address)
       return;
 
-    this.setState({address});
+    this.setState({address, place: ''});
 
     if (address.house) {
       this.map.setCenter({lat: address.geoLat, lng: address.geoLon});
@@ -234,7 +246,7 @@ class EventEditView extends Component {
   };
 
   onChangePlace = place => {
-
+    this.setState({place});
   };
 
   onImageUpload = async event => {
@@ -396,7 +408,8 @@ class EventEditView extends Component {
               <div styleName="inline top-margin">
                 <div>Город:</div>
                 <div styleName="input-wrapper">
-                  <GeoSearchControl placeholder="Введите первые буквы города"
+                  <GeoSearchControl ref={elm => this.cityElm = elm}
+                                    placeholder="Введите первые буквы города"
                                     value={this.state.city ? this.state.city.main : null}
                                     onChange={this.onChangeCity} />
                 </div>
@@ -405,7 +418,8 @@ class EventEditView extends Component {
               <div styleName="inline top-margin">
                 <div>Адрес:</div>
                 <div styleName="input-wrapper">
-                  <GeoSearchControl value={this.state.address ? this.state.address.main : null}
+                  <GeoSearchControl ref={elm => this.addressElm = elm}
+                                    value={this.state.address ? this.state.address.main : null}
                                     type={TYPE_ADDRESS}
                                     city={this.state.city}
                                     onChange={this.onChangeAddress} />
@@ -415,8 +429,8 @@ class EventEditView extends Component {
               <div styleName="inline top-margin">
                 <div>Место:</div>
                 <div styleName="input-wrapper">
-                  <GeoSearchControl onChange={this.onChangePlace}
-                                    value={this.state.place} />
+                  <InputControl onChange={this.onChangePlace}
+                                value={this.state.place} />
                 </div>
               </div>
 
