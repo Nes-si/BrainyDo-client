@@ -101,11 +101,12 @@ export function transformDadataCity(location) {
       details += `${data.region} ${regType}`;
   }
 
+  const sId = data.settlement_fias_id;
   return {
     main,
     details,
-    isSettlement: data.fias_id == data.settlement_fias_id,
-    fias: data.fias_id,
+    isSettlement: !!data.settlement,
+    fias: sId ? sId : data.city_fias_id,
     unrestricted: location.unrestricted_value
   };
 }
