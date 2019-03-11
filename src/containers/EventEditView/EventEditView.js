@@ -14,7 +14,7 @@ import {FILE_SIZE_MAX} from 'ConnectConstants';
 import {EventData, AGE_LIMITS, AGE_LIMIT_NO_LIMIT} from "models/EventData";
 import {showAlert, showModal} from "ducks/nav";
 import {createEvent} from "ducks/events";
-import {getTextDateTime, convertDataUnits, BYTES, M_BYTES, checkFileType, TYPE_IMAGE, filterSpecials, throttle} from "utils/common";
+import {getTextDateTime, convertDataUnits, BYTES, M_BYTES, checkFileType, TYPE_IMAGE, filterSpecials} from "utils/common";
 import {transformDadataAddress, transformDadataCity} from 'utils/data';
 
 import ButtonControl from "components/elements/ButtonControl/ButtonControl";
@@ -22,7 +22,7 @@ import InputControl from "components/elements/InputControl/InputControl";
 import DropdownControl from "components/elements/DropdownControl/DropdownControl";
 import CheckboxControl from 'components/elements/CheckboxControl/CheckboxControl';
 import LoaderComponent from 'components/elements/LoaderComponent/LoaderComponent';
-import GeoSearchControl, {TYPE_ADDRESS, TYPE_PLACE} from "components/elements/GeoSearchControl/GeoSearchControl";
+import GeoSearchControl, {TYPE_ADDRESS, TYPE_CITY} from "components/elements/GeoSearchControl/GeoSearchControl";
 
 import styles from './EventEditView.sss';
 
@@ -38,12 +38,11 @@ class EventEditView extends Component {
     tags: [],
     price: 0,
     ageLimit: AGE_LIMIT_NO_LIMIT,
-    location: null,
 
     city: null,
     address: null,
     place: null,
-    placeAdd: null,
+    locationDetails: null,
 
     errorNameRequired: false,
     errorCityRequired: false,
@@ -214,7 +213,7 @@ class EventEditView extends Component {
   };
 
   onChangeCity = city => {
-    this.setState({city, address: '', place: '', errorCityRequired: false});
+    this.setState({city, address: null, place: '', errorCityRequired: false});
     this.addressElm.updateValue('');
 
     if (city) {
@@ -240,8 +239,8 @@ class EventEditView extends Component {
     this.setState({place});
   };
 
-  onChangePlaceAdd = placeAdd => {
-    this.setState({placeAdd});
+  onChangeLocDetails = locationDetails => {
+    this.setState({locationDetails});
   };
 
   onImageUpload = async event => {
@@ -416,6 +415,7 @@ class EventEditView extends Component {
                 <div>Город:</div>
                 <div styleName="input-wrapper">
                   <GeoSearchControl ref={elm => this.cityElm = elm}
+                                    type={TYPE_CITY}
                                     placeholder="Введите первые буквы города"
                                     value={this.state.city ? this.state.city.main : null}
                                     onChange={this.onChangeCity} />
@@ -426,8 +426,9 @@ class EventEditView extends Component {
                 <div>Адрес:</div>
                 <div styleName="input-wrapper">
                   <GeoSearchControl ref={elm => this.addressElm = elm}
-                                    value={this.state.address ? this.state.address.main : null}
                                     type={TYPE_ADDRESS}
+                                    placeholder="Введите начало адреса"
+                                    value={this.state.address ? this.state.address.main : null}
                                     city={this.state.city}
                                     onChange={this.onChangeAddress} />
                 </div>
@@ -446,8 +447,8 @@ class EventEditView extends Component {
               <div styleName="top-margin">
                 <div>Дополнительная информация:</div>
                 <div styleName="input-wrapper">
-                  <InputControl onChange={this.onChangePlaceAdd}
-                                value={this.state.placeAdd} />
+                  <InputControl onChange={this.onChangeLocDetails}
+                                value={this.state.locationDetails} />
                 </div>
               </div>
             </div>

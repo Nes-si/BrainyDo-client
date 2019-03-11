@@ -84,7 +84,7 @@ export default class GeoSearchControl extends Component {
       data.geoLat = parseFloat(resData.geo_lat);
       data.geoLon = parseFloat(resData.geo_lon);
 
-      if (!(this.type == TYPE_ADDRESS && !data.house))
+      if (this.type != TYPE_ADDRESS || data.house)
         this.props.onChange(data);
     } catch (e) {}
   };
