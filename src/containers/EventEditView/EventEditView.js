@@ -164,8 +164,12 @@ class EventEditView extends Component {
 
     const resJson = await res.json();
     const suggestion = resJson.suggestions[0];
-    if (!suggestion)
+    if (!suggestion) {
+      this.setState({city: null, address: null});
+      this.cityElm.updateValue('');
+      this.addressElm.updateValue('');
       return;
+    }
     const city = transformDadataCity(suggestion);
     const address = transformDadataAddress(suggestion);
     this.setState({city, address});
@@ -300,6 +304,15 @@ class EventEditView extends Component {
     this.event.ageLimit    = this.state.ageLimit;
     this.event.image       = this.state.image;
     this.event.owner       = this.props.user.userData;
+
+    const markerPos = this.marker.getPosition();
+    this.event.location           = new Parse.GeoPoint(markerPos.lat(), markerPos.lng());
+    this.event.locationRegionFias = this.state.city.regionFias;
+    this.event.locationCityFias   = this.state.city.cityFias;
+    this.event.locationCity       = this.state.city.city;
+    this.event.locationAddress    = this.state.address.main;
+    this.event.locationPlace      = this.state.place;
+    this.event.locationDetails    = this.state.locationDetails;
 
     const {createEvent} = this.props.eventsActions;
     createEvent(this.event);

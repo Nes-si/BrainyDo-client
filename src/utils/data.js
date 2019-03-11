@@ -69,6 +69,11 @@ export function shortLocType(type) {
     case 'деревня': return 'дер.';
     case 'хутор': return 'хут.';
     case 'поселок': return 'пос.';
+    case 'городской поселок': return 'г/п';
+    case 'рабочий поселок': return 'р/п';
+    case 'дачный поселок': return 'д/п';
+    case 'территория днт': return 'терр. ДНТ';
+    case 'станица': return 'стан.';
     case 'аобл': return 'авт. обл.';
   }
 
@@ -80,50 +85,59 @@ export function shortLocType(type) {
 
 export function transformDadataCity(location) {
   const {data} = location;
-  if (data.city && data.settlement)
-    return null;
 
-  let main;
+  let city;
   if (data.city)
-    main = `${shortLocType(data.city_type)} ${data.city}`;
+    city = `${shortLocType(data.city_type)} ${data.city}`;
   else if (data.settlement)
-    main = `${shortLocType(data.settlement_type_full)} ${data.settlement}`;
+    city = `${shortLocType(data.settlement_type_full)} ${data.settlement}`;
 
-  let details = ``;
-  if (data.area)
-    details = `${data.area} ${data.area_type}, `;
+  const area = data.area ? `${data.area} ${data.area_type}` : null;
 
+  let region;
   if (data.city_with_type != data.region_with_type) {
     const regType = shortLocType(data.region_type);
     if (regType == 'респ.' || regType == 'г.')
-      details += `${regType} ${data.region}`;
+      region = `${regType} ${data.region}`;
     else
-      details += `${data.region} ${regType}`;
+      region = `${data.region} ${regType}`;
   }
+
+  const main = city;
+  let details = region;
+  if (area)
+    details = `${area}, ${details}`;
 
   const sId = data.settlement_fias_id;
   return {
+    city,
+    area,
+    region,
+    cityFias: sId ? sId : data.city_fias_id,
+    regionFias: data.region_fias_id,
+    isSettlement: !!data.settlement,
+
     main,
     details,
-    isSettlement: !!data.settlement,
-    fias: sId ? sId : data.city_fias_id,
     unrestricted: location.unrestricted_value
   };
 }
 
 export function transformDadataAddress(location) {
   const {data} = location;
-  let main = `${shortLocType(data.street_type)} ${data.street}`;
-  let house = null;
-  if (data.house) {
-    house = data.house;
-    main += `, ${data.house}`;
-  }
+  const street = `${shortLocType(data.street_type)} ${data.street}`;
+  const house = data.house;
+
+  let main = street;
+  if (house)
+    main += `, ${house}`;
 
   return {
-    main,
+    street,
     house,
     fias: data.fias_id,
+
+    main,
     unrestricted: location.unrestricted_value
   };
 }

@@ -21,12 +21,18 @@ export class EventData {
   description = ``;
   dateStart = null;
   dateEnd = null;
-  place = ``;
   image = null;
   ageLimit = AGE_LIMIT_NO_LIMIT;
   price = ``;
   tags = [];
 
+  location = null;
+  locationRegionFias = ``;
+  locationCityFias = ``;
+  locationCity = ``;
+  locationAddress = ``;
+  locationPlace = ``;
+  locationDetails = ``;
 
   //links
   owner = null;
@@ -47,11 +53,18 @@ export class EventData {
     if (origin.get(`description`))  this.description  = origin.get(`description`);
     if (origin.get(`dateStart`))    this.dateStart    = origin.get(`dateStart`);
     if (origin.get(`dateEnd`))      this.dateEnd      = origin.get(`dateEnd`);
-    if (origin.get(`place`))        this.place        = origin.get(`place`);
     if (origin.get(`image`))        this.image        = origin.get(`image`);
     if (origin.get(`ageLimit`))     this.ageLimit     = origin.get(`ageLimit`);
     if (origin.get(`price`))        this.price        = origin.get(`price`);
     if (origin.get(`tags`))         this.tags         = origin.get(`tags`);
+
+    if (origin.get(`location`))           this.location           = origin.get(`location`);
+    if (origin.get(`locationRegionFias`)) this.locationRegionFias = origin.get(`locationRegionFias`);
+    if (origin.get(`locationCityFias`))   this.locationCityFias   = origin.get(`locationCityFias`);
+    if (origin.get(`locationCity`))       this.locationCity       = origin.get(`locationCity`);
+    if (origin.get(`locationAddress`))    this.locationAddress    = origin.get(`locationAddress`);
+    if (origin.get(`locationPlace`))      this.locationPlace      = origin.get(`locationPlace`);
+    if (origin.get(`locationDetails`))    this.locationDetails    = origin.get(`locationDetails`);
 
     return this;
   }
@@ -64,13 +77,20 @@ export class EventData {
     this.origin.set(`description`,this.description);
     this.origin.set(`dateStart`,  this.dateStart);
     this.origin.set(`dateEnd`,    this.dateEnd);
-    this.origin.set(`place`,      this.place);
     this.origin.set(`image`,      this.image);
     this.origin.set(`ageLimit`,   this.ageLimit);
     this.origin.set(`price`,      this.price);
     this.origin.set(`tags`,       this.tags);
     if (this.owner)
       this.origin.set(`owner`,    this.owner.origin);
+
+    this.origin.set(`location`,           this.location);
+    this.origin.set(`locationRegionFias`, this.locationRegionFias);
+    this.origin.set(`locationCityFias`,   this.locationCityFias);
+    this.origin.set(`locationCity`,       this.locationCity);
+    this.origin.set(`locationAddress`,    this.locationAddress);
+    this.origin.set(`locationPlace`,      this.locationPlace);
+    this.origin.set(`locationDetails`,    this.locationDetails);
   }
 }
 
