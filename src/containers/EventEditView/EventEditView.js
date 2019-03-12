@@ -86,7 +86,7 @@ class EventEditView extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.event.origin && this.event.origin.id)
-      this.props.history.push(`/event${this.event.origin.id}`);
+      this.props.history.push(`/event-${this.event.origin.id}`);
   }
 
   setupGMaps = () => {

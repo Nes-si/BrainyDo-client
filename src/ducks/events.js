@@ -240,7 +240,7 @@ export function showEvent(id) {
       type: SHOW_EVENT,
       event
     });
-  }
+  };
 }
 
 export function joinEvent(event) {

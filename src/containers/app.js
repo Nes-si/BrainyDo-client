@@ -119,13 +119,13 @@ class App extends React.Component {
               <Route path="/events-list" component={EventsList}/>
               <Route path="/event-creation" component={EventEditView}/>
               <Route path="/settings" component={SettingsView}/>
-              <Route path="/event:id" component={EventView} />
+              <Route path="/event-:id" component={EventView} />
               <Redirect to="/dashboard" />
             </Switch>
           :
             <Switch>
               <Route path="/" exact component={StartView}/>
-              <Route path="/event:id" component={EventView} />
+              <Route path="/event-:id" component={EventView} />
               <Redirect to="/" />
             </Switch>
           }

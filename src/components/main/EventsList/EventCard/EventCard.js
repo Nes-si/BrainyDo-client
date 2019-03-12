@@ -52,7 +52,7 @@ export default class EventCard extends Component {
              style={{backgroundImage: `url(${imageSrc}`}} />
 
         <div styleName="content">
-          <Link to={`/event${event.origin.id}`}>
+          <Link to={`/event-${event.origin.id}`}>
             <div styleName="title">{event.name}</div>
           </Link>
 
