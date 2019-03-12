@@ -3,8 +3,9 @@ import CSSModules from 'react-css-modules';
 
 import {transformDadataCity, transformDadataAddress} from "utils/data";
 
-import styles from './GeoSearchControl.sss';
+import LoaderComponent from "components/elements/LoaderComponent/LoaderComponent";
 
+import styles from './GeoSearchControl.sss';
 
 
 export const TYPE_CITY = 'TYPE_CITY';
@@ -15,7 +16,8 @@ export const TYPE_ADDRESS = 'TYPE_ADDRESS';
 export default class GeoSearchControl extends Component {
   state = {
     value: '',
-    listVis: false
+    listVis: false,
+    loading: false
   };
   list = [];
   type = TYPE_CITY;
@@ -25,10 +27,15 @@ export default class GeoSearchControl extends Component {
   constructor(props) {
     super(props);
 
-    if (props.value)
-      this.state.value = props.value;
     if (props.type)
       this.type = props.type;
+    if (props.value)
+      this.state.value = props.value;
+    this.state.loading = props.showLoader;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({loading: nextProps.showLoader});
   }
 
   updateValue(value) {
@@ -94,6 +101,9 @@ export default class GeoSearchControl extends Component {
   };
 
   onChange = async (event, value) => {
+    if (this.state.loading)
+      return;
+
     if (event)
       value = event.target.value;
     this.setState({value});
@@ -174,11 +184,16 @@ export default class GeoSearchControl extends Component {
     return (
       <div styleName="GeoSearchControl" onBlur={this.onBlur} onKeyDown={this.onKeyDown}>
         <input styleName="input"
-               placeholder={placeholder}
-               value={this.state.value}
+               placeholder={this.state.loading ? '' : placeholder}
+               value={this.state.loading ? '' : this.state.value}
                autoFocus
                ref={elm => this.inputElm = elm}
                onChange={this.onChange} />
+        {this.state.loading &&
+          <div styleName="loader-wrapper">
+            <LoaderComponent/>
+          </div>
+        }
         {this.state.listVis &&
           <div styleName="items">
             {this.list.map((item, key) =>

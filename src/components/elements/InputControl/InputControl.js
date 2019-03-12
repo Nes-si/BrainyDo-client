@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import CSSModules from 'react-css-modules';
 
 import IconsComponent from 'components/elements/IconsComponent/IconsComponent';
+import LoaderComponent from "components/elements/LoaderComponent/LoaderComponent";
 
 import styles from './InputControl.sss';
 
@@ -9,14 +10,14 @@ import styles from './InputControl.sss';
 @CSSModules(styles, {allowMultiple: true})
 export default class InputControl extends Component {
   onChange = e => {
-    const {onChange} = this.props;
-    if (onChange)
+    const {onChange, showLoader} = this.props;
+    if (onChange && !showLoader)
       onChange(e.target.value);
   };
 
   render() {
     let {label, value, placeholder, onChange, readOnly, autoFocus, onKeyDown, onBlur, DOMRef, icon,
-      onIconClick, inputType, dropdown, red} = this.props;
+      onIconClick, inputType, dropdown, red, showLoader} = this.props;
 
     if (!onChange)
       readOnly = true;
@@ -49,7 +50,7 @@ export default class InputControl extends Component {
           {iconEl}
           <input type={inputType}
                  styleName={inputStyles}
-                 value={value}
+                 value={showLoader ? '' : value}
                  autoFocus={autoFocus}
                  placeholder={placeholder}
                  onChange={this.onChange}
@@ -57,6 +58,11 @@ export default class InputControl extends Component {
                  onKeyDown={onKeyDown}
                  readOnly={readOnly}
                  ref={DOMRef} />
+          {showLoader &&
+            <div styleName="loader-wrapper">
+              <LoaderComponent/>
+            </div>
+          }
         </div>
       </div>
     );
