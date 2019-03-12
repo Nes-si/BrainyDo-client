@@ -266,13 +266,15 @@ export function leaveEvent(event) {
 }
 
 export function createEvent(event) {
-  event.updateOrigin();
-  event.origin.setACL(new Parse.ACL(event.owner.origin));
-  send(event.origin.save());
+  return async dispatch => {
+    event.updateOrigin();
+    event.origin.setACL(new Parse.ACL(event.owner.origin));
+    await send(event.origin.save());
 
-  return {
-    type: CREATE_EVENT,
-    event
+    dispatch({
+      type: CREATE_EVENT,
+      event
+    });
   };
 }
 
