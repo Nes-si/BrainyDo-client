@@ -44,6 +44,10 @@ class EventEditView extends Component {
     place: null,
     locationDetails: null,
 
+    loadingCity: false,
+    loadingAddress: false,
+    loadingPlace: false,
+
     errorNameRequired: false,
     errorCityRequired: false,
     errorMarkerNull: false,
@@ -108,15 +112,17 @@ class EventEditView extends Component {
     this.placesService = new google.maps.places.PlacesService(this.map);
 
     this.map.addListener('click', async event => {
+      this.setState({loadingAddress: true});
       if (event.placeId) {
         event.stop();
+        this.setState({loadingPlace: true});
 
         this.placesService.getDetails({placeId: event.placeId}, (place, status) => {
           if (status != 'OK')
             return;
 
           this.setMarker(place.geometry.location.lat(), place.geometry.location.lng());
-          this.setState({place: place.name});
+          this.setState({place: place.name, loadingPlace: false});
         });
 
       } else {
@@ -147,6 +153,7 @@ class EventEditView extends Component {
   };
 
   setAddressByCoords = async (lat, lng) => {
+    this.setState({loadingAddress: true});
     const URL = `https://suggestions.dadata.ru/suggestions/api/4_1/rs/geolocate/address`;
     const res = await fetch(URL, {
       method: 'POST',
@@ -164,6 +171,7 @@ class EventEditView extends Component {
 
     const resJson = await res.json();
     const suggestion = resJson.suggestions[0];
+    this.setState({loadingCity: false, loadingAddress: false});
     if (!suggestion) {
       this.setState({city: null, address: null});
       this.cityElm.updateValue('');
@@ -431,6 +439,7 @@ class EventEditView extends Component {
                                     type={TYPE_CITY}
                                     placeholder="Введите первые буквы города"
                                     value={this.state.city ? this.state.city.main : null}
+                                    showLoader={this.state.loadingCity}
                                     onChange={this.onChangeCity} />
                 </div>
               </div>
@@ -443,6 +452,7 @@ class EventEditView extends Component {
                                     placeholder="Введите начало адреса"
                                     value={this.state.address ? this.state.address.main : null}
                                     city={this.state.city}
+                                    showLoader={this.state.loadingAddress}
                                     onChange={this.onChangeAddress} />
                 </div>
               </div>
@@ -451,6 +461,7 @@ class EventEditView extends Component {
                 <div>Место:</div>
                 <div styleName="input-wrapper">
                   <InputControl onChange={this.onChangePlace}
+                                showLoader={this.state.loadingPlace}
                                 value={this.state.place} />
                 </div>
               </div>
