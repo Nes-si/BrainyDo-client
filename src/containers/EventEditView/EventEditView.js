@@ -13,7 +13,7 @@ import Flatpickr from 'react-flatpickr';
 import {FILE_SIZE_MAX} from 'ConnectConstants';
 import {EventData, AGE_LIMITS, AGE_LIMIT_NO_LIMIT} from "models/EventData";
 import {showAlert, showModal} from "ducks/nav";
-import {createEvent} from "ducks/events";
+import {createEvent, showEvent} from "ducks/events";
 import {getTextDateTime, convertDataUnits, BYTES, M_BYTES, checkFileType, TYPE_IMAGE, filterSpecials} from "utils/common";
 import {transformDadataAddress, transformDadataCity} from 'utils/data';
 
@@ -56,10 +56,11 @@ class EventEditView extends Component {
     imageLoading: false,
     imageError: null,
 
-    creating: false
+    waitingForCreate: false
   };
 
-  event = new EventData();
+  eventId = '';
+  event = null;
 
   mapElm = null;
   cityElm = null;
@@ -74,33 +75,86 @@ class EventEditView extends Component {
   constructor(props) {
     super(props);
 
-    this.state.dateStart.setDate(this.state.dateStart.getDate() + 1);
-    this.state.dateStart.setHours(18, 0, 0, 0);
+    const params = new URLSearchParams(this.props.location.search);
+    if (params.has('id')) {
+      this.eventId = params.get('id');
+      const event = props.events.currentEvent;
+      if (event && event.origin.id == this.eventId)
+        Object.assign(this.state, this.setupEvent(event));
+      else
+        props.eventsActions.showEvent(this.eventId);
 
-    this.state.dateEnd.setDate(this.state.dateEnd.getDate() + 1);
-    this.state.dateEnd.setHours(19, 0, 0, 0);
+    } else {
+      this.event = new EventData();
 
-    this.state.city = props.user.userData.location;
-  }
+      this.state.dateStart.setDate(this.state.dateStart.getDate() + 1);
+      this.state.dateStart.setHours(18, 0, 0, 0);
 
-  componentDidMount() {
-    this.setupGMaps();
+      this.state.dateEnd.setDate(this.state.dateEnd.getDate() + 1);
+      this.state.dateEnd.setHours(19, 0, 0, 0);
+
+      this.state.city = props.user.userData.location;
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.event.origin && this.event.origin.id)
+    if (this.eventId && !this.event) {
+      const event = nextProps.events.currentEvent;
+      if (event && event.origin.id == this.eventId) {
+        this.setState({...this.setupEvent(event)});
+        setTimeout(this.setupGMaps, 1);
+      }
+    }
+
+    if (this.state.waitingForCreate && this.event.origin && this.event.origin.id)
       this.props.history.push(`/event-${this.event.origin.id}`);
+  }
+
+  setupEvent = event => {
+    this.event = event;
+
+    let dateEnd = event.dateEnd;
+    if (!dateEnd) {
+      dateEnd = new Date(event.dateStart);
+      dateEnd.setHours(19, 0, 0, 0);
+    }
+
+    return {
+      name:           event.name,
+      description:    event.description,
+      dateStart:      event.dateStart,
+      dateEnd,
+      dateEndEnabled: !!event.dateEnd,
+      tags:           event.tags,
+      price:          event.price,
+      ageLimit:       event.ageLimit,
+      image:          event.image,
+      place:          event.locationPlace,
+      locationDetails:event.locationDetails,
+      city:       {main: event.locationCity, cityFias: event.locationCityFias, regionFias: event.locationRegionFias},
+      address:    {main: event.locationAddress}
+    };
+  };
+
+  componentDidMount() {
+    if (this.event)
+      this.setupGMaps();
   }
 
   setupGMaps = () => {
     let center = {lat: 55.76, lng: 37.64}; // Москва
+    let zoom = 11;
     const {city} = this.state;
     if (city && city.geoLat && city.geoLon)
       center = {lat: city.geoLat, lng: city.geoLon};
+    if (this.event.location) {
+      center = {lat: this.event.location.latitude, lng: this.event.location.longitude};
+      zoom = 19;
+    }
 
     this.map = new google.maps.Map(this.mapElm, {
       center,
-      zoom: 11,
+      zoom,
       mapTypeControl: false,
       streetViewControl: false,
       gestureHandling: 'greedy'
@@ -129,6 +183,9 @@ class EventEditView extends Component {
         this.setState({place: ''});
       }
     });
+
+    if (this.event.location)
+      this.setMarker(this.event.location.latitude, this.event.location.longitude, false);
   };
 
   setMarker = (lat, lng, setAddress = true) => {
@@ -182,14 +239,6 @@ class EventEditView extends Component {
     this.setState({city, address});
     this.cityElm.updateValue(city.main);
     this.addressElm.updateValue(address.main);
-
-    /*
-    this.geocoder.geocode({location: {lat, lng}}, (results, status) => {
-      if (status != 'OK')
-        return;
-      console.log(results);
-    });
-    */
   };
 
   onChangeName = name => {
@@ -324,23 +373,28 @@ class EventEditView extends Component {
     const {createEvent} = this.props.eventsActions;
     createEvent(this.event);
 
-    this.setState({creating: true});
+    this.setState({waitingForCreate: true});
   };
 
   render() {
+    if (!this.event)
+      return <LoaderComponent />;
+
     const imageSrc = this.state.image ? this.state.image.url() : require('assets/images/event-empty.png');
 
     const errorRequired = this.state.errorNameRequired || this.state.errorCityRequired;
 
+    const title = this.eventId ? 'Изменение события' : 'Новое событие';
+
     return (
       <div styleName="EventEditView">
         <Helmet>
-          <title>Новое событие — Triple L</title>
+          <title>{title} — Triple L</title>
         </Helmet>
 
         <div styleName="background"></div>
         <div styleName="header">
-          <div styleName="title">Новое событие</div>
+          <div styleName="title">{title}</div>
         </div>
 
         <div styleName='content'>
@@ -499,7 +553,7 @@ class EventEditView extends Component {
           </div>
         </div>
 
-        {this.state.creating &&
+        {this.state.waitingForCreate &&
           <div styleName="loader">
             <LoaderComponent/>
           </div>
@@ -519,7 +573,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    eventsActions:bindActionCreators({createEvent}, dispatch),
+    eventsActions:bindActionCreators({createEvent, showEvent}, dispatch),
     navActions:   bindActionCreators({showModal, showAlert}, dispatch)
   };
 }

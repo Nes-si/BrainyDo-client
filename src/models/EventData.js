@@ -23,7 +23,7 @@ export class EventData {
   dateEnd = null;
   image = null;
   ageLimit = AGE_LIMIT_NO_LIMIT;
-  price = ``;
+  price = 0;
   tags = [];
 
   location = null;
