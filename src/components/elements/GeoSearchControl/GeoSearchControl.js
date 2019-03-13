@@ -129,11 +129,11 @@ export default class GeoSearchControl extends Component {
           };
           if (this.props.city.isSettlement)
             queryParams.locations = [{
-              "settlement_fias_id": this.props.city.fias
+              "settlement_fias_id": this.props.city.cityFias
             }];
           else
             queryParams.locations = [{
-              "city_fias_id": this.props.city.fias
+              "city_fias_id": this.props.city.cityFias
             }];
           break;
       }
