@@ -13,7 +13,7 @@ import Flatpickr from 'react-flatpickr';
 import {FILE_SIZE_MAX} from 'ConnectConstants';
 import {EventData, AGE_LIMITS, AGE_LIMIT_NO_LIMIT} from "models/EventData";
 import {showAlert, showModal} from "ducks/nav";
-import {createEvent, showEvent} from "ducks/events";
+import {createEvent, updateEvent, showEvent} from "ducks/events";
 import {getTextDateTime, convertDataUnits, BYTES, M_BYTES, checkFileType, TYPE_IMAGE, filterSpecials} from "utils/common";
 import {transformDadataAddress, transformDadataCity} from 'utils/data';
 
@@ -347,7 +347,7 @@ class EventEditView extends Component {
     return true;
   }
 
-  onCreate = () => {
+  onApply = () => {
     if (!this.validate())
       return;
 
@@ -370,10 +370,14 @@ class EventEditView extends Component {
     this.event.locationPlace      = this.state.place;
     this.event.locationDetails    = this.state.locationDetails;
 
-    const {createEvent} = this.props.eventsActions;
-    createEvent(this.event);
-
-    this.setState({waitingForCreate: true});
+    const {createEvent, updateEvent} = this.props.eventsActions;
+    if (this.eventId) {
+      updateEvent(this.event);
+      this.props.history.push(`/event-${this.event.origin.id}`);
+    } else {
+      createEvent(this.event);
+      this.setState({waitingForCreate: true});
+    }
   };
 
   render() {
@@ -532,8 +536,8 @@ class EventEditView extends Component {
 
             <div styleName="buttons">
               <div styleName="button-wrapper">
-                <ButtonControl onClick={this.onCreate}
-                               value="Создать событие"/>
+                <ButtonControl onClick={this.onApply}
+                               value={this.eventId ? "Изменить событие" : "Создать событие"}/>
               </div>
               <div styleName="button-wrapper">
                 <Link to="/dashboard">
@@ -573,7 +577,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    eventsActions:bindActionCreators({createEvent, showEvent}, dispatch),
+    eventsActions:bindActionCreators({createEvent, updateEvent, showEvent}, dispatch),
     navActions:   bindActionCreators({showModal, showAlert}, dispatch)
   };
 }
