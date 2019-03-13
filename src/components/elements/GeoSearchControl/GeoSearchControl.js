@@ -10,6 +10,7 @@ import styles from './GeoSearchControl.sss';
 
 
 export const TYPE_CITY = 'TYPE_CITY';
+export const TYPE_CITY_AND_REGION = 'TYPE_CITY_AND_REGION';
 export const TYPE_ADDRESS = 'TYPE_ADDRESS';
 
 
@@ -134,6 +135,16 @@ export default class GeoSearchControl extends Component {
           };
           break;
 
+        case TYPE_CITY_AND_REGION:
+          queryParams = {
+            locations: [{
+              "country": "Россия"
+            }],
+            "from_bound": {"value": "region"},
+            "to_bound": {"value": "settlement"}
+          };
+          break;
+
         case TYPE_ADDRESS:
           queryParams = {
             "from_bound": {"value": "street"},
@@ -172,6 +183,10 @@ export default class GeoSearchControl extends Component {
         switch (this.type) {
           case TYPE_CITY:
             data = transformDadataCity(suggestion);
+            break;
+
+          case TYPE_CITY_AND_REGION:
+            data = transformDadataCity(suggestion, true);
             break;
 
           case TYPE_ADDRESS:

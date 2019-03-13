@@ -83,7 +83,7 @@ export function shortLocType(type) {
   return type;
 }
 
-export function transformDadataCity(location) {
+export function transformDadataCity(location, includeRegions = false) {
   const {data} = location;
 
   let city;
@@ -103,7 +103,7 @@ export function transformDadataCity(location) {
       region = `${data.region} ${regType}`;
   }
 
-  const main = city;
+  const main = city ? city : region;
   let details = region;
   if (area)
     details = `${area}, ${details}`;
