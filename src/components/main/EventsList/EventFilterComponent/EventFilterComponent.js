@@ -16,6 +16,7 @@ import InputControl from "components/elements/InputControl/InputControl";
 import ButtonControl from "components/elements/ButtonControl/ButtonControl";
 import DropdownControl from 'components/elements/DropdownControl/DropdownControl';
 import RadioControl from 'components/elements/RadioControl/RadioControl';
+import GeoSearchControl, {TYPE_CITY_AND_REGION} from "components/elements/GeoSearchControl/GeoSearchControl";
 
 import styles from './EventFilterComponent.sss';
 
@@ -38,6 +39,10 @@ const AGE_MY = 'Для меня';
 const AGE_VALUE = 'Выбрать';
 let AGES = [AGE_OFF, AGE_MY, AGE_VALUE];
 
+const REGION_OFF = 'Неважно';
+const REGION_VALUE = 'Выбрать';
+const REGIONS = [REGION_OFF, REGION_VALUE];
+
 
 @CSSModules(styles, {allowMultiple: true})
 export default class EventFilterComponent extends Component {
@@ -52,6 +57,9 @@ export default class EventFilterComponent extends Component {
     ageType: AGE_OFF,
     ageLimit: AGE_LIMIT_NO_LIMIT,
 
+    regionType: REGION_VALUE,
+    region: null,
+
     tags: []
   };
   filter = new FilterEventData();
@@ -60,6 +68,10 @@ export default class EventFilterComponent extends Component {
     super(props);
 
     this.filter.date.type = FILTER_DATE_FUTURE;
+    if (props.location) {
+      this.state.region = props.location;
+      this.filter.region.regionData = props.location;
+    }
     if (!props.hasAge)
       AGES = [AGE_OFF, AGE_VALUE];
   }
@@ -95,6 +107,14 @@ export default class EventFilterComponent extends Component {
     this.setState({ageLimit});
   };
 
+  onChangeRegionType = regionType => {
+    this.setState({regionType});
+  };
+
+  onChangeRegion = region => {
+    this.setState({region});
+  };
+
   onTagAdd = tag => {
   };
 
@@ -109,6 +129,8 @@ export default class EventFilterComponent extends Component {
     this.filter.ageLimit.my = this.state.ageType == AGE_MY;
     this.filter.ageLimit.ageLimit = this.state.ageType == AGE_VALUE ? this.state.ageLimit : undefined;
 
+    this.filter.region.regionData = this.state.regionType == REGION_VALUE ? this.state.region : undefined;
+
     this.filter.tags = this.state.tags;
 
     this.props.onApply(this.filter);
@@ -118,7 +140,8 @@ export default class EventFilterComponent extends Component {
     this.setState({
       dateType: FILTER_DATE_FUTURE,
       priceType: PRICE_OFF,
-      ageType: AGE_OFF
+      ageType: AGE_OFF,
+      regionType: REGION_OFF
     });
 
     this.filter = new FilterEventData();
@@ -225,6 +248,29 @@ export default class EventFilterComponent extends Component {
                                current={this.state.ageLimit} />
             </div>
 
+          </div>
+
+          <div styleName="filter">
+            <div styleName="filter-title">Регион</div>
+
+            <div styleName="radio-group">
+              {REGIONS.map(regionType =>
+                <div key={regionType} styleName="radio-wrapper">
+                  <RadioControl name="region-type"
+                                data={regionType}
+                                value={this.state.regionType}
+                                label={regionType}
+                                onChange={this.onChangeRegionType} />
+                </div>
+              )}
+            </div>
+
+            <div styleName="region">
+              <GeoSearchControl type={TYPE_CITY_AND_REGION}
+                                onChange={this.onChangeRegion}
+                                disabled={this.state.regionType != REGION_VALUE}
+                                value={this.state.region ? this.state.region.main : null} />
+            </div>
           </div>
         </div>
 

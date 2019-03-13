@@ -148,6 +148,15 @@ async function requestEvents(filter = {}) {
       query.containedIn("ageLimit", getAgeLimitsByLimit(filter.ageLimit.ageLimit));
   }
 
+  if (filter.region) {
+    if (filter.region.regionData) {
+      if (filter.region.regionData.cityFias)
+        query.equalTo("locationCityFias", filter.region.regionData.cityFias);
+      else if (filter.region.regionData.regionFias)
+        query.equalTo("locationRegionFias", filter.region.regionData.regionFias);
+    }
+  }
+
   if (filter.tags && filter.tags.length) {
     query.containedIn("tags", filter.tags);
   }

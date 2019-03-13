@@ -217,7 +217,7 @@ export default class GeoSearchControl extends Component {
 
     return (
       <div styleName="GeoSearchControl"
-           onBlur={this.onBlur} 
+           onBlur={this.onBlur}
            onFocus={this.onFocus}
            onKeyDown={this.onKeyDown}>
         <input styleName="input"

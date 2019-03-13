@@ -24,6 +24,9 @@ class EventsList extends Component {
 
     const filter = new FilterEventData();
     filter.date.type = FILTER_DATE_FUTURE;
+    if (props.user.userData.location)
+      filter.region.regionData = props.user.userData.location;
+
     props.eventsActions.showEvents(filter);
   }
 
@@ -55,6 +58,7 @@ class EventsList extends Component {
         <div styleName='content'>
           <EventFilterComponent ref={elm => this.filterComp = elm}
                                 onApply={this.onFilterChange}
+                                location={userData.location}
                                 hasAge={userData.birthdate} />
           {pending ?
             <div styleName="loader">

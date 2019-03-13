@@ -122,6 +122,10 @@ export class FilterEventData {
     onlyFree: false
   };
 
+  region = {
+    regionData: undefined
+  };
+
   members = {
     onlyMy: false
   };
