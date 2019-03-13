@@ -4,7 +4,7 @@ import {bindActionCreators} from "redux";
 import CSSModules from 'react-css-modules';
 import {Helmet} from "react-helmet";
 import {Parse} from 'parse';
-import {Link} from 'react-router-dom';
+import {Link, Prompt} from 'react-router-dom';
 
 import 'flatpickr/dist/flatpickr.min.css';
 import {Russian} from "flatpickr/dist/l10n/ru";
@@ -55,6 +55,8 @@ class EventEditView extends Component {
     image: null,
     imageLoading: false,
     imageError: null,
+
+    dirty: false,
 
     waitingForCreate: false
   };
@@ -165,7 +167,7 @@ class EventEditView extends Component {
     this.placesService = new google.maps.places.PlacesService(this.map);
 
     this.map.addListener('click', async event => {
-      this.setState({loadingAddress: true});
+      this.setState({loadingAddress: true, dirty: true});
       if (event.placeId) {
         event.stop();
         this.setState({loadingPlace: true});
@@ -196,7 +198,7 @@ class EventEditView extends Component {
         draggable: true
       });
       this.marker.addListener('dragend', e => {
-        this.setState({place: ''});
+        this.setState({place: '', dirty: true});
         this.setAddressByCoords(e.latLng.lat(), e.latLng.lng());
       });
       this.setState({errorMarkerNull: false});
@@ -242,38 +244,38 @@ class EventEditView extends Component {
   };
 
   onChangeName = name => {
-    this.setState({name, errorNameRequired: false});
+    this.setState({name, dirty: true, errorNameRequired: false});
   };
 
   onChangeDescription = event => {
     const description = event.target.value;
-    this.setState({description});
+    this.setState({description, dirty: true});
   };
 
   onChangePrice = price => {
-    this.setState({price});
+    this.setState({price, dirty: true});
   };
 
   onChangeAgeLimit = ageLimit => {
-    this.setState({ageLimit});
+    this.setState({ageLimit, dirty: true});
   };
 
   onChangeDateStart = _date => {
     const dateStart = _date[0];
-    this.setState({dateStart});
+    this.setState({dateStart, dirty: true});
   };
 
   onChangeDateEnd = _date => {
     const dateEnd = _date[0];
-    this.setState({dateEnd});
+    this.setState({dateEnd, dirty: true});
   };
 
   onChangeDateEndEnabled = dateEndEnabled => {
-    this.setState({dateEndEnabled});
+    this.setState({dateEndEnabled, dirty: true});
   };
 
   onChangeCity = city => {
-    this.setState({city, address: null, place: '', errorCityRequired: false});
+    this.setState({city, address: null, place: '', errorCityRequired: false, dirty: true});
     this.addressElm.updateValue('');
 
     if (city) {
@@ -286,7 +288,7 @@ class EventEditView extends Component {
     if (!address)
       return;
 
-    this.setState({address, place: ''});
+    this.setState({address, place: '', dirty: true});
 
     if (address.house) {
       this.map.setCenter({lat: address.geoLat, lng: address.geoLon});
@@ -296,11 +298,11 @@ class EventEditView extends Component {
   };
 
   onChangePlace = place => {
-    this.setState({place});
+    this.setState({place, dirty: true});
   };
 
   onChangeLocDetails = locationDetails => {
-    this.setState({locationDetails});
+    this.setState({locationDetails, dirty: true});
   };
 
   onImageUpload = async event => {
@@ -325,7 +327,7 @@ class EventEditView extends Component {
     const parseFile = new Parse.File(filterSpecials(file.name), file, file.type);
     await parseFile.save();
 
-    this.setState({imageLoading: false, image: parseFile});
+    this.setState({imageLoading: false, image: parseFile, dirty: true});
   };
 
   validate() {
@@ -373,10 +375,11 @@ class EventEditView extends Component {
     const {createEvent, updateEvent} = this.props.eventsActions;
     if (this.eventId) {
       updateEvent(this.event);
-      this.props.history.push(`/event-${this.event.origin.id}`);
+      this.setState({dirty: false},
+        () => this.props.history.push(`/event-${this.event.origin.id}`));
     } else {
       createEvent(this.event);
-      this.setState({waitingForCreate: true});
+      this.setState({waitingForCreate: true, dirty: false});
     }
   };
 
@@ -395,6 +398,9 @@ class EventEditView extends Component {
         <Helmet>
           <title>{title} — Triple L</title>
         </Helmet>
+
+        <Prompt when={this.state.dirty}
+                message="У вас остались несохранённые изменения. Покинуть страницу?" />
 
         <div styleName="background"></div>
         <div styleName="header">
