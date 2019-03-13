@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import CSSModules from 'react-css-modules';
 import {Helmet} from "react-helmet";
+import {Link} from 'react-router-dom';
 
 import {showAlert, showModal} from "ducks/nav";
 import {showEvent, joinEvent, leaveEvent} from "ducks/events";
@@ -109,6 +110,11 @@ class EventView extends Component {
                                  value="Пойду"/>
                 }
               </div>
+            }
+
+            {isOwner &&
+              <Link to={{pathname: "/event-edit", search: `?id=${event.origin.id}`}}>
+                <ButtonControl value="Редактировать"/> </Link>
             }
           </div>
         </div>
