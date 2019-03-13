@@ -4,6 +4,7 @@ import CSSModules from 'react-css-modules';
 import {transformDadataCity, transformDadataAddress} from "utils/data";
 
 import LoaderComponent from "components/elements/LoaderComponent/LoaderComponent";
+import InputControl from "components/elements/InputControl/InputControl";
 
 import styles from './GeoSearchControl.sss';
 
@@ -17,7 +18,8 @@ export default class GeoSearchControl extends Component {
   state = {
     value: '',
     listVis: false,
-    loading: false
+    loading: false,
+    disabled: false
   };
   list = [];
   type = TYPE_CITY;
@@ -27,15 +29,20 @@ export default class GeoSearchControl extends Component {
   constructor(props) {
     super(props);
 
-    if (props.type)
-      this.type = props.type;
-    if (props.value)
-      this.state.value = props.value;
-    this.state.loading = props.showLoader;
+    const {type, value, showLoader, disabled} = props;
+    if (type)
+      this.type = type;
+    if (value)
+      this.state.value = value;
+    this.state.loading = showLoader;
+    this.state.disabled = disabled;
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({loading: nextProps.showLoader});
+    this.setState({
+      loading: nextProps.showLoader,
+      disabled: nextProps.disabled
+    });
   }
 
   updateValue(value) {
@@ -98,6 +105,11 @@ export default class GeoSearchControl extends Component {
 
   onBlur = () => {
     this.setState({listVis: false});
+  };
+
+  onFocus = () => {
+    if (this.inputElm && this.type != TYPE_ADDRESS)
+      this.inputElm.select();
   };
 
   onChange = async (event, value) => {
@@ -181,12 +193,21 @@ export default class GeoSearchControl extends Component {
   render() {
     const {placeholder} = this.props;
 
+    if (this.state.disabled)
+      return <InputControl icon="lock"
+                           placeholder={this.state.loading ? '' : placeholder}
+                           value={this.state.loading ? '' : this.state.value}
+                           dropdown={true}
+                           readOnly={true} />;
+
     return (
-      <div styleName="GeoSearchControl" onBlur={this.onBlur} onKeyDown={this.onKeyDown}>
+      <div styleName="GeoSearchControl"
+           onBlur={this.onBlur} 
+           onFocus={this.onFocus}
+           onKeyDown={this.onKeyDown}>
         <input styleName="input"
                placeholder={this.state.loading ? '' : placeholder}
                value={this.state.loading ? '' : this.state.value}
-               autoFocus
                ref={elm => this.inputElm = elm}
                onChange={this.onChange} />
         {this.state.loading &&
