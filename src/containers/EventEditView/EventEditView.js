@@ -84,7 +84,6 @@ class EventEditView extends Component {
   }
 
   componentDidMount() {
-    //ymaps.ready(this.setupYMaps);
     this.setupGMaps();
   }
 

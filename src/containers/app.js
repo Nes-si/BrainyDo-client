@@ -117,7 +117,7 @@ class App extends React.Component {
             <Switch>
               <Route path="/dashboard" component={Dashboard}/>
               <Route path="/events-list" component={EventsList}/>
-              <Route path="/event-creation" component={EventEditView}/>
+              <Route path="/event-edit" component={EventEditView}/>
               <Route path="/settings" component={SettingsView}/>
               <Route path="/event-:id" component={EventView} />
               <Redirect to="/dashboard" />

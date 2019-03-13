@@ -29,7 +29,7 @@ class Dashboard extends Component {
         </div>
         <div styleName='content'>
           <CalendarComponent />
-          <Link to="/event-creation">
+          <Link to="/event-edit">
             <ButtonControl value="Создать событие" />
           </Link>
         </div>
