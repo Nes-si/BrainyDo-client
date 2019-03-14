@@ -47,6 +47,8 @@ const REGIONS = [REGION_OFF, REGION_VALUE];
 @CSSModules(styles, {allowMultiple: true})
 export default class EventFilterComponent extends Component {
   state = {
+    search: '',
+
     dateType: FILTER_DATE_FUTURE,
     dateFrom: new Date(),
     dateTo: new Date(),
@@ -77,6 +79,10 @@ export default class EventFilterComponent extends Component {
     if (!props.hasAge)
       AGES = [AGE_OFF, AGE_VALUE];
   }
+
+  onChangeSearch = search => {
+    this.setState({search});
+  };
 
   onChangeDateType = dateType => {
     this.setState({dateType}, this.onApply);
@@ -162,6 +168,17 @@ export default class EventFilterComponent extends Component {
     return (
       <div styleName="EventFilterComponent">
         <div styleName="title">Фильтр</div>
+
+        <div styleName="search-bar">
+          <div styleName="input-wrapper">
+            <InputControl onChange={this.onChangeSearch}
+                          value={this.state.search} />
+          </div>
+          <div styleName="button">
+            <ButtonControl value="Поиск"
+                           onClick={this.onApply} />
+          </div>
+        </div>
 
         <div styleName="filters">
           <div styleName="filter">

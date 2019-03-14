@@ -105,6 +105,8 @@ export const FILTER_DATE_VALUES = "FILTER_DATE_VALUES";
 
 
 export class FilterEventData {
+  search = '';
+
   date = {
     type: FILTER_DATE_OFF,
     greaterThan: null,
