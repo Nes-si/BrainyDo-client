@@ -121,7 +121,12 @@ export default class EventFilterComponent extends Component {
   onTagAdd = tag => {
   };
 
-  onApply = () => {
+  onApply = e => {
+    if (e)
+      e.preventDefault();
+
+    this.filter.search            = this.state.search;
+
     this.filter.date.type         = this.state.dateType;
     this.filter.date.greaterThan  = this.state.dateFrom;
     this.filter.date.lessThan     = this.state.dateTo;
@@ -149,6 +154,7 @@ export default class EventFilterComponent extends Component {
 
   onReset = () => {
     this.setState({
+      search: '',
       dateType: FILTER_DATE_FUTURE,
       priceType: PRICE_OFF,
       ageType: AGE_OFF,
@@ -169,16 +175,16 @@ export default class EventFilterComponent extends Component {
       <div styleName="EventFilterComponent">
         <div styleName="title">Фильтр</div>
 
-        <div styleName="search-bar">
+        <form styleName="search-bar" onSubmit={this.onApply}>
           <div styleName="input-wrapper">
             <InputControl onChange={this.onChangeSearch}
                           value={this.state.search} />
           </div>
           <div styleName="button">
             <ButtonControl value="Поиск"
-                           onClick={this.onApply} />
+                           type="submit" />
           </div>
-        </div>
+        </form>
 
         <div styleName="filters">
           <div styleName="filter">

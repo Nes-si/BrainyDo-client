@@ -161,6 +161,9 @@ async function requestEvents(filter = {}) {
     query.containedIn("tags", filter.tags);
   }
 
+  if (filter.search)
+    query.startsWith("name", filter.search);
+
   const events_o = await send(getAllObjects(query));
 
   const events = [];
