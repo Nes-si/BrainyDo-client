@@ -22,16 +22,60 @@ class EventsList extends Component {
   constructor(props) {
     super(props);
 
-    const filter = new FilterEventData();
-    filter.date.type = FILTER_DATE_FUTURE;
-    if (props.user.userData.location)
-      filter.region.regionData = props.user.userData.location;
+    if (props.location.search) {
+      const paramsStr = this.parseParams(props.location.search);
+      props.eventsActions.showEvents(paramsStr);
+    } else {
+      let paramsStr = `?dateType=${FILTER_DATE_FUTURE}`;
+      if (props.user.userData.location)
+        paramsStr += `&cityFias=${props.user.userData.location.cityFias}`;
 
-    props.eventsActions.showEvents(filter);
+      this.props.history.replace(`${props.match.url}${paramsStr}`);
+    }
   }
 
-  onFilterChange = filter => {
-    this.props.eventsActions.showEvents(filter);
+  componentWillReceiveProps(nextProps) {
+    if (this.props.location.search != nextProps.location.search) {
+      const paramsStr = this.parseParams(nextProps.location.search);
+      this.props.eventsActions.showEvents(paramsStr);
+    }
+  }
+
+  parseParams = paramsStr => {
+    let params = new URLSearchParams(paramsStr);
+
+    const filter = new FilterEventData();
+
+    if (params.has('search'))
+      filter.search = decodeURIComponent(params.get('search'));
+
+    if (params.has('dateType'))
+      filter.date.type = params.get('dateType');
+    if (params.has('dateFrom'))
+      filter.date.greaterThan = params.get('dateFrom');
+    if (params.has('dateTo'))
+      filter.date.lessThan = params.get('dateTo');
+
+    filter.price.onlyFree = !!params.get('priceOnlyFree');
+    if (params.has('priceLessThan'))
+      filter.date.lessThan = params.get('priceLessThan');
+
+    filter.ageLimit.my = !!params.get('ageMy');
+    if (params.has('ageLimit'))
+      filter.ageLimit.ageLimit = decodeURIComponent(params.get('ageLimit'));
+
+    if (params.has('cityFias'))
+      filter.region.cityFias = params.get('cityFias');
+    if (params.has('regionFias'))
+      filter.region.regionFias = params.get('regionFias');
+
+    //this.filter.tags = this.state.tags;
+
+    return filter;
+  };
+
+  onFilterChange = paramsStr => {
+    this.props.history.replace(`${this.props.match.url}${paramsStr}`);
   };
 
   onTagClick = tag => {

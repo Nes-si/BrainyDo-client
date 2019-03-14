@@ -149,12 +149,10 @@ async function requestEvents(filter = {}) {
   }
 
   if (filter.region) {
-    if (filter.region.regionData) {
-      if (filter.region.regionData.cityFias)
-        query.equalTo("locationCityFias", filter.region.regionData.cityFias);
-      else if (filter.region.regionData.regionFias)
-        query.equalTo("locationRegionFias", filter.region.regionData.regionFias);
-    }
+    if (filter.region.cityFias)
+      query.equalTo("locationCityFias", filter.region.cityFias);
+    else if (filter.region.regionFias)
+      query.equalTo("locationRegionFias", filter.region.regionFias);
   }
 
   if (filter.tags && filter.tags.length) {

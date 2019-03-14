@@ -125,23 +125,38 @@ export default class EventFilterComponent extends Component {
     if (e)
       e.preventDefault();
 
-    this.filter.search            = this.state.search;
+    const params = [];
+    if (this.state.search)
+      params.push(`search=${encodeURIComponent(this.state.search)}`);
 
-    this.filter.date.type         = this.state.dateType;
-    this.filter.date.greaterThan  = this.state.dateFrom;
-    this.filter.date.lessThan     = this.state.dateTo;
+    params.push(`dateType=${this.state.dateType}`);
+    if (this.state.dateType == FILTER_DATE_VALUES && this.state.dateFrom)
+      params.push(`dateFrom=${encodeURIComponent(this.state.dateFrom.toISOString())}`);
+    if (this.state.dateType == FILTER_DATE_VALUES && this.state.dateTo)
+      params.push(`dateTo=${encodeURIComponent(this.state.dateTo.toISOString())}`);
 
-    this.filter.price.onlyFree = this.state.priceType == PRICE_FREE;
-    this.filter.price.lessThan = this.state.priceType == PRICE_LESS ? this.state.price : undefined;
+    if (this.state.priceType == PRICE_FREE)
+      params.push(`priceOnlyFree=true`);
+    if (this.state.priceType == PRICE_LESS)
+      params.push(`priceLessThan=${this.state.price}`);
 
-    this.filter.ageLimit.my = this.state.ageType == AGE_MY;
-    this.filter.ageLimit.ageLimit = this.state.ageType == AGE_VALUE ? this.state.ageLimit : undefined;
+    if (this.state.ageType == AGE_MY)
+      params.push(`ageMy=true`);
+    if (this.state.ageType == AGE_VALUE)
+      params.push(`ageLimit=${encodeURIComponent(this.state.ageLimit)}`);
 
-    this.filter.region.regionData = this.state.regionType == REGION_VALUE ? this.state.region : undefined;
+    if (this.state.regionType == REGION_VALUE && this.state.region) {
+      if (this.state.region.cityFias)
+        params.push(`cityFias=${this.state.region.cityFias}`);
+      else if (this.state.region.regionFias)
+        params.push(`regionFias=${this.state.region.regionFias}`);
+    }
 
-    this.filter.tags = this.state.tags;
-
-    this.props.onApply(this.filter);
+    let paramsStr;
+    if (params.length) {
+      paramsStr = '?' + params.join('&');
+      this.props.onApply(paramsStr);
+    }
   };
 
   debouncedApply = debounce(this.onApply, 1000);
@@ -161,9 +176,8 @@ export default class EventFilterComponent extends Component {
       regionType: REGION_OFF
     });
 
-    this.filter = new FilterEventData();
-    this.filter.date.type = FILTER_DATE_FUTURE;
-    this.props.onApply(this.filter);
+    let paramsStr = `?dateType=${FILTER_DATE_FUTURE}`;
+    this.props.onApply(paramsStr);
   };
 
   render() {

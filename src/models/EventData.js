@@ -125,7 +125,8 @@ export class FilterEventData {
   };
 
   region = {
-    regionData: undefined
+    cityFias: undefined,
+    regionFias: undefined
   };
 
   members = {
