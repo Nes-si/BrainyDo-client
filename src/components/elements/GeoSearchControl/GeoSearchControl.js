@@ -201,7 +201,8 @@ export default class GeoSearchControl extends Component {
         listVis: !!this.list.length
       });
 
-      this.props.onChange(null);
+      if (this.props.sendNull)
+        this.props.onChange(null);
     } catch (e) {}
   };
 

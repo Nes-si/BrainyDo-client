@@ -5,7 +5,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 import {Russian} from "flatpickr/dist/l10n/ru";
 import Flatpickr from 'react-flatpickr';
 
-import {getTextDate} from 'utils/common';
+import {getTextDate, debounce} from 'utils/common';
 import {
   FILTER_DATE_OFF, FILTER_DATE_FUTURE, FILTER_DATE_TODAY, FILTER_DATE_TOMORROW, FILTER_DATE_VALUES, FILTER_DATE_WEEK,
   FILTER_DATE_WEEKEND, AGE_LIMIT_NO_LIMIT, AGE_LIMIT_18_PLUS, AGE_LIMIT_18_MINUS, AGE_LIMIT_12_PLUS, AGE_LIMIT_12_MINUS,
@@ -62,7 +62,9 @@ export default class EventFilterComponent extends Component {
 
     tags: []
   };
+
   filter = new FilterEventData();
+
 
   constructor(props) {
     super(props);
@@ -77,42 +79,37 @@ export default class EventFilterComponent extends Component {
   }
 
   onChangeDateType = dateType => {
-    this.setState({dateType});
+    this.setState({dateType}, this.onApply);
   };
 
   onChangeDateFrom = _date => {
     const dateFrom = _date[0];
-    this.setState({dateFrom});
+    this.setState({dateFrom}, this.onApply);
   };
 
   onChangeDateTo = _date => {
     const dateTo = _date[0];
-    this.setState({dateTo});
+    this.setState({dateTo}, this.onApply);
   };
 
   onChangePriceType = priceType => {
-    this.setState({priceType});
-  };
-
-  onChangePrice = priceStr => {
-    const price = parseInt(priceStr);
-    this.setState({price});
+    this.setState({priceType}, this.onApply);
   };
 
   onChangeAgeType = ageType => {
-    this.setState({ageType});
+    this.setState({ageType}, this.onApply);
   };
 
   onChangeAgeLimit = ageLimit => {
-    this.setState({ageLimit});
+    this.setState({ageLimit}, this.onApply);
   };
 
   onChangeRegionType = regionType => {
-    this.setState({regionType});
+    this.setState({regionType}, this.onApply);
   };
 
   onChangeRegion = region => {
-    this.setState({region});
+    this.setState({region}, this.onApply);
   };
 
   onTagAdd = tag => {
@@ -134,6 +131,14 @@ export default class EventFilterComponent extends Component {
     this.filter.tags = this.state.tags;
 
     this.props.onApply(this.filter);
+  };
+
+  debouncedApply = debounce(this.onApply, 1000);
+  onChangePrice = priceStr => {
+    let price = parseInt(priceStr);
+    if (!price)
+      price = 0;
+    this.setState({price}, this.debouncedApply);
   };
 
   onReset = () => {
@@ -227,7 +232,7 @@ export default class EventFilterComponent extends Component {
           </div>
 
           <div styleName="filter">
-            <div styleName="filter-title">Возрастное ограничение</div>
+            <div styleName="filter-title">Возраст</div>
 
             <div styleName="radio-group">
               {AGES.map(ageType =>
@@ -275,10 +280,6 @@ export default class EventFilterComponent extends Component {
         </div>
 
         <div styleName="buttons">
-          <div styleName="button">
-            <ButtonControl value="Применить"
-                           onClick={this.onApply} />
-          </div>
           <div styleName="button">
             <ButtonControl value="Сбросить фильтр"
                            onClick={this.onReset} />

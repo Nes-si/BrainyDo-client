@@ -39,6 +39,7 @@ export default class CitySelectModal extends Component {
 
           <div styleName='search-wrapper'>
             <GeoSearchControl placeholder="Введите первые буквы вашего города"
+                              sendNull
                               onChange={this.onChange} />
           </div>
 

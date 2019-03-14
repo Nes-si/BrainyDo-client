@@ -218,7 +218,6 @@ export function init() {
 }
 
 export function showEvents(filter = {}) {
-  console.log(filter);
   return async dispatch => {
     dispatch({
       type: PENDING_START

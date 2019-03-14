@@ -500,6 +500,7 @@ class EventEditView extends Component {
                 <div styleName="input-wrapper">
                   <GeoSearchControl ref={elm => this.cityElm = elm}
                                     type={TYPE_CITY}
+                                    sendNull
                                     placeholder="Введите первые буквы города"
                                     value={this.state.city ? this.state.city.main : null}
                                     showLoader={this.state.loadingCity}
@@ -512,6 +513,7 @@ class EventEditView extends Component {
                 <div styleName="input-wrapper">
                   <GeoSearchControl ref={elm => this.addressElm = elm}
                                     type={TYPE_ADDRESS}
+                                    sendNull
                                     placeholder="Введите начало адреса"
                                     value={this.state.address ? this.state.address.main : null}
                                     city={this.state.city}
