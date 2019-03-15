@@ -9,6 +9,7 @@ export class UserData {
   nameFirst = ``;
   nameLast = ``;
   image = null;
+  imageMini = null;
   sex = ``;
   birthdate = null;
   location = null;
@@ -28,6 +29,7 @@ export class UserData {
     if (origin.get(`nameFirst`))  this.nameFirst  = origin.get(`nameFirst`);
     if (origin.get(`nameLast`))   this.nameLast   = origin.get(`nameLast`);
     if (origin.get(`image`))      this.image      = origin.get(`image`);
+    if (origin.get(`imageMini`))  this.imageMini  = origin.get(`imageMini`);
     if (origin.get(`sex`))        this.sex        = origin.get(`sex`);
     if (origin.get(`birthdate`))  this.birthdate  = origin.get(`birthdate`);
     if (origin.get(`location`))   this.location   = origin.get(`location`);
@@ -39,6 +41,7 @@ export class UserData {
     this.origin.set(`nameFirst`,  this.nameFirst);
     this.origin.set(`nameLast`,   this.nameLast);
     this.origin.set(`image`,      this.image);
+    this.origin.set(`imageMini`,  this.imageMini);
     this.origin.set(`sex`,        this.sex);
     this.origin.set(`birthdate`,  this.birthdate);
     this.origin.set(`location`,   this.location);
