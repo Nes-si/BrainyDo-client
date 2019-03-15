@@ -36,11 +36,75 @@
 
     .section
       width: 100%
-      margin-bottom: 40px
+      margin-top: 40px
 
       &-header
         font-size: 18px
         font-weight: bold
+
+      &-columns
+        position: relative
+        width: 100%
+        margin-top: 30px
+
+        display: flex
+        align-items: flex-start
+
+        .image-container
+          position: relative
+          margin-right: 30px
+
+          .image
+            width: 150px
+            height: 150px
+            background-repeat: no-repeat
+            background-position: center
+            background-size: cover
+
+          .upload-button
+            position: relative
+            height: 40px
+            padding: 0 15px
+
+            display: flex
+            justify-content: center
+            align-items: center
+
+            background-image: linear-gradient(-180deg, #658ad2 0%, #476a9e 150%)
+            box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.15)
+            border-radius: 2px
+            border: none
+
+            text-align: center
+            font-weight: bold
+            color: #FFFFFF
+
+            cursor: pointer
+
+          .upload-hidden
+            position: absolute
+            left: 0
+            top: 0
+            width: 100%
+            height: 100%
+            opacity: 0
+            cursor: pointer
+
+          .image-loading
+            position: absolute
+            top: 0
+            left: 0
+            width: 100%
+            height: 100%
+            display: flex
+            justify-content: center
+            align-items: center
+
+            background: rgba(255, 255, 255, .6)
+
+        .text
+          padding: 0
+          flex-grow: 1
 
 
     .field
@@ -53,6 +117,9 @@
       &-error,
       &-success
         line-height: 30px
+
+      &-title
+        margin-right: 20px
 
       &-error
         color: #DD5555
@@ -70,7 +137,12 @@
 
       .input-wrapper
         display: flex
+        width: 100%
         flex-flow: column nowrap
+
+    .inline
+      display: flex
+      align-items: center
 
     .buttons-wrapper
       margin-top: 20px
@@ -78,16 +150,6 @@
       display: flex
       flex-flow: row nowrap
       justify-content: flex-end
-
-    .name-wrapper
-      width: 100%
-
-      display: flex
-      flex-flow: row nowrap
-      justify-content: space-between
-
-      .field
-        width: 49%
 
     .radio-wrapper
       display: inline-block

@@ -3,6 +3,7 @@ import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import CSSModules from 'react-css-modules';
 import {Helmet} from "react-helmet";
+import {Parse} from "parse";
 
 import 'flatpickr/dist/flatpickr.min.css';
 import {Russian} from "flatpickr/dist/l10n/ru";
@@ -10,15 +11,16 @@ import Flatpickr from 'react-flatpickr';
 
 import {MODAL_TYPE_CITY, showAlert, showModal} from "ducks/nav";
 import {update, updateEmail, updatePassword, resendVerEmail, ERROR_USER_EXISTS, ERROR_OTHER} from 'ducks/user';
-import {checkEmail, getTextDate} from 'utils/common';
+import {checkEmail, checkFileType, convertDataUnits, filterSpecials, getTextDate, BYTES, M_BYTES, TYPE_IMAGE} from 'utils/common';
 import {checkPassword} from 'utils/data';
+import {FILE_SIZE_MAX} from "ConnectConstants";
 
 import InputControl from 'components/elements/InputControl/InputControl';
 import ButtonControl from 'components/elements/ButtonControl/ButtonControl';
 import RadioControl from "components/elements/RadioControl/RadioControl";
+import LoaderComponent from "components/elements/LoaderComponent/LoaderComponent";
 
 import styles from './SettingsView.sss';
-
 
 
 const CHG_DATA      = `CHG_DATA`;
@@ -36,6 +38,10 @@ class SettingsView extends Component {
     dirtyData: false,
     errorData: null,
     successData: ``,
+
+    image: null,
+    imageLoading: false,
+    imageError: null,
 
     email: '',
     emailNew: '',
@@ -67,6 +73,7 @@ class SettingsView extends Component {
     this.state.nameLast   = this.userData.nameLast;
     this.state.sex        = this.userData.sex;
     this.state.birthdate  = this.userData.birthdate;
+    this.state.image      = this.userData.image;
     this.state.email      = this.userData.email;
 
     if (this.userData.emailNew) {
@@ -125,6 +132,7 @@ class SettingsView extends Component {
       this.userData.nameLast  = this.state.nameLast;
       this.userData.sex       = this.state.sex;
       this.userData.birthdate = this.state.birthdate;
+      this.userData.image     = this.state.image;
 
       const {update} = this.props.userActions;
       update(this.userData);
@@ -161,6 +169,31 @@ class SettingsView extends Component {
         this.setState({passwordOld: ``, password: '', passwordConfirm: '', dirtyPassword: false});
       })
       .catch(() => {});
+  };
+
+  onImageUpload = async event => {
+    const file = event.target.files[0];
+    if (!file)
+      return;
+
+    if (file.size > FILE_SIZE_MAX) {
+      const max = convertDataUnits(FILE_SIZE_MAX, BYTES, M_BYTES);
+      const size = convertDataUnits(size, BYTES, M_BYTES);
+      this.setState({imageError: `Размер файла (${size} ${M_BYTES}) превышает допустимый (${max} ${M_BYTES})!`});
+      return;
+    }
+
+    if (checkFileType(file.type) != TYPE_IMAGE) {
+      this.setState({imageError: `Необходимо выбрать файл с изображением!`});
+      return;
+    }
+
+    this.setState({imageLoading: true});
+
+    const parseFile = new Parse.File(filterSpecials(file.name), file, file.type);
+    await parseFile.save();
+
+    this.setState({imageLoading: false, image: parseFile, dirtyData: true});
   };
 
   validateData() {
@@ -246,6 +279,8 @@ class SettingsView extends Component {
   render() {
     const {location} = this.props.user.userData;
 
+    const imageSrc = this.state.image ? this.state.image.url() : require('assets/images/event-empty.png');
+
     return (
       <div styleName="SettingsView">
         <Helmet>
@@ -260,49 +295,68 @@ class SettingsView extends Component {
         <div styleName='content'>
           <form styleName="section" onSubmit={this.onSaveData}>
             <div styleName="section-header">Личные данные</div>
-            <div styleName="name-wrapper">
-              <div styleName="field">
-                <div styleName="field-title">Имя</div>
-                <div styleName="input-wrapper">
-                  <InputControl value={this.state.nameFirst}
-                                onChange={this.onChangeNameFirst} />
+
+            <div styleName="section-columns">
+              <div styleName='image-container'>
+                <div styleName="image"
+                     style={{backgroundImage: `url(${imageSrc}`}} />
+                <div styleName="upload-button">
+                  Загрузить изображение
+                  <input styleName="upload-hidden"
+                         type="file"
+                         onChange={this.onImageUpload}/>
                 </div>
+                {this.state.imageLoading &&
+                  <div styleName="image-loading">
+                    <LoaderComponent/>
+                  </div>
+                }
               </div>
-              <div styleName="field">
-                <div styleName="field-title">Фамилия</div>
-                <div styleName="input-wrapper">
-                  <InputControl value={this.state.nameLast}
-                                onChange={this.onChangeNameLast} />
+
+              <div styleName="text">
+                <div styleName="field inline">
+                  <div styleName="field-title">Имя:</div>
+                  <div styleName="input-wrapper">
+                    <InputControl value={this.state.nameFirst}
+                                  onChange={this.onChangeNameFirst} />
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div styleName="field">
-              <div styleName="field-title">Пол</div>
-              <div styleName="radio-wrapper">
-                <RadioControl name="sex"
-                              data="male"
-                              value={this.state.sex}
-                              label="мужской"
-                              onChange={this.onChangeSex} />
-              </div>
-              <div styleName="radio-wrapper">
-                <RadioControl name="sex"
-                              data="female"
-                              value={this.state.sex}
-                              label="женский"
-                              onChange={this.onChangeSex} />
-              </div>
-            </div>
-            <div styleName="field">
-              <div styleName="field-title">Дата рождения</div>
-              <div styleName="date-picker">
-                <Flatpickr value={this.state.birthdate}
-                           options={{
-                             locale: Russian,
-                             formatDate: getTextDate,
-                             maxDate: this.now
-                           }}
-                           onChange={this.onChangeBirthdate} />
+                <div styleName="field inline">
+                  <div styleName="field-title">Фамилия:</div>
+                  <div styleName="input-wrapper">
+                    <InputControl value={this.state.nameLast}
+                                  onChange={this.onChangeNameLast} />
+                  </div>
+                </div>
+                <div styleName="field inline">
+                  <div styleName="field-title">Пол:</div>
+                  <div styleName="radio-wrapper">
+                    <RadioControl name="sex"
+                                  data="male"
+                                  value={this.state.sex}
+                                  label="мужской"
+                                  onChange={this.onChangeSex} />
+                  </div>
+                  <div styleName="radio-wrapper">
+                    <RadioControl name="sex"
+                                  data="female"
+                                  value={this.state.sex}
+                                  label="женский"
+                                  onChange={this.onChangeSex} />
+                  </div>
+                </div>
+                <div styleName="field inline">
+                  <div styleName="field-title">Дата рождения:</div>
+                  <div styleName="date-picker">
+                    <Flatpickr value={this.state.birthdate}
+                               options={{
+                                 locale: Russian,
+                                 formatDate: getTextDate,
+                                 maxDate: this.now
+                               }}
+                               onChange={this.onChangeBirthdate} />
+                  </div>
+                </div>
               </div>
             </div>
             <div styleName="buttons-wrapper">
