@@ -79,6 +79,38 @@ class EventView extends Component {
     leaveEvent(this.state.event);
   };
 
+  getMembersTitle = () => {
+    const {members} = this.state.event;
+    const count = members.length;
+    const rest = count % 10;
+    if (rest == 1)
+      return `${count} участник`;
+    else if (rest >= 2 && rest <= 4)
+      return `${count} участника`;
+    else
+      return `${count} участников`;
+  };
+
+  getMembersImgs = () => {
+    const {members} = this.state.event;
+
+    if (!members.length)
+      return;
+
+    const res = [];
+    for (let i = 0; i < members.length; i++) {
+      let member = members[i];
+      if (!member.imageMini)
+        continue;
+
+      res.push(<img styleName="member-image"
+                    src={member.imageMini.url()}
+                    key={i}/>);
+    }
+
+    return res;
+  };
+
   render() {
     const {event} = this.state;
     if (!event)
@@ -135,6 +167,11 @@ class EventView extends Component {
                   <div key={i} styleName="tag">{tag}</div>)}
               </div>
             }
+
+            <div styleName="members">
+              {this.getMembersTitle()}:
+              {this.getMembersImgs()}
+            </div>
 
             <div styleName="button-wrapper">
               {isOwner ?
