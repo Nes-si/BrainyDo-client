@@ -31,6 +31,38 @@ export default class EventCard extends Component {
     leaveEvent(event);
   };
 
+  getMembersTitle = () => {
+    const {members} = this.props.event;
+    const count = members.length;
+    const rest = count % 10;
+    if (rest == 1)
+      return `${count} участник`;
+    else if (rest >= 2 && rest <= 4)
+      return `${count} участника`;
+    else
+      return `${count} участников`;
+  };
+
+  getMembersImgs = () => {
+    const {members} = this.props.event;
+
+    if (!members.length)
+      return;
+
+    const res = [];
+    for (let i = 0; i < members.length && i < 6; i++) {
+      let member = members[i];
+      if (!member.imageMini)
+        continue;
+
+      res.push(<img styleName="member-image"
+                    src={member.imageMini.url()}
+                    key={i}/>);
+    }
+
+    return res;
+  };
+
   render() {
     const {event, userData, onTagClick} = this.props;
     if (!event)
@@ -93,6 +125,13 @@ export default class EventCard extends Component {
             <div styleName="tags">
               {event.tags.map((tag, i) =>
                 <div key={i} styleName="tag" onClick={() => onTagClick(tag)}>{tag}</div>)}
+            </div>
+          }
+
+          {!!event.members.length &&
+            <div styleName="members">
+              {this.getMembersTitle()}:
+              {this.getMembersImgs()}
             </div>
           }
 
