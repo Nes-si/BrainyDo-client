@@ -69,7 +69,7 @@ export default class EventCard extends Component {
                   Свернуть описание
                 </div>
               ]
-              :
+            :
               <div styleName="expand"
                    onClick={() => this.onExpand(true)}>
                 Показать описание
@@ -77,23 +77,17 @@ export default class EventCard extends Component {
             )
           }
 
-          {event.price ?
-            <div styleName="cost">{event.price} рублей</div>
-          :
-            <div styleName="cost">Бесплатно</div>
-          }
+          <div styleName="cost">{event.price ? event.price + ' рублей' : 'Бесплатно!'}</div>
 
-          {dateEnd ?
-            <div styleName="date">{dateStart} — {dateEnd}</div>
-          :
-            <div styleName="date">{dateStart}</div>
-          }
+          <div styleName="date">{dateStart} {dateEnd ? ' — ' + dateEnd : ''}</div>
 
           {event.ageLimit &&
             <div styleName="date">{event.ageLimit}</div>
           }
 
-          <div styleName="date">{event.place}</div>
+          {event.location &&
+            <div styleName="location"><b>{event.locationPlace ? event.locationPlace + ': ' : ''}</b>{event.locationCity}, {event.locationAddress}</div>
+          }
 
           {(event.tags && !!event.tags.length) &&
             <div styleName="tags">
