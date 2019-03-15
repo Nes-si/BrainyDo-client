@@ -168,12 +168,16 @@ async function requestEvents(filter = {}) {
   for (let event_o of events_o) {
     const event = new EventData(event_o);
 
-    event.owner = new UserData(event_o.get('owner'));
+    const owner_o = event_o.get('owner');
+    await owner_o.fetch({include: ['nameFirst', 'nameLast', 'imageMini']});
+    event.owner = new UserData(owner_o);
 
     const members_o = event_o.get('members');
     if (members_o) {
-      for (let member_o of members_o)
+      for (let member_o of members_o) {
+        await member_o.fetch({include: ['nameFirst', 'nameLast', 'imageMini']});
         event.members.push(new UserData(member_o));
+      }
     }
     
     events.push(event);
@@ -236,7 +240,9 @@ export function showEvent(id) {
     const event_o = await send(new Parse.Query(EventData.OriginClass).get(id));
     const event = new EventData(event_o);
 
-    event.owner = new UserData(event_o.get('owner'));
+    const owner_o = event_o.get('owner');
+    await owner_o.fetch();
+    event.owner = new UserData(owner_o);
 
     const members_o = event_o.get('members');
     if (members_o) {
