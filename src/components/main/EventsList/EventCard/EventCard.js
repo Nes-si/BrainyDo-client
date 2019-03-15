@@ -45,7 +45,6 @@ export default class EventCard extends Component {
 
   getMembersImgs = () => {
     const {members} = this.props.event;
-
     if (!members.length)
       return;
 
@@ -128,12 +127,10 @@ export default class EventCard extends Component {
             </div>
           }
 
-          {!!event.members.length &&
-            <div styleName="members">
-              {this.getMembersTitle()}:
-              {this.getMembersImgs()}
-            </div>
-          }
+          <div styleName="members">
+            {this.getMembersTitle()}:
+            {this.getMembersImgs()}
+          </div>
 
           {isOwner ?
             <div styleName="expand">Я создатель события, ёпта</div>
