@@ -14,7 +14,7 @@ import {FILE_SIZE_MAX} from 'ConnectConstants';
 import {EventData, AGE_LIMITS, AGE_LIMIT_NO_LIMIT} from "models/EventData";
 import {showAlert, showModal} from "ducks/nav";
 import {createEvent, updateEvent, showEvent} from "ducks/events";
-import {getTextDateTime, convertDataUnits, BYTES, M_BYTES, checkFileType, TYPE_IMAGE, filterSpecials} from "utils/common";
+import {getTextDateTime, convertDataUnits, BYTES, M_BYTES, filterSpecials} from "utils/common";
 import {transformDadataAddress, transformDadataCity} from 'utils/data';
 
 import ButtonControl from "components/elements/ButtonControl/ButtonControl";
@@ -317,11 +317,6 @@ class EventEditView extends Component {
       return;
     }
 
-    if (checkFileType(file.type) != TYPE_IMAGE) {
-      this.setState({imageError: `Необходимо выбрать файл с изображением!`});
-      return;
-    }
-
     this.setState({imageLoading: true});
 
     const parseFile = new Parse.File(filterSpecials(file.name), file, file.type);
@@ -415,6 +410,7 @@ class EventEditView extends Component {
               Загрузить изображение
               <input styleName="upload-hidden"
                      type="file"
+                     accept="image/*"
                      onChange={this.onImageUpload}/>
             </div>
             {this.state.imageLoading &&

@@ -11,7 +11,7 @@ import Flatpickr from 'react-flatpickr';
 
 import {MODAL_TYPE_CITY, showAlert, showModal} from "ducks/nav";
 import {update, updateEmail, updatePassword, resendVerEmail, ERROR_USER_EXISTS, ERROR_OTHER} from 'ducks/user';
-import {checkEmail, checkFileType, convertDataUnits, filterSpecials, getTextDate, BYTES, M_BYTES, TYPE_IMAGE} from 'utils/common';
+import {checkEmail, convertDataUnits, filterSpecials, getTextDate, BYTES, M_BYTES} from 'utils/common';
 import {checkPassword} from 'utils/data';
 import {FILE_SIZE_MAX} from "ConnectConstants";
 
@@ -183,11 +183,6 @@ class SettingsView extends Component {
       return;
     }
 
-    if (checkFileType(file.type) != TYPE_IMAGE) {
-      this.setState({imageError: `Необходимо выбрать файл с изображением!`});
-      return;
-    }
-
     this.setState({imageLoading: true});
 
     const parseFile = new Parse.File(filterSpecials(file.name), file, file.type);
@@ -304,6 +299,7 @@ class SettingsView extends Component {
                   Загрузить изображение
                   <input styleName="upload-hidden"
                          type="file"
+                         accept="image/*"
                          onChange={this.onImageUpload}/>
                 </div>
                 {this.state.imageLoading &&
