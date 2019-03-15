@@ -353,7 +353,7 @@ class EventEditView extends Component {
     this.event.dateStart   = this.state.dateStart;
     this.event.dateEnd     = this.state.dateEndEnabled ? this.state.dateEnd : undefined;
     this.event.tags        = this.state.tags;
-    this.event.price       = this.state.price;
+    this.event.price       = parseInt(this.state.price);
     this.event.ageLimit    = this.state.ageLimit;
     this.event.image       = this.state.image;
     this.event.owner       = this.props.user.userData;
