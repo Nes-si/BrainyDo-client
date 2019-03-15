@@ -110,9 +110,7 @@ class EventView extends Component {
                style={{backgroundImage: `url(${imageSrc}`}} />
 
           <div styleName="text">
-            {event.description &&
-              <div styleName="description">{event.description}</div>
-            }
+            <div styleName="description">{event.description}</div>
 
             <div styleName="cost">{event.price ? event.price + ' рублей' : 'Бесплатно!'}</div>
 
