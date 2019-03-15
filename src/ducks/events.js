@@ -277,6 +277,7 @@ export function leaveEvent(event) {
 export function createEvent(event) {
   return async dispatch => {
     event.updateOrigin();
+    event.origin.set('members', [event.owner.origin]);
 
     const ACL = new Parse.ACL(event.owner.origin);
     ACL.setPublicReadAccess(true);

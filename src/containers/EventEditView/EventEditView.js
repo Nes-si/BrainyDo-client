@@ -357,6 +357,7 @@ class EventEditView extends Component {
     this.event.ageLimit    = this.state.ageLimit;
     this.event.image       = this.state.image;
     this.event.owner       = this.props.user.userData;
+    this.event.members     = [this.props.user.userData];
 
     const markerPos = this.marker.getPosition();
     this.event.location           = new Parse.GeoPoint(markerPos.lat(), markerPos.lng());
