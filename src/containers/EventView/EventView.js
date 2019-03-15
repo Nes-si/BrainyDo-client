@@ -18,6 +18,15 @@ import styles from './EventView.sss';
 
 @CSSModules(styles, {allowMultiple: true})
 class EventView extends Component {
+  state = {
+    event: null
+  };
+
+  mapElm = null;
+  map = null;
+  marker = null;
+
+
   constructor(props) {
     super(props);
 
@@ -25,20 +34,53 @@ class EventView extends Component {
       props.eventsActions.showEvent(props.match.params.id);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (!this.state.event) {
+      const event = nextProps.events.currentEvent;
+      if (event && event.origin.id == this.props.match.params.id) {
+        this.setState({event});
+        setTimeout(this.setupGMaps, 1);
+      }
+    }
+  }
+
+  componentDidMount() {
+    if (this.state.event)
+      this.setupGMaps();
+  }
+
+  setupGMaps = () => {
+    if (!this.state.event.location)
+      return;
+
+    let location = {lat: this.state.event.location.latitude, lng: this.state.event.location.longitude};
+
+    this.map = new google.maps.Map(this.mapElm, {
+      center: location,
+      zoom: 19,
+      mapTypeControl: false,
+      streetViewControl: false,
+      gestureHandling: 'greedy'
+    });
+
+    this.marker = new google.maps.Marker({
+      position: location,
+      map: this.map
+    });
+  };
+
   onJoin = () => {
-    const {currentEvent} = this.props.events;
     const {joinEvent} = this.props.eventsActions;
-    joinEvent(currentEvent);
+    joinEvent(this.state.event);
   };
 
   onLeave = () => {
-    const {currentEvent} = this.props.events;
     const {leaveEvent} = this.props.eventsActions;
-    leaveEvent(currentEvent);
+    leaveEvent(this.state.event);
   };
 
   render() {
-    const event = this.props.events.currentEvent;
+    const {event} = this.state;
     if (!event)
       return <LoaderComponent />;
 
@@ -72,23 +114,22 @@ class EventView extends Component {
               <div styleName="description">{event.description}</div>
             }
 
-            {event.price ?
-              <div styleName="cost">{event.price} рублей</div>
-            :
-              <div styleName="cost">Бесплатно!</div>
-            }
+            <div styleName="cost">{event.price ? event.price + ' рублей' : 'Бесплатно!'}</div>
 
-            <div styleName="date">{dateStart}</div>
-
-            {dateEnd &&
-              <div styleName="date">{dateEnd}</div>
-            }
+            <div styleName="date">{dateStart} {dateEnd ? ' — ' + dateEnd : ''}</div>
 
             {event.ageLimit &&
               <div styleName="date">{event.ageLimit}</div>
             }
 
-            <div styleName="date">{event.place}</div>
+            {event.location &&
+              <div styleName="location">
+                <div styleName="place">{event.locationPlace}</div>
+                <div styleName="place">{event.locationCity}, {event.locationAddress}</div>
+                <div styleName="place">{event.locationDetails}</div>
+                <div styleName="map" ref={elm => this.mapElm = elm}></div>
+              </div>
+            }
 
             {(event.tags && !!event.tags.length) &&
               <div styleName="tags">
@@ -97,25 +138,20 @@ class EventView extends Component {
               </div>
             }
 
-            {isOwner ?
-              <div styleName="expand">Я создатель события, ёпта</div>
-            :
-              <div styleName="button-wrapper">
-                {isMember ?
+            <div styleName="button-wrapper">
+              {isOwner ?
+                <Link to={{pathname: "/event-edit", search: `?id=${event.origin.id}`}}>
+                  <ButtonControl value="Редактировать"/>
+                </Link>
+              : (isMember ?
                   <ButtonControl onClick={this.onLeave}
                                  color="red"
                                  value="Не пойду"/>
                 :
                   <ButtonControl onClick={this.onJoin}
                                  value="Пойду"/>
-                }
-              </div>
-            }
-
-            {isOwner &&
-              <Link to={{pathname: "/event-edit", search: `?id=${event.origin.id}`}}>
-                <ButtonControl value="Редактировать"/> </Link>
-            }
+                )}
+            </div>
           </div>
         </div>
       </div>
