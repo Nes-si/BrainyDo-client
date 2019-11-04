@@ -52,9 +52,9 @@ class EventsList extends Component {
     if (params.has('dateType'))
       filter.date.type = params.get('dateType');
     if (params.has('dateFrom'))
-      filter.date.greaterThan = params.get('dateFrom');
+      filter.date.greaterThan = new Date(decodeURIComponent(params.get('dateFrom')));
     if (params.has('dateTo'))
-      filter.date.lessThan = params.get('dateTo');
+      filter.date.lessThan = new Date(decodeURIComponent(params.get('dateTo')));
 
     filter.price.onlyFree = !!params.get('priceOnlyFree');
     if (params.has('priceLessThan'))
