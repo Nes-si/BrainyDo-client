@@ -38,6 +38,14 @@ class App extends React.Component {
   lastModal = <span></span>;
 
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const locationChanged = this.props.location !== prevProps.location;
+    if (locationChanged) {
+      const {closeModal} = this.props.navActions;
+      closeModal();
+    }
+  }
+
   getAlarm = () => {
     const {nav} = this.props;
 
