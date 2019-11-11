@@ -96,8 +96,12 @@ class App extends React.Component {
     const {nav, user} = this.props;
 
     const modal = this.getModal();
-    if (modal)
+    if (modal) {
       this.lastModal = modal;
+      document.body.style.overflowY = 'hidden';
+    } else {
+      document.body.style.overflowY = 'auto';
+    }
 
     const showModalLoader =
       (user.pending || user.authorized && !nav.initEnded) &&
