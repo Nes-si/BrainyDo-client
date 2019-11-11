@@ -3,6 +3,7 @@ import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import CSSModules from 'react-css-modules';
 import {NavLink, withRouter} from "react-router-dom";
+import InlineSVG from 'svg-inline-react';
 
 import {detectLocation} from 'utils/data';
 import {showModal, MODAL_TYPE_SIGN, MODAL_TYPE_CITY} from "ducks/nav";
@@ -90,9 +91,12 @@ class Header extends Component {
 
     return (
       <div styleName="Header">
-        <div styleName="logo">
-          <img src={require("assets/images/logo.png")} />
-        </div>
+        <InlineSVG styleName="logo"
+                   src={require("assets/images/logo.svg")} />
+        {//<div styleName="logo">
+          //<img src={require("assets/images/logo.png")}/>
+        //</div>
+        }
         {menu}
         {!authorized && !!this.state.location &&
           <div styleName="location" onClick={this.onLocationClick}>
