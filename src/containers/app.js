@@ -129,7 +129,9 @@ class App extends React.Component {
               <Redirect to="/" />
             </Switch>
           }
-          <Footer />
+          <footer>
+            <Footer />
+          </footer>
         </div>
         {showModalLoader &&
           <SiteLoader />
