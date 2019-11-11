@@ -106,7 +106,7 @@ class App extends React.Component {
     let res = (
       <div styleName="wrapper">
         <Helmet>
-          <title>Triple L</title>
+          <title>BrainyDo</title>
         </Helmet>
 
         <header>

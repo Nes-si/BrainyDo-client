@@ -392,7 +392,7 @@ class EventEditView extends Component {
     return (
       <div styleName="EventEditView">
         <Helmet>
-          <title>{title} — Triple L</title>
+          <title>{title} — BrainyDo</title>
         </Helmet>
 
         <Prompt when={this.state.dirty}

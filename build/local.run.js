@@ -22,7 +22,7 @@ const server = new express();
 
 server.use('/', express.static(path.resolve(__dirname, '../dist')));
 
-server.get('/triplel-config.json', (req, res) => {
+server.get('/brainy_do-config.json', (req, res) => {
   const response = {configServerURL, configAppId, configJSkey, configRESTkey};
   return res.json(response);
 });

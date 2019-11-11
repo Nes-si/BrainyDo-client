@@ -129,7 +129,7 @@ class EventView extends Component {
     return (
       <div styleName="EventView">
         <Helmet>
-          <title>{event.name} — Triple L</title>
+          <title>{event.name} — BrainyDo</title>
         </Helmet>
 
         <div styleName="background"></div>

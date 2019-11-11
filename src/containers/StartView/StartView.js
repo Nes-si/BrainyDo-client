@@ -29,7 +29,7 @@ class StartView extends Component {
     return (
       <div styleName="StartView">
         <Helmet>
-          <title>Добро пожаловать — Triple L</title>
+          <title>Добро пожаловать — BrainyDo</title>
         </Helmet>
 
         <section styleName="page-open">
@@ -39,7 +39,7 @@ class StartView extends Component {
           </div>
 
           <div styleName='title'>
-            Привет! Это пиздатый сервис.
+            Привет! Это пиздатый сервис
           </div>
 
           <div styleName="events">
@@ -70,7 +70,7 @@ class StartView extends Component {
         <ScrollElement id="page1">
           <section styleName="page-about">
             <div styleName='title'>
-              Мы служим силам света.
+              Мы служим силам света
             </div>
             <div styleName='text'>
               <p>

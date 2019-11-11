@@ -91,7 +91,7 @@ class EventsList extends Component {
     return (
       <div styleName="EventsList">
         <Helmet>
-          <title>Список событий — Triple L</title>
+          <title>Список событий — BrainyDo</title>
         </Helmet>
 
         <div styleName="background"></div>

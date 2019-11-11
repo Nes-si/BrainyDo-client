@@ -20,7 +20,7 @@ class Dashboard extends Component {
     return (
       <div styleName="Dashboard">
         <Helmet>
-          <title>Моя страница — Triple L</title>
+          <title>Моя страница — BrainyDo</title>
         </Helmet>
 
         <div styleName="background"></div>

@@ -279,7 +279,7 @@ class SettingsView extends Component {
     return (
       <div styleName="SettingsView">
         <Helmet>
-          <title>Настройки — Triple L</title>
+          <title>Настройки — BrainyDo</title>
         </Helmet>
 
         <div styleName="background"></div>

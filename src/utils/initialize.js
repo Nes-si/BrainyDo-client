@@ -13,7 +13,7 @@ async function requestConfig() {
   config.appId      = process.env.REACT_APP_APP_ID      || _config.appId;
 
   try {
-    const response = await fetch('/triplel-config.json');
+    const response = await fetch('/brainy_do-config.json');
     const result = await response.json();
     config.serverURL = result.configServerURL || config.serverURL;
     config.appId = result.configAppId || config.appId;
