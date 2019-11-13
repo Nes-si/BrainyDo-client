@@ -259,24 +259,30 @@ export function showEvent(id) {
 }
 
 export function joinEvent(event) {
+  const userData = store.getState().user.userData;
+
   send(
     Parse.Cloud.run('joinEvent', {id: event.origin.id})
   );
 
   return {
     type: JOIN_EVENT,
-    event
+    event,
+    userData
   };
 }
 
 export function leaveEvent(event) {
+  const userData = store.getState().user.userData;
+
   send(
     Parse.Cloud.run('leaveEvent', {id: event.origin.id})
   );
 
   return {
     type: LEAVE_EVENT,
-    event
+    event,
+    userData
   };
 }
 
@@ -368,6 +374,17 @@ export default function eventsReducer(state = initialState, action) {
     case JOIN_EVENT:
       userEvents = state.userEvents.slice();
       userEvents.push(action.event);
+
+      //похоже, что это очень плохая практика
+      for (let event of state.currentEvents) {
+        if (event.origin.id == action.event.origin.id) {
+          let ind = event.members.indexOf(action.userData);
+          if (ind == -1)
+            event.members.push(action.userData);
+          break;
+        }
+      }
+
       return {
         ...state,
         userEvents
@@ -375,19 +392,28 @@ export default function eventsReducer(state = initialState, action) {
 
     case LEAVE_EVENT:
       userEvents = state.userEvents.slice();
-      let eventInd = -1;
-      for (let i = 0; i < userEvents.length; i++) {
-        if (userEvents[i].origin.id == action.event.origin.id){
-          eventInd = i;
+
+      //похоже, что это очень плохая практика
+      for (let event of state.currentEvents) {
+        if (event.origin.id == action.event.origin.id) {
+          for (let i = 0; i < event.members.length; i++) {
+            if (event.members[i].origin.id == action.userData.origin.id) {
+              event.members.splice(i, 1);
+              break;
+            }
+          }
           break;
         }
       }
-      if (eventInd != -1) {
-        userEvents.splice(eventInd, 1);
-        return {
-          ...state,
-          userEvents
-        };
+
+      for (let i = 0; i < userEvents.length; i++) {
+        if (userEvents[i].origin.id == action.event.origin.id) {
+          userEvents.splice(i, 1);
+          return {
+            ...state,
+            userEvents
+          };
+        }
       }
       return state;
 
