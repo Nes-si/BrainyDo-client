@@ -3,7 +3,7 @@ import CSSModules from 'react-css-modules';
 import {Link} from 'react-router-dom';
 
 import {getEventDateTime} from 'utils/common';
-import {isMeEventMember} from 'utils/data';
+import {getVisibleMemberName, isMeEventMember} from 'utils/data';
 
 import ButtonControl from 'components/elements/ButtonControl/ButtonControl';
 import LoaderComponent from "components/elements/LoaderComponent/LoaderComponent";
@@ -55,6 +55,7 @@ export default class EventCard extends Component {
         continue;
 
       res.push(<img styleName="member-image"
+                    title={getVisibleMemberName(member)}
                     src={member.imageMini.url()}
                     key={i}/>);
     }

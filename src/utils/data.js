@@ -158,3 +158,11 @@ export async function detectLocation() {
 
   } catch (e) {}
 }
+
+
+export function getVisibleMemberName(member) {
+ return member.nameFirst && member.nameLast ?
+    member.nameFirst + ' ' + member.nameLast : (
+    member.nameFirst ?
+      member.nameFirst : (member.nameLast ? member.nameLast : null));
+}
