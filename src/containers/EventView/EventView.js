@@ -100,11 +100,10 @@ class EventView extends Component {
     const res = [];
     for (let i = 0; i < members.length; i++) {
       let member = members[i];
-      if (!member.imageMini)
-        continue;
+      const image = member.imageMini ? member.imageMini.url() : require('assets/images/default-avatar-mini.png');
 
       res.push(<img styleName="member-image"
-                    src={member.imageMini.url()}
+                    src={image}
                     key={i}/>);
     }
 
