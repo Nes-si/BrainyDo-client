@@ -274,7 +274,7 @@ class SettingsView extends Component {
   render() {
     const {location} = this.props.user.userData;
 
-    const imageSrc = this.state.image ? this.state.image.url() : require('assets/images/event-empty.png');
+    const imageSrc = this.state.image ? this.state.image.url() : require('assets/images/default-avatar.jpg');
 
     return (
       <div styleName="SettingsView">

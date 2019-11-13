@@ -51,12 +51,11 @@ export default class EventCard extends Component {
     const res = [];
     for (let i = 0; i < members.length && i < 6; i++) {
       let member = members[i];
-      if (!member.imageMini)
-        continue;
+      const image = member.imageMini ? member.imageMini.url() : require('assets/images/default-avatar-mini.png');
 
       res.push(<img styleName="member-image"
                     title={getVisibleMemberName(member)}
-                    src={member.imageMini.url()}
+                    src={image}
                     key={i}/>);
     }
 
