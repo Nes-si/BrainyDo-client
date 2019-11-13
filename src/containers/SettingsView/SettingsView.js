@@ -299,7 +299,7 @@ class SettingsView extends Component {
                   Загрузить изображение
                   <input styleName="upload-hidden"
                          type="file"
-                         accept="image/*"
+                         accept="image/jpeg,image/png,image/gif"
                          onChange={this.onImageUpload}/>
                 </div>
                 {this.state.imageLoading &&
