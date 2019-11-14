@@ -449,7 +449,7 @@ export default function eventsReducer(state = initialState, action) {
 
       return {
         ...state,
-        event
+        userEvents
       };
 
     case PENDING_START:
