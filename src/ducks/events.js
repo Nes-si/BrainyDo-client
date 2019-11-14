@@ -385,6 +385,12 @@ export default function eventsReducer(state = initialState, action) {
         }
       }
 
+      if (state.currentEvent.origin.id == action.event.origin.id) {
+        let ind = state.currentEvent.members.indexOf(action.userData);
+        if (ind == -1)
+          state.currentEvent.members.push(action.userData);
+      }
+
       return {
         ...state,
         userEvents
@@ -403,6 +409,15 @@ export default function eventsReducer(state = initialState, action) {
             }
           }
           break;
+        }
+      }
+
+      if (state.currentEvent.origin.id == action.event.origin.id) {
+        for (let i = 0; i < state.currentEvent.members.length; i++) {
+          if (state.currentEvent.members[i].origin.id == action.userData.origin.id) {
+            state.currentEvent.members.splice(i, 1);
+            break;
+          }
         }
       }
 
