@@ -123,13 +123,8 @@ async function requestEvents(filter = {}) {
   }
 
   if (filter.members) {
-    if (filter.members.onlyMy) {
-      const query1 = Parse.Query.or(query);
-      const query2 = Parse.Query.or(query);
-      query1.equalTo("members", Parse.User.current());
-      query2.equalTo("owner", Parse.User.current());
-      query = Parse.Query.or(query1, query2);
-    }
+    if (filter.members.onlyMy)
+      query.equalTo("members", Parse.User.current());
   }
 
   if (filter.price) {
