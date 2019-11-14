@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import CSSModules from 'react-css-modules';
 import {Helmet} from "react-helmet";
 import {Parse} from "parse";
+import {Prompt} from 'react-router-dom';
 
 import 'flatpickr/dist/flatpickr.min.css';
 import {Russian} from "flatpickr/dist/l10n/ru";
@@ -282,6 +283,9 @@ class SettingsView extends Component {
         <Helmet>
           <title>Настройки — BrainyDo</title>
         </Helmet>
+
+        <Prompt when={this.state.dirtyData || this.state.dirtyEmail || this.state.dirtyPassword}
+                message="У вас есть несохранённые изменения. Покинуть страницу?" />
 
         <div styleName="background"></div>
         <div styleName="header">
