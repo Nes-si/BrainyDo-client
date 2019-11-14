@@ -108,7 +108,6 @@ async function requestEvents(filter = {}) {
         if (filter.date.lessThan) {
           filter.date.lessThan.setHours(23, 59, 59, 999);
           query.lessThanOrEqualTo("dateStart", filter.date.lessThan);
-          query2.lessThanOrEqualTo("dateStart", filter.date.lessThan);
         }
 
         if (filter.date.greaterThan) {
