@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import CSSModules from 'react-css-modules';
 import {Link} from 'react-router-dom';
 
-import {getEventDateTime} from 'utils/common';
+import {getEventDateTime, getMembersNumber} from 'utils/strings';
 import {getVisibleMemberName, isMeEventMember} from 'utils/data';
 
 import ButtonControl from 'components/elements/ButtonControl/ButtonControl';
@@ -29,18 +29,6 @@ export default class EventCard extends Component {
   onLeave = () => {
     const {leaveEvent, event} = this.props;
     leaveEvent(event);
-  };
-
-  getMembersTitle = () => {
-    const {members} = this.props.event;
-    const count = members.length;
-    const rest = count % 10;
-    if (rest == 1)
-      return `${count} участник`;
-    else if (rest >= 2 && rest <= 4)
-      return `${count} участника`;
-    else
-      return `${count} участников`;
   };
 
   getMembersImgs = () => {
@@ -128,7 +116,7 @@ export default class EventCard extends Component {
           }
 
           <div styleName="members">
-            {this.getMembersTitle()}:
+            {getMembersNumber(event.members.length)}:
             {this.getMembersImgs()}
           </div>
 

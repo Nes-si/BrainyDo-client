@@ -7,7 +7,7 @@ import {Link} from 'react-router-dom';
 
 import {showAlert, showModal} from "ducks/nav";
 import {showEvent, joinEvent, leaveEvent} from "ducks/events";
-import {getEventDateTime} from "utils/common";
+import {getEventDateTime, getMembersNumber} from "utils/strings";
 import {isMeEventMember} from "utils/data";
 
 import LoaderComponent from "components/elements/LoaderComponent/LoaderComponent";
@@ -77,18 +77,6 @@ class EventView extends Component {
   onLeave = () => {
     const {leaveEvent} = this.props.eventsActions;
     leaveEvent(this.state.event);
-  };
-
-  getMembersTitle = () => {
-    const {members} = this.state.event;
-    const count = members.length;
-    const rest = count % 10;
-    if (rest == 1)
-      return `${count} участник`;
-    else if (rest >= 2 && rest <= 4)
-      return `${count} участника`;
-    else
-      return `${count} участников`;
   };
 
   getMembersImgs = () => {
@@ -168,7 +156,7 @@ class EventView extends Component {
             }
 
             <div styleName="members">
-              {this.getMembersTitle()}:
+              {getMembersNumber(event.members.length)}:
               {this.getMembersImgs()}
             </div>
 

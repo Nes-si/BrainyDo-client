@@ -11,7 +11,8 @@ import Flatpickr from 'react-flatpickr';
 
 import {MODAL_TYPE_CITY, showAlert, showModal} from "ducks/nav";
 import {update, updateEmail, updatePassword, resendVerEmail, ERROR_USER_EXISTS, ERROR_OTHER} from 'ducks/user';
-import {checkEmail, convertDataUnits, filterSpecials, getTextDate, BYTES, M_BYTES} from 'utils/common';
+import {convertDataUnits, BYTES, M_BYTES} from 'utils/common';
+import {checkEmail, filterSpecials, getTextDate} from 'utils/strings';
 import {checkPassword} from 'utils/data';
 import {FILE_SIZE_MAX} from "ConnectConstants";
 

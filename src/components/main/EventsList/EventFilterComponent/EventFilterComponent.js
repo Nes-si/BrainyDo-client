@@ -5,7 +5,8 @@ import 'flatpickr/dist/flatpickr.min.css';
 import {Russian} from "flatpickr/dist/l10n/ru";
 import Flatpickr from 'react-flatpickr';
 
-import {getTextDate, debounce} from 'utils/common';
+import {debounce} from 'utils/common';
+import {getTextDate} from 'utils/strings';
 import {
   FILTER_DATE_OFF, FILTER_DATE_FUTURE, FILTER_DATE_TODAY, FILTER_DATE_TOMORROW, FILTER_DATE_VALUES, FILTER_DATE_WEEK,
   FILTER_DATE_WEEKEND, AGE_LIMIT_NO_LIMIT, AGE_LIMIT_18_PLUS, AGE_LIMIT_18_MINUS, AGE_LIMIT_12_PLUS, AGE_LIMIT_12_MINUS,

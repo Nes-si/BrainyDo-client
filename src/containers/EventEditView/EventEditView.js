@@ -14,7 +14,8 @@ import {FILE_SIZE_MAX} from 'ConnectConstants';
 import {EventData, AGE_LIMITS, AGE_LIMIT_NO_LIMIT} from "models/EventData";
 import {showAlert, showModal} from "ducks/nav";
 import {createEvent, updateEvent, showEvent} from "ducks/events";
-import {getTextDateTime, convertDataUnits, BYTES, M_BYTES, filterSpecials} from "utils/common";
+import {convertDataUnits, BYTES, M_BYTES} from "utils/common";
+import {getTextDateTime, filterSpecials} from 'utils/strings';
 import {transformDadataAddress, transformDadataCity} from 'utils/data';
 
 import ButtonControl from "components/elements/ButtonControl/ButtonControl";
