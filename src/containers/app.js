@@ -6,7 +6,7 @@ import {Route, Switch, Redirect, withRouter} from "react-router-dom";
 import {Helmet} from "react-helmet";
 import CSSTransition from 'react-transition-group/CSSTransition';
 
-import {closeAlert, closeModal, MODAL_TYPE_CITY, MODAL_TYPE_SIGN} from 'ducks/nav';
+import {closeModal, MODAL_TYPE_ALERT, MODAL_TYPE_CITY, MODAL_TYPE_SIGN} from 'ducks/nav';
 import {login, register, restorePassword, resendVerEmail, resetStatus} from 'ducks/user';
 
 import SiteLoader from 'components/misc/SiteLoader/SiteLoader';
@@ -58,30 +58,34 @@ class App extends React.Component {
     return null;
   };
 
+  getAlarmModal = () => {
+    const params = {
+      type: ALERT_TYPE_ALERT,
+      title: `Проблема сервиса`,
+      description: `Возникли проблемы с нашим сервисом либо с вашим интернет-соединением. Пожалуйста, повторите попытку позже.`,
+      confirmLabel: 'Перезагрузить страницу'
+    };
+    return <AlertModal params={params}
+                       onClose={() => window.location = '/'} />;
+  };
+
   getModal = () => {
     const {nav, user} = this.props;
-    const {closeAlert, closeModal} = this.props.navActions;
+    const {closeModal} = this.props.navActions;
 
-    if (nav.alertShowing)
-      return <AlertModal params={nav.alertParams} onClose={closeAlert}/>;
+    if (nav.serverProblemB)
+      return this.getAlarmModal();
 
-    if (!nav.modalShowing) {
-      if (!nav.serverProblemB || !nav.initEnded)
-        return null;
-
-      const params = {
-        type: ALERT_TYPE_ALERT,
-        title: `Проблема сервиса`,
-        description: `Возникли проблемы с нашим сервисом либо с вашим интернет-соединением. Пожалуйста, повторите попытку позже.`,
-        confirmLabel: 'Перезагрузить страницу'
-      };
-      return <AlertModal params={params}
-                         onClose={() => window.location = '/'} />;
-    }
+    if (!nav.modalShowing)
+      return null;
 
     const {login, register, restorePassword, resendVerEmail, resetStatus} = this.props.userActions;
 
     switch (nav.modalType) {
+      case MODAL_TYPE_ALERT:
+        return <AlertModal onClose={closeModal}
+                           params={nav.modalParams} />;
+
       case MODAL_TYPE_SIGN:
         return <SignModal onClose={closeModal}
                           params={nav.modalParams}
@@ -169,14 +173,14 @@ class App extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    nav:          state.nav,
-    user:         state.user
+    nav:  state.nav,
+    user: state.user
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    navActions:   bindActionCreators({closeAlert, closeModal}, dispatch),
+    navActions:   bindActionCreators({closeModal}, dispatch),
     userActions:  bindActionCreators({login, register, restorePassword, resendVerEmail, resetStatus}, dispatch)
   };
 }

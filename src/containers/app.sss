@@ -27,6 +27,30 @@
       left: 0
       width: 100%
 
+  .alarm
+    position: fixed
+    bottom: 0
+    right: 0
+    padding: 6px 15px
+    text-align: right
+    background: rgba(0, 0, 0, 0.06)
+    color: #e32d36
+    z-index: 200
+    animation-name: blinking
+    animation-duration: 2s
+    animation-iteration-count: infinite
+    animation-timing-function: cubic-bezier(0.1, 0, 1, 1)
+    animation-direction: alternate
+
+    font-size: 13px
+    letter-spacing: 0.5px
+
+@keyframes blinking
+  0%
+    opacity: 1
+  50%
+    opacity: .51
+
 .modal-enter
   opacity: 0.01
 
