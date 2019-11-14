@@ -5,7 +5,7 @@ import CSSModules from 'react-css-modules';
 import {Helmet} from "react-helmet";
 import {Link} from 'react-router-dom';
 
-import {showAlert, showModal} from "ducks/nav";
+import {showModal} from "ducks/nav";
 
 import CalendarComponent from "components/main/Dashboard/CalendarComponent/CalendarComponent";
 import ButtonControl from 'components/elements/ButtonControl/ButtonControl';
@@ -47,7 +47,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    navActions:  bindActionCreators({showModal, showAlert}, dispatch)
+    navActions:  bindActionCreators({showModal}, dispatch)
   };
 }
 

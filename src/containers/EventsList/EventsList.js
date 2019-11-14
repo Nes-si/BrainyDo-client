@@ -4,7 +4,6 @@ import {connect} from "react-redux";
 import CSSModules from 'react-css-modules';
 import {Helmet} from "react-helmet";
 
-import {showAlert, showModal} from "ducks/nav";
 import {showEvents, joinEvent, leaveEvent} from "ducks/events";
 import {FilterEventData, FILTER_DATE_FUTURE} from "models/EventData";
 
@@ -137,8 +136,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    eventsActions:bindActionCreators({showEvents, joinEvent, leaveEvent}, dispatch),
-    navActions:   bindActionCreators({showModal, showAlert}, dispatch)
+    eventsActions:bindActionCreators({showEvents, joinEvent, leaveEvent}, dispatch)
   };
 }
 

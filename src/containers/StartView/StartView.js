@@ -7,7 +7,7 @@ import {Helmet} from "react-helmet";
 import ScrollAnim from 'rc-scroll-anim';
 
 import {showStartEvents} from 'ducks/events';
-import {showModal, showAlert} from 'ducks/nav';
+import {showModal} from 'ducks/nav';
 
 import styles from './StartView.sss';
 
@@ -108,7 +108,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     eventsActions:bindActionCreators({showStartEvents}, dispatch),
-    navActions:   bindActionCreators({showModal, showAlert}, dispatch)
+    navActions:   bindActionCreators({showModal}, dispatch)
   };
 }
 

@@ -9,7 +9,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 import {Russian} from "flatpickr/dist/l10n/ru";
 import Flatpickr from 'react-flatpickr';
 
-import {MODAL_TYPE_CITY, showAlert, showModal} from "ducks/nav";
+import {MODAL_TYPE_CITY, showModal} from "ducks/nav";
 import {update, updateEmail, updatePassword, resendVerEmail, ERROR_USER_EXISTS, ERROR_OTHER} from 'ducks/user';
 import {convertDataUnits, BYTES, M_BYTES} from 'utils/common';
 import {checkEmail, filterSpecials, getTextDate} from 'utils/strings';
@@ -463,7 +463,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    navActions:  bindActionCreators({showModal, showAlert}, dispatch),
+    navActions:  bindActionCreators({showModal}, dispatch),
     userActions: bindActionCreators({update, updateEmail, updatePassword, resendVerEmail}, dispatch)
   };
 }

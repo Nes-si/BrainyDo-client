@@ -12,7 +12,6 @@ import Flatpickr from 'react-flatpickr';
 
 import {FILE_SIZE_MAX} from 'ConnectConstants';
 import {EventData, AGE_LIMITS, AGE_LIMIT_NO_LIMIT} from "models/EventData";
-import {showAlert, showModal} from "ducks/nav";
 import {createEvent, updateEvent, showEvent} from "ducks/events";
 import {convertDataUnits, BYTES, M_BYTES} from "utils/common";
 import {getTextDateTime, filterSpecials} from 'utils/strings';
@@ -583,8 +582,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    eventsActions:bindActionCreators({createEvent, updateEvent, showEvent}, dispatch),
-    navActions:   bindActionCreators({showModal, showAlert}, dispatch)
+    eventsActions:bindActionCreators({createEvent, updateEvent, showEvent}, dispatch)
   };
 }
 

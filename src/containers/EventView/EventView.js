@@ -5,7 +5,6 @@ import CSSModules from 'react-css-modules';
 import {Helmet} from "react-helmet";
 import {Link} from 'react-router-dom';
 
-import {showAlert, showModal} from "ducks/nav";
 import {showEvent, joinEvent, leaveEvent} from "ducks/events";
 import {getEventDateTime, getMembersNumber} from "utils/strings";
 import {isMeEventMember} from "utils/data";
@@ -191,8 +190,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    eventsActions:bindActionCreators({showEvent, joinEvent, leaveEvent}, dispatch),
-    navActions:   bindActionCreators({showModal, showAlert}, dispatch)
+    eventsActions:bindActionCreators({showEvent, joinEvent, leaveEvent}, dispatch)
   };
 }
 
