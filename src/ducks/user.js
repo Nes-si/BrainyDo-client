@@ -3,6 +3,7 @@ import {Parse} from 'parse';
 import {store} from 'index';
 import {UserData} from 'models/UserData';
 import {config} from 'utils/initialize';
+import {detectLocation} from 'utils/dadata';
 import {send, PARSE_ERROR_CODE__USERNAME_TAKEN, PARSE_ERROR_CODE__OBJECT_NOT_FOUND, PARSE_ERROR_CODE__EMAIL_NOT_FOUND,
   PARSE_ERROR_CODE__EMAIL_TAKEN} from 'utils/server';
 
@@ -102,24 +103,31 @@ export function login(email, password) {
 
 export function getLocalStorage() {
   return dispatch => {
-    const currentUser = Parse.User.current();
-    if (!currentUser || !currentUser.get('sessionToken')) {
-      dispatch({type: LOGIN_RESPONSE});
-      return;
-    }
-  
-    send(currentUser.fetch())
+    let loc;
+    detectLocation()
+      .catch(e => {})
+      .then(_loc => {
+        loc = _loc;
+        const currentUser = Parse.User.current();
+        if (!currentUser || !currentUser.get('sessionToken')) {
+          dispatch({type: LOGIN_RESPONSE, loc});
+          return;
+        }
+
+        return send(currentUser.fetch());
+      })
       .then(() => {
         const userData = new UserData();
         dispatch({
           type: LOGIN_RESPONSE,
           status: OK,
           authorized: true,
-          userData
+          userData,
+          loc
         });
       })
-      .catch(() => dispatch ({type: LOGIN_RESPONSE}));
-  }
+      .catch(() => dispatch({type: LOGIN_RESPONSE, loc}));
+  };
 }
 
 export function logout() {
@@ -250,12 +258,14 @@ const initialState = {
   password: '',
 
   userData: null,
+  loc: null,
 
   pending: false
 };
 
 export default function userReducer(state = initialState, action) {
   const userData = state.userData;
+  let loc;
   
   switch (action.type) {
 
@@ -280,6 +290,8 @@ export default function userReducer(state = initialState, action) {
       };
 
     case LOGIN_RESPONSE:
+      loc = (action.userData && action.userData.location) ? action.userData.location : action.loc;
+
       return {
         ...state,
         authorized: action.authorized,
@@ -287,6 +299,7 @@ export default function userReducer(state = initialState, action) {
         userData: action.userData,
         localStorageReady: true,
         password: ``,
+        loc,
         pending: false
       };
 
@@ -307,9 +320,11 @@ export default function userReducer(state = initialState, action) {
       };
       
     case UPDATE:
+      loc = action.data.location ? action.data.location : state.loc;
       return {
         ...state,
-        userData: action.data
+        userData: action.data,
+        loc
       };
   
     case UPDATE_EMAIL:

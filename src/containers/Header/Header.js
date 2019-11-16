@@ -5,7 +5,6 @@ import CSSModules from 'react-css-modules';
 import {NavLink, withRouter} from "react-router-dom";
 import InlineSVG from 'svg-inline-react';
 
-import {detectLocation} from 'utils/dadata';
 import {showModal, MODAL_TYPE_SIGN, MODAL_TYPE_SETTLEMENT} from "ducks/nav";
 import {logout} from "ducks/user";
 
@@ -19,16 +18,6 @@ class Header extends Component {
   state = {
     location: null
   };
-
-  constructor(props) {
-    super(props);
-
-    if (!props.user.authorized)
-      detectLocation()
-        .then(location => {
-          this.setState({location});
-        });
-  }
 
   onLogin = () => {
     const {showModal} = this.props.navActions;
@@ -58,7 +47,7 @@ class Header extends Component {
   };
 
   render() {
-    const {authorized} = this.props.user;
+    const {authorized, loc} = this.props.user;
 
     let menu = (
       <div styleName="menu">
@@ -98,9 +87,9 @@ class Header extends Component {
         //</div>
         }
         {menu}
-        {!authorized && !!this.state.location &&
+        {!authorized && !!loc &&
           <div styleName="location" onClick={this.onLocationClick}>
-            Ваш населённый пункт — {this.state.location.main}, верно?
+            Ваш населённый пункт — {loc.main}, верно?
           </div>
         }
       </div>
