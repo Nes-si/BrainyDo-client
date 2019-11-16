@@ -95,13 +95,25 @@ export class EventData {
 }
 
 
-export const FILTER_DATE_OFF = "FILTER_DATE_OFF";
-export const FILTER_DATE_FUTURE = "FILTER_DATE_FUTURE";
-export const FILTER_DATE_TODAY = "FILTER_DATE_TODAY";
-export const FILTER_DATE_TOMORROW = "FILTER_DATE_TOMORROW";
-export const FILTER_DATE_WEEK = "FILTER_DATE_WEEK";
-export const FILTER_DATE_WEEKEND = "FILTER_DATE_WEEKEND";
-export const FILTER_DATE_VALUES = "FILTER_DATE_VALUES";
+export const FILTER_DATE_OFF = "DATE_OFF";
+export const FILTER_DATE_FUTURE = "DATE_FUTURE";
+export const FILTER_DATE_TODAY = "DATE_TODAY";
+export const FILTER_DATE_TOMORROW = "DATE_TOMORROW";
+export const FILTER_DATE_WEEK = "DATE_WEEK";
+export const FILTER_DATE_WEEKEND = "DATE_WEEKEND";
+export const FILTER_DATE_VALUES = "DATE_VALUES";
+
+export const FILTER_PRICE_OFF = 'PRICE_OFF';
+export const FILTER_PRICE_FREE = 'PRICE_FREE';
+export const FILTER_PRICE_MAX = 'PRICE_MAX';
+
+export const FILTER_AGE_OFF = 'AGE_OFF';
+export const FILTER_AGE_MY = 'AGE_MY';
+export const FILTER_AGE_FIX = 'AGE_FIX';
+export const FILTER_AGE_VALUE = 'AGE_VALUE';
+
+export const FILTER_REGION_OFF = 'REGION_OFF';
+export const FILTER_REGION_VALUE = 'REGION_VALUE';
 
 
 export class FilterEventData {
@@ -109,22 +121,23 @@ export class FilterEventData {
 
   date = {
     type: FILTER_DATE_OFF,
-    greaterThan: null,
-    lessThan: null
-  };
-
-  ageLimit = {
-    age: undefined,
-    my: false,
-    ageLimit: undefined
+    from: null,
+    to: null
   };
 
   price = {
-    lessThan: undefined,
-    onlyFree: false
+    type: FILTER_PRICE_OFF,
+    max: 0
+  };
+
+  ageLimit = {
+    type: FILTER_AGE_OFF,
+    limit: AGE_LIMIT_NO_LIMIT,
+    age: 0
   };
 
   region = {
+    type: FILTER_REGION_OFF,
     cityFias: undefined,
     regionFias: undefined
   };

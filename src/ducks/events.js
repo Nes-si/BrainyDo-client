@@ -1,7 +1,10 @@
 import {Parse} from 'parse';
 
-import {EventData, FilterEventData, FILTER_DATE_OFF, FILTER_DATE_FUTURE, FILTER_DATE_TODAY, FILTER_DATE_TOMORROW, FILTER_DATE_VALUES,
-  FILTER_DATE_WEEK, FILTER_DATE_WEEKEND} from 'models/EventData';
+import {
+  EventData, FilterEventData, FILTER_DATE_OFF, FILTER_DATE_FUTURE, FILTER_DATE_TODAY, FILTER_DATE_TOMORROW,
+  FILTER_DATE_VALUES, FILTER_DATE_WEEK, FILTER_DATE_WEEKEND, FILTER_PRICE_OFF, FILTER_PRICE_FREE, FILTER_PRICE_MAX,
+  FILTER_AGE_MY, FILTER_AGE_OFF, FILTER_AGE_VALUE, FILTER_REGION_OFF, FILTER_REGION_VALUE, FILTER_AGE_FIX
+} from 'models/EventData';
 import {store} from 'index';
 import {send, getAllObjects} from 'utils/server';
 import {getPermissibleAgeLimits, getAgeLimitsByLimit} from 'utils/data';
@@ -24,7 +27,8 @@ export const PENDING_START      = 'app/events/PENDING_START';
 async function requestEvents(filter = {}) {
   const userData = store.getState().user.userData;
 
-  let query = new Parse.Query(EventData.OriginClass);
+  let queryTotal = new Parse.Query(EventData.OriginClass);
+  let query;
 
   if (filter.date && filter.date.type != FILTER_DATE_OFF) {
     const todayStart = new Date();
@@ -37,25 +41,28 @@ async function requestEvents(filter = {}) {
     const weekEnd = new Date(todayEnd);
     weekEnd.setDate(todayStart.getDate() + (7 - todayDOW));
 
-    const query2 = new Parse.Query(EventData.OriginClass);
+
+    let query1 = new Parse.Query(EventData.OriginClass);
+
+    let query2 = new Parse.Query(EventData.OriginClass);
     query2.doesNotExist("dateEnd");
 
     switch (filter.date.type) {
       case FILTER_DATE_FUTURE:
-        query.greaterThan("dateEnd", new Date());
+        query1.greaterThan("dateEnd", new Date());
         query2.greaterThan("dateStart", todayStart);
 
-        query = Parse.Query.or(query, query2);
+        query = Parse.Query.or(query1, query2);
         break;
 
       case FILTER_DATE_TODAY:
-        query.greaterThan("dateEnd", new Date());
-        query.lessThan("dateStart", todayEnd);
+        query1.greaterThan("dateEnd", new Date());
+        query1.lessThan("dateStart", todayEnd);
 
         query2.greaterThanOrEqualTo("dateStart", todayStart);
         query2.lessThan("dateStart", todayEnd);
 
-        query = Parse.Query.or(query, query2);
+        query = Parse.Query.or(query1, query2);
         break;
 
       case FILTER_DATE_TOMORROW:
@@ -65,25 +72,23 @@ async function requestEvents(filter = {}) {
         const tomorrowEnd = new Date(tomorrowStart);
         tomorrowEnd.setHours(23, 59, 59, 999);
 
-        query.greaterThan("dateEnd", tomorrowStart);
-        query.lessThan("dateStart", tomorrowEnd);
+        query1.greaterThan("dateEnd", tomorrowStart);
+        query1.lessThan("dateStart", tomorrowEnd);
 
         query2.greaterThanOrEqualTo("dateStart", tomorrowStart);
         query2.lessThan("dateStart", tomorrowEnd);
 
-        query = Parse.Query.or(query, query2);
-
+        query = Parse.Query.or(query1, query2);
         break;
 
       case FILTER_DATE_WEEK:
-        query.greaterThan("dateEnd", new Date());
-        query.lessThan("dateStart", weekEnd);
+        query1.greaterThan("dateEnd", new Date());
+        query1.lessThan("dateStart", weekEnd);
 
         query2.greaterThanOrEqualTo("dateStart", todayStart);
         query2.lessThan("dateStart", weekEnd);
 
-        query = Parse.Query.or(query, query2);
-
+        query = Parse.Query.or(query1, query2);
         break;
 
       case FILTER_DATE_WEEKEND:
@@ -94,69 +99,101 @@ async function requestEvents(filter = {}) {
           weekEndStart.setHours(0, 0, 0, 0);
         }
 
-        query.greaterThanOrEqualTo("dateEnd", weekEndStart);
-        query.lessThan("dateStart", weekEnd);
+        query1.greaterThanOrEqualTo("dateEnd", weekEndStart);
+        query1.lessThan("dateStart", weekEnd);
 
         query2.greaterThanOrEqualTo("dateStart", weekEndStart);
         query2.lessThan("dateStart", weekEnd);
 
-        query = Parse.Query.or(query, query2);
-
+        query = Parse.Query.or(query1, query2);
         break;
 
       case FILTER_DATE_VALUES:
-        if (filter.date.lessThan) {
-          filter.date.lessThan.setHours(23, 59, 59, 999);
-          query.lessThanOrEqualTo("dateStart", filter.date.lessThan);
+        if (filter.date.to) {
+          filter.date.to.setHours(23, 59, 59, 999);
+          query1.lessThanOrEqualTo("dateStart", filter.date.to);
+          query2.lessThanOrEqualTo("dateStart", filter.date.to);
         }
 
-        if (filter.date.greaterThan) {
-          filter.date.greaterThan.setHours(0, 0, 0, 0);
-          query.greaterThanOrEqualTo("dateEnd", filter.date.greaterThan);
-          query2.greaterThanOrEqualTo("dateStart", filter.date.greaterThan);
-          query = Parse.Query.or(query, query2);
+        if (filter.date.from) {
+          filter.date.from.setHours(0, 0, 0, 0);
+          query1.greaterThanOrEqualTo("dateEnd", filter.date.from);
+          query2.greaterThanOrEqualTo("dateStart", filter.date.from);
+          query = Parse.Query.or(query1, query2);
         }
 
         break;
     }
+
+    queryTotal = Parse.Query.and(queryTotal, query);
   }
 
-  if (filter.members) {
-    if (filter.members.onlyMy)
-      query.equalTo("members", Parse.User.current());
+  if (filter.price && filter.price.type != FILTER_PRICE_OFF) {
+    query = new Parse.Query(EventData.OriginClass);
+
+    switch (filter.price.type) {
+      case FILTER_PRICE_FREE:
+        query.containedIn("price", [0, undefined]);
+        break;
+      case FILTER_PRICE_MAX:
+        query.lessThanOrEqualTo("price", filter.price.max);
+        break;
+    }
+
+    queryTotal = Parse.Query.and(queryTotal, query);
   }
 
-  if (filter.price) {
-    if (filter.price.onlyFree)
-      query.containedIn("price", [0, undefined]);
-    else if (filter.price.lessThan)
-      query.lessThanOrEqualTo("price", filter.price.lessThan);
+  if (filter.ageLimit && filter.ageLimit.type != FILTER_AGE_OFF) {
+    query = new Parse.Query(EventData.OriginClass);
+
+    switch (filter.ageLimit.type) {
+      case FILTER_AGE_MY:
+        query.containedIn("ageLimit", getPermissibleAgeLimits(userData.age));
+        break;
+      case FILTER_AGE_FIX:
+        query.containedIn("ageLimit", getAgeLimitsByLimit(filter.ageLimit.limit));
+        break;
+      case FILTER_AGE_VALUE:
+        query.containedIn("ageLimit", getPermissibleAgeLimits(filter.ageLimit.age));
+        break;
+    }
+
+    queryTotal = Parse.Query.and(queryTotal, query);
   }
 
-  if (filter.ageLimit) {
-    if (filter.ageLimit.my)
-      query.containedIn("ageLimit", getPermissibleAgeLimits(userData.age));
-    if (filter.ageLimit.age)
-      query.containedIn("ageLimit", getPermissibleAgeLimits(filter.age.age));
-    if (filter.ageLimit.ageLimit)
-      query.containedIn("ageLimit", getAgeLimitsByLimit(filter.ageLimit.ageLimit));
-  }
+  if (filter.region && filter.region.type != FILTER_REGION_OFF) {
+    query = new Parse.Query(EventData.OriginClass);
 
-  if (filter.region) {
     if (filter.region.cityFias)
       query.equalTo("locationCityFias", filter.region.cityFias);
     else if (filter.region.regionFias)
       query.equalTo("locationRegionFias", filter.region.regionFias);
+
+    queryTotal = Parse.Query.and(queryTotal, query);
+  }
+
+  if (filter.members) {
+    query = new Parse.Query(EventData.OriginClass);
+
+    if (filter.members.onlyMy)
+      query.equalTo("members", Parse.User.current());
+
+    queryTotal = Parse.Query.and(queryTotal, query);
   }
 
   if (filter.tags && filter.tags.length) {
+    query = new Parse.Query(EventData.OriginClass);
     query.containedIn("tags", filter.tags);
+    queryTotal = Parse.Query.and(queryTotal, query);
   }
 
-  if (filter.search)
+  if (filter.search) {
+    query = new Parse.Query(EventData.OriginClass);
     query.startsWith("name", filter.search);
+    queryTotal = Parse.Query.and(queryTotal, query);
+  }
 
-  const events_o = await send(getAllObjects(query));
+  const events_o = await send(getAllObjects(queryTotal));
 
   const events = [];
   for (let event_o of events_o) {
@@ -183,11 +220,11 @@ async function requestEvents(filter = {}) {
 export function showStartEvents() {
   return async dispatch => {
     let filter = new FilterEventData();
-    filter.date.today = true;
+    filter.date.type = FILTER_DATE_TODAY;
     const eventsToday = await requestEvents(filter);
 
     filter = new FilterEventData();
-    filter.date.tomorrow = true;
+    filter.date.type = FILTER_DATE_TOMORROW;
     const eventsTomorrow = await requestEvents(filter);
 
     filter = new FilterEventData();

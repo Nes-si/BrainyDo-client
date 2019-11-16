@@ -9,8 +9,9 @@ import {debounce} from 'utils/common';
 import {getTextDate} from 'utils/strings';
 import {
   FILTER_DATE_OFF, FILTER_DATE_FUTURE, FILTER_DATE_TODAY, FILTER_DATE_TOMORROW, FILTER_DATE_VALUES, FILTER_DATE_WEEK,
-  FILTER_DATE_WEEKEND, AGE_LIMIT_NO_LIMIT, AGE_LIMIT_18_PLUS, AGE_LIMIT_18_MINUS, AGE_LIMIT_12_PLUS, AGE_LIMIT_12_MINUS,
-  AGE_LIMIT_6_PLUS, AGE_LIMIT_6_MINUS, AGE_LIMITS, FilterEventData
+  FILTER_DATE_WEEKEND, FILTER_PRICE_OFF, FILTER_PRICE_MAX, FILTER_PRICE_FREE, FILTER_AGE_OFF, FILTER_AGE_FIX, FILTER_AGE_MY,
+  FILTER_REGION_OFF, FILTER_REGION_VALUE, AGE_LIMIT_NO_LIMIT, AGE_LIMIT_18_PLUS, AGE_LIMIT_18_MINUS, AGE_LIMIT_12_PLUS,
+  AGE_LIMIT_12_MINUS, AGE_LIMIT_6_PLUS, AGE_LIMIT_6_MINUS, AGE_LIMITS, FilterEventData
 } from 'models/EventData';
 
 import InputControl from "components/elements/InputControl/InputControl";
@@ -30,19 +31,19 @@ DATE_MAP.set(FILTER_DATE_WEEK, "На этой неделе");
 DATE_MAP.set(FILTER_DATE_WEEKEND, "На выходных");
 DATE_MAP.set(FILTER_DATE_VALUES, "Указать точно");
 
-const PRICE_OFF = 'Неважно';
-const PRICE_FREE = 'Только бесплатные';
-const PRICE_LESS = 'Не дороже';
-const PRICES = [PRICE_OFF, PRICE_FREE, PRICE_LESS];
+const PRICE_MAP = new Map();
+PRICE_MAP.set(FILTER_PRICE_OFF, "Неважно");
+PRICE_MAP.set(FILTER_PRICE_FREE, "Только бесплатные");
+PRICE_MAP.set(FILTER_PRICE_MAX, "Не дороже");
 
-const AGE_OFF = 'Неважно';
-const AGE_MY = 'Для меня';
-const AGE_VALUE = 'Выбрать';
-let AGES = [AGE_OFF, AGE_MY, AGE_VALUE];
+const AGE_MAP = new Map();
+AGE_MAP.set(FILTER_AGE_OFF, "Неважно");
+AGE_MAP.set(FILTER_AGE_MY, "Для меня");
+AGE_MAP.set(FILTER_AGE_FIX, "Выбрать");
 
-const REGION_OFF = 'Неважно';
-const REGION_VALUE = 'Выбрать';
-const REGIONS = [REGION_OFF, REGION_VALUE];
+const REGION_MAP = new Map();
+REGION_MAP.set(FILTER_REGION_OFF, "Неважно");
+REGION_MAP.set(FILTER_REGION_VALUE, "Выбрать");
 
 
 @CSSModules(styles, {allowMultiple: true})
@@ -54,13 +55,13 @@ export default class EventFilterComponent extends Component {
     dateFrom: new Date(),
     dateTo: new Date(),
 
-    priceType: PRICE_OFF,
-    price: 0,
+    priceType: FILTER_PRICE_OFF,
+    priceMax: 0,
 
-    ageType: AGE_OFF,
+    ageType: FILTER_AGE_OFF,
     ageLimit: AGE_LIMIT_NO_LIMIT,
 
-    regionType: REGION_VALUE,
+    regionType: FILTER_REGION_VALUE,
     region: null,
 
     tags: []
@@ -72,13 +73,32 @@ export default class EventFilterComponent extends Component {
   constructor(props) {
     super(props);
 
-    this.filter.date.type = FILTER_DATE_FUTURE;
-    if (props.location) {
-      this.state.region = props.location;
-      this.filter.region.regionData = props.location;
+    if (props.startFilter) {
+      this.filter = props.startFilter;
+      this.filterToState();
     }
+
     if (!props.hasAge)
-      AGES = [AGE_OFF, AGE_VALUE];
+      AGE_MAP.delete(FILTER_AGE_MY);
+  }
+
+  filterToState() {
+    this.state.search = this.filter.search;
+
+    this.state.dateType = this.filter.date.type;
+    if (this.filter.date.from)
+      this.state.dateFrom = this.filter.date.from;
+    if (this.filter.date.to)
+      this.state.dateTo = this.filter.date.to;
+
+    this.state.priceType = this.filter.price.type;
+    this.state.priceMax = this.filter.price.max;
+
+    this.state.ageType = this.filter.ageLimit.type;
+    this.state.ageLimit = this.filter.ageLimit.limit;
+
+    this.state.regionType = this.filter.region.type;
+    this.state.region = this.filter.region;
   }
 
   onChangeSearch = search => {
@@ -136,17 +156,16 @@ export default class EventFilterComponent extends Component {
     if (this.state.dateType == FILTER_DATE_VALUES && this.state.dateTo)
       params.push(`dateTo=${encodeURIComponent(this.state.dateTo.toISOString())}`);
 
-    if (this.state.priceType == PRICE_FREE)
-      params.push(`priceOnlyFree=true`);
-    if (this.state.priceType == PRICE_LESS)
-      params.push(`priceLessThan=${this.state.price}`);
+    params.push(`priceType=${this.state.priceType}`);
+    if (this.state.priceType == FILTER_PRICE_MAX)
+      params.push(`priceMax=${this.state.priceMax}`);
 
-    if (this.state.ageType == AGE_MY)
-      params.push(`ageMy=true`);
-    if (this.state.ageType == AGE_VALUE)
+    params.push(`ageType=${this.state.ageType}`);
+    if (this.state.ageType == FILTER_AGE_FIX)
       params.push(`ageLimit=${encodeURIComponent(this.state.ageLimit)}`);
 
-    if (this.state.regionType == REGION_VALUE && this.state.region) {
+    params.push(`regionType=${this.state.regionType}`);
+    if (this.state.regionType == FILTER_REGION_VALUE && this.state.region) {
       if (this.state.region.cityFias)
         params.push(`cityFias=${this.state.region.cityFias}`);
       else if (this.state.region.regionFias)
@@ -162,19 +181,19 @@ export default class EventFilterComponent extends Component {
 
   debouncedApply = debounce(this.onApply, 1000);
   onChangePrice = priceStr => {
-    let price = parseInt(priceStr);
-    if (!price)
-      price = 0;
-    this.setState({price}, this.debouncedApply);
+    let priceMax = parseInt(priceStr);
+    if (!priceMax)
+      priceMax = 0;
+    this.setState({priceMax}, this.debouncedApply);
   };
 
   onReset = () => {
     this.setState({
       search: '',
       dateType: FILTER_DATE_FUTURE,
-      priceType: PRICE_OFF,
-      ageType: AGE_OFF,
-      regionType: REGION_OFF
+      priceType: FILTER_PRICE_OFF,
+      ageType: FILTER_AGE_OFF,
+      regionType: FILTER_REGION_OFF
     });
 
     let paramsStr = `?dateType=${FILTER_DATE_FUTURE}`;
@@ -248,12 +267,12 @@ export default class EventFilterComponent extends Component {
             <div styleName="filter-title">Стоимость</div>
 
             <div styleName="radio-group">
-              {PRICES.map(priceType =>
+              {Array.from(PRICE_MAP.keys()).map(priceType =>
                 <div key={priceType} styleName="radio-wrapper">
                   <RadioControl name="price-type"
                                 data={priceType}
                                 value={this.state.priceType}
-                                label={priceType}
+                                label={PRICE_MAP.get(priceType)}
                                 onChange={this.onChangePriceType} />
                 </div>
               )}
@@ -262,8 +281,8 @@ export default class EventFilterComponent extends Component {
             <div styleName="price">
               <div styleName="price-input">
                 <InputControl onChange={this.onChangePrice}
-                              readOnly={this.state.priceType != PRICE_LESS}
-                              value={this.state.price} />
+                              readOnly={this.state.priceType != FILTER_PRICE_MAX}
+                              value={this.state.priceMax} />
               </div>
               <div styleName="price-unit">рублей</div>
             </div>
@@ -273,12 +292,12 @@ export default class EventFilterComponent extends Component {
             <div styleName="filter-title">Возраст</div>
 
             <div styleName="radio-group">
-              {AGES.map(ageType =>
+              {Array.from(AGE_MAP.keys()).map(ageType =>
                 <div key={ageType} styleName="radio-wrapper">
                   <RadioControl name="age-type"
                                 data={ageType}
                                 value={this.state.ageType}
-                                label={ageType}
+                                label={AGE_MAP.get(ageType)}
                                 onChange={this.onChangeAgeType} />
                 </div>
               )}
@@ -287,7 +306,7 @@ export default class EventFilterComponent extends Component {
             <div styleName="dropdown-wrapper">
               <DropdownControl list={AGE_LIMITS}
                                onSuggest={this.onChangeAgeLimit}
-                               disabled={this.state.ageType != AGE_VALUE}
+                               disabled={this.state.ageType != FILTER_AGE_FIX}
                                current={this.state.ageLimit} />
             </div>
 
@@ -297,12 +316,12 @@ export default class EventFilterComponent extends Component {
             <div styleName="filter-title">Регион</div>
 
             <div styleName="radio-group">
-              {REGIONS.map(regionType =>
+              {Array.from(REGION_MAP.keys()).map(regionType =>
                 <div key={regionType} styleName="radio-wrapper">
                   <RadioControl name="region-type"
                                 data={regionType}
                                 value={this.state.regionType}
-                                label={regionType}
+                                label={REGION_MAP.get(regionType)}
                                 onChange={this.onChangeRegionType} />
                 </div>
               )}
@@ -311,7 +330,7 @@ export default class EventFilterComponent extends Component {
             <div styleName="region">
               <GeoSearchControl type={TYPE_CITY_AND_REGION}
                                 onChange={this.onChangeRegion}
-                                disabled={this.state.regionType != REGION_VALUE}
+                                disabled={this.state.regionType != FILTER_REGION_VALUE}
                                 value={this.state.region ? this.state.region.main : null} />
             </div>
           </div>

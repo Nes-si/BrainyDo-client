@@ -17,17 +17,24 @@ import styles from './EventsList.sss';
 @CSSModules(styles, {allowMultiple: true})
 class EventsList extends Component {
   filterComp = null;
+  startFilter = new FilterEventData();
 
   constructor(props) {
     super(props);
 
     if (props.location.search) {
-      const paramsStr = this.parseParams(props.location.search);
-      props.eventsActions.showEvents(paramsStr);
+      this.startFilter = this.parseParams(props.location.search);
+      props.eventsActions.showEvents(this.startFilter);
+
     } else {
       let paramsStr = `?dateType=${FILTER_DATE_FUTURE}`;
-      if (props.user.userData.location)
-        paramsStr += `&cityFias=${props.user.userData.location.cityFias}`;
+      this.startFilter.date.type = FILTER_DATE_FUTURE;
+
+      const userLoc = props.user.userData.location;
+      if (userLoc) {
+        paramsStr += `&cityFias=${userLoc.cityFias}`;
+        this.startFilter.region.cityFias = userLoc.cityFias;
+      }
 
       this.props.history.replace(`${props.match.url}${paramsStr}`);
     }
@@ -55,14 +62,18 @@ class EventsList extends Component {
     if (params.has('dateTo'))
       filter.date.lessThan = new Date(decodeURIComponent(params.get('dateTo')));
 
-    filter.price.onlyFree = !!params.get('priceOnlyFree');
-    if (params.has('priceLessThan'))
-      filter.date.lessThan = params.get('priceLessThan');
+    if (params.has('priceType'))
+      filter.price.type = params.get('priceType');
+    if (params.has('priceMax'))
+      filter.price.max = parseInt(params.get('priceMax'));
 
-    filter.ageLimit.my = !!params.get('ageMy');
+    if (params.has('ageType'))
+      filter.ageLimit.type = params.get('ageType');
     if (params.has('ageLimit'))
-      filter.ageLimit.ageLimit = decodeURIComponent(params.get('ageLimit'));
+      filter.ageLimit.limit = decodeURIComponent(params.get('ageLimit'));
 
+    if (params.has('regionType'))
+      filter.region.type = params.get('regionType');
     if (params.has('cityFias'))
       filter.region.cityFias = params.get('cityFias');
     if (params.has('regionFias'))
@@ -101,7 +112,7 @@ class EventsList extends Component {
         <div styleName='content'>
           <EventFilterComponent ref={elm => this.filterComp = elm}
                                 onApply={this.onFilterChange}
-                                location={userData.location}
+                                startFilter={this.startFilter}
                                 hasAge={userData.birthdate} />
           {pending ?
             <div styleName="loader">
