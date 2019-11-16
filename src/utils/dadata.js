@@ -84,6 +84,31 @@ export function transformDadataAddress(location) {
   };
 }
 
+export async function getLocationByFias(fias) {
+  const URL = `https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/address`;
+
+  try {
+    const res = await fetch(URL, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Token ${DADATA_TOKEN}`
+      },
+      body: JSON.stringify({
+        query: fias
+      })
+    });
+
+    const resJson = await res.json();
+    const {suggestions} = resJson;
+    return transformDadataSettlement(suggestions[0]);
+
+  } catch (e) {
+  }
+}
+
+
 //Вычисляет населённый пункт по IP
 export async function detectLocation() {
   const URL = `https://suggestions.dadata.ru/suggestions/api/4_1/rs/detectAddressByIp`;
