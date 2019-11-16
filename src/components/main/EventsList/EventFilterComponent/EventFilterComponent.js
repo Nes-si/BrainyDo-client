@@ -166,10 +166,13 @@ export default class EventFilterComponent extends Component {
 
     params.push(`regionType=${this.state.regionType}`);
     if (this.state.regionType == FILTER_REGION_VALUE && this.state.region) {
-      if (this.state.region.settlementFias)
+      if (this.state.region.settlementFias) {
         params.push(`settlementFias=${this.state.region.settlementFias}`);
-      else if (this.state.region.regionFias)
+        params.push(`settlement=${this.state.region.main}`);
+      } else if (this.state.region.regionFias) {
         params.push(`regionFias=${this.state.region.regionFias}`);
+        params.push(`region=${this.state.region.main}`);
+      }
     }
 
     let paramsStr;

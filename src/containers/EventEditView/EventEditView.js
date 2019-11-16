@@ -275,7 +275,13 @@ class EventEditView extends Component {
   };
 
   onChangeSettlement = settlement => {
-    this.setState({settlement, address: null, place: '', errorSettlementRequired: false, dirty: true});
+    this.setState({
+      settlement,
+      address: null,
+      place: '',
+      errorSettlementRequired: false,
+      dirty: true
+    });
     this.addressElm.updateValue('');
 
     if (settlement) {
