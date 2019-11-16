@@ -26,6 +26,10 @@ class StartView extends Component {
   render() {
     const {eventsToday, eventsTomorrow, eventsNext} = this.props.events.startEvents;
 
+    let imageToday = eventsToday[0] ? eventsToday[0].image.url() : require('assets/images/events/event1.png');
+    let imageTomorrow = eventsTomorrow[0] ? eventsTomorrow[0].image.url() : require('assets/images/events/event2.png');
+    let imageNext = eventsNext[0] ? eventsNext[0].image.url() : require('assets/images/events/event3.png');
+
     return (
       <div styleName="StartView">
         <Helmet>
@@ -46,17 +50,17 @@ class StartView extends Component {
             <div styleName="item">
               <div styleName="item-title">Сегодня</div>
               <div styleName="image"
-                   style={{backgroundImage: `url(${require('assets/images/events/event1.png')})`}} />
+                   style={{backgroundImage: `url(${imageToday})`}} />
             </div>
             <div styleName="item">
               <div styleName="item-title">Завтра</div>
               <div styleName="image"
-                   style={{backgroundImage: `url(${require('assets/images/events/event2.png')})`}} />
+                   style={{backgroundImage: `url(${imageTomorrow})`}} />
             </div>
             <div styleName="item">
               <div styleName="item-title">На следующей неделе</div>
               <div styleName="image"
-                   style={{backgroundImage: `url(${require('assets/images/events/event3.png')})`}} />
+                   style={{backgroundImage: `url(${imageNext})`}} />
             </div>
           </div>
 
