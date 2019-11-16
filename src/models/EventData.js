@@ -147,4 +147,6 @@ export class FilterEventData {
   };
 
   tags = [];
+
+  imageRequired = false;
 }

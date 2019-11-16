@@ -187,6 +187,12 @@ async function requestEvents(filter = {}) {
     queryTotal = Parse.Query.and(queryTotal, query);
   }
 
+  if (filter.imageRequired) {
+    query = new Parse.Query(EventData.OriginClass);
+    query.notContainedIn("image", [null, undefined]);
+    queryTotal = Parse.Query.and(queryTotal, query);
+  }
+
   const events_o = await send(getAllObjects(queryTotal));
 
   const events = [];
@@ -213,15 +219,24 @@ async function requestEvents(filter = {}) {
 
 export function showStartEvents() {
   return async dispatch => {
+    const loc = store.getState().user.loc;
+
     let filter = new FilterEventData();
+    if (loc) {
+      filter.region = loc;
+      filter.region.type = FILTER_REGION_VALUE;
+    }
+    filter.imageRequired = true;
     filter.date.type = FILTER_DATE_TODAY;
     const eventsToday = await requestEvents(filter);
 
-    filter = new FilterEventData();
     filter.date.type = FILTER_DATE_TOMORROW;
     const eventsTomorrow = await requestEvents(filter);
 
-    filter = new FilterEventData();
+    filter.date.type = FILTER_DATE_VALUES;
+    const date = new Date();
+    date.setDate(date.getDate() + 2);
+    filter.date.from = date;
     const eventsNext = await requestEvents(filter);
 
     dispatch({
