@@ -369,7 +369,7 @@ class EventEditView extends Component {
     this.event.location               = new Parse.GeoPoint(markerPos.lat(), markerPos.lng());
     this.event.locationRegionFias     = this.state.settlement.regionFias;
     this.event.locationSettlementFias = this.state.settlement.settlementFias;
-    this.event.locationSettlement     = this.state.settlement.settlement;
+    this.event.locationSettlement     = this.state.settlement.main;
     this.event.locationAddress        = this.state.address.main;
     this.event.locationPlace          = this.state.place;
     this.event.locationDetails        = this.state.locationDetails;
