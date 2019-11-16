@@ -24,14 +24,15 @@ export function shortLocType(type) {
   return type;
 }
 
+// Преобразовывает объект населённого пункта, полученный от DaData, в нормальную структуру.
 export function transformDadataSettlement(location, includeRegions = false) {
   const {data} = location;
 
   let settlement;
-  if (data.city)
-    settlement = `${shortLocType(data.city_type)} ${data.city}`;
-  else if (data.settlement)
+  if (data.settlement)
     settlement = `${shortLocType(data.settlement_type_full)} ${data.settlement}`;
+  else if (data.city)
+    settlement = `${shortLocType(data.city_type)} ${data.city}`;
 
   const area = data.area ? `${data.area} ${data.area_type}` : null;
 
@@ -49,12 +50,12 @@ export function transformDadataSettlement(location, includeRegions = false) {
   if (area)
     details = `${area}, ${details}`;
 
-  const sId = data.settlement_fias_id;
+  const settlementFias = data.settlement ? data.settlement_fias_id : data.city_fias_id;
   return {
     settlement,
     area,
     region,
-    settlementFias: sId ? sId : data.city_fias_id,
+    settlementFias,
     regionFias: data.region_fias_id,
     isSettlement: !!data.settlement,
 
