@@ -40,6 +40,7 @@ export default class SettlementSelectModal extends Component {
           <div styleName='search-wrapper'>
             <GeoSearchControl placeholder="Введите первые буквы вашего населённого пункта"
                               sendNull
+                              autoFocus
                               onChange={this.onChange} />
           </div>
 

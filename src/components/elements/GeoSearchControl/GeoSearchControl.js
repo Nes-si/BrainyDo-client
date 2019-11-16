@@ -209,7 +209,7 @@ export default class GeoSearchControl extends Component {
   };
 
   render() {
-    const {placeholder} = this.props;
+    const {placeholder, autoFocus} = this.props;
 
     if (this.state.disabled)
       return <InputControl icon="lock"
@@ -224,6 +224,7 @@ export default class GeoSearchControl extends Component {
            onFocus={this.onFocus}
            onKeyDown={this.onKeyDown}>
         <input styleName="input"
+               autoFocus={autoFocus}
                placeholder={this.state.loading ? '' : placeholder}
                value={this.state.loading ? '' : this.state.value}
                ref={elm => this.inputElm = elm}
