@@ -51,8 +51,6 @@ async function requestEvents(filter = {}) {
       case FILTER_DATE_FUTURE:
         query1.greaterThan("dateEnd", new Date());
         query2.greaterThan("dateStart", todayStart);
-
-        query = Parse.Query.or(query1, query2);
         break;
 
       case FILTER_DATE_TODAY:
@@ -62,7 +60,6 @@ async function requestEvents(filter = {}) {
         query2.greaterThanOrEqualTo("dateStart", todayStart);
         query2.lessThan("dateStart", todayEnd);
 
-        query = Parse.Query.or(query1, query2);
         break;
 
       case FILTER_DATE_TOMORROW:
@@ -78,7 +75,6 @@ async function requestEvents(filter = {}) {
         query2.greaterThanOrEqualTo("dateStart", tomorrowStart);
         query2.lessThan("dateStart", tomorrowEnd);
 
-        query = Parse.Query.or(query1, query2);
         break;
 
       case FILTER_DATE_WEEK:
@@ -88,7 +84,6 @@ async function requestEvents(filter = {}) {
         query2.greaterThanOrEqualTo("dateStart", todayStart);
         query2.lessThan("dateStart", weekEnd);
 
-        query = Parse.Query.or(query1, query2);
         break;
 
       case FILTER_DATE_WEEKEND:
@@ -105,7 +100,6 @@ async function requestEvents(filter = {}) {
         query2.greaterThanOrEqualTo("dateStart", weekEndStart);
         query2.lessThan("dateStart", weekEnd);
 
-        query = Parse.Query.or(query1, query2);
         break;
 
       case FILTER_DATE_VALUES:
@@ -119,12 +113,12 @@ async function requestEvents(filter = {}) {
           filter.date.from.setHours(0, 0, 0, 0);
           query1.greaterThanOrEqualTo("dateEnd", filter.date.from);
           query2.greaterThanOrEqualTo("dateStart", filter.date.from);
-          query = Parse.Query.or(query1, query2);
         }
 
         break;
     }
 
+    query = Parse.Query.or(query1, query2);
     queryTotal = Parse.Query.and(queryTotal, query);
   }
 
