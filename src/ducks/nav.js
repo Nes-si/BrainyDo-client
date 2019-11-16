@@ -8,9 +8,9 @@ export const SET_SERVER_PROBLEM_A = 'app/nav/SET_SERVER_PROBLEM_A';
 export const SET_SERVER_PROBLEM_B = 'app/nav/SET_SERVER_PROBLEM_B';
 
 
-export const MODAL_TYPE_ALERT = 'app/nav/modals/MODAL_TYPE_ALERT';
-export const MODAL_TYPE_SIGN  = 'app/nav/modals/MODAL_TYPE_SIGN';
-export const MODAL_TYPE_CITY  = 'app/nav/modals/MODAL_TYPE_CITY';
+export const MODAL_TYPE_ALERT       = 'app/nav/modals/MODAL_TYPE_ALERT';
+export const MODAL_TYPE_SIGN        = 'app/nav/modals/MODAL_TYPE_SIGN';
+export const MODAL_TYPE_SETTLEMENT  = 'app/nav/modals/MODAL_TYPE_SETTLEMENT';
 
 
 

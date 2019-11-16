@@ -18,7 +18,7 @@ import InputControl from "components/elements/InputControl/InputControl";
 import ButtonControl from "components/elements/ButtonControl/ButtonControl";
 import DropdownControl from 'components/elements/DropdownControl/DropdownControl';
 import RadioControl from 'components/elements/RadioControl/RadioControl';
-import GeoSearchControl, {TYPE_CITY_AND_REGION} from "components/elements/GeoSearchControl/GeoSearchControl";
+import GeoSearchControl, {TYPE_SETTLEMENT_AND_REGION} from "components/elements/GeoSearchControl/GeoSearchControl";
 
 import styles from './EventFilterComponent.sss';
 
@@ -166,8 +166,8 @@ export default class EventFilterComponent extends Component {
 
     params.push(`regionType=${this.state.regionType}`);
     if (this.state.regionType == FILTER_REGION_VALUE && this.state.region) {
-      if (this.state.region.cityFias)
-        params.push(`cityFias=${this.state.region.cityFias}`);
+      if (this.state.region.settlementFias)
+        params.push(`settlementFias=${this.state.region.settlementFias}`);
       else if (this.state.region.regionFias)
         params.push(`regionFias=${this.state.region.regionFias}`);
     }
@@ -328,7 +328,7 @@ export default class EventFilterComponent extends Component {
             </div>
 
             <div styleName="region">
-              <GeoSearchControl type={TYPE_CITY_AND_REGION}
+              <GeoSearchControl type={TYPE_SETTLEMENT_AND_REGION}
                                 onChange={this.onChangeRegion}
                                 disabled={this.state.regionType != FILTER_REGION_VALUE}
                                 value={this.state.region ? this.state.region.main : null} />

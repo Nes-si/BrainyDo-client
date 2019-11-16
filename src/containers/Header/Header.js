@@ -6,7 +6,7 @@ import {NavLink, withRouter} from "react-router-dom";
 import InlineSVG from 'svg-inline-react';
 
 import {detectLocation} from 'utils/dadata';
-import {showModal, MODAL_TYPE_SIGN, MODAL_TYPE_CITY} from "ducks/nav";
+import {showModal, MODAL_TYPE_SIGN, MODAL_TYPE_SETTLEMENT} from "ducks/nav";
 import {logout} from "ducks/user";
 
 import {MODE_LOGIN, MODE_REG} from "components/modals/SignModal/SignModal";
@@ -52,7 +52,7 @@ class Header extends Component {
 
   onLocationClick = () => {
     const {showModal} = this.props.navActions;
-    showModal(MODAL_TYPE_CITY, {callback: location =>
+    showModal(MODAL_TYPE_SETTLEMENT, {callback: location =>
       this.setState({location})
     });
   };

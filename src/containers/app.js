@@ -6,7 +6,7 @@ import {Route, Switch, Redirect, withRouter} from "react-router-dom";
 import {Helmet} from "react-helmet";
 import CSSTransition from 'react-transition-group/CSSTransition';
 
-import {closeModal, MODAL_TYPE_ALERT, MODAL_TYPE_CITY, MODAL_TYPE_SIGN} from 'ducks/nav';
+import {closeModal, MODAL_TYPE_ALERT, MODAL_TYPE_SETTLEMENT, MODAL_TYPE_SIGN} from 'ducks/nav';
 import {login, register, restorePassword, resendVerEmail, resetStatus} from 'ducks/user';
 
 import SiteLoader from 'components/misc/SiteLoader/SiteLoader';
@@ -20,7 +20,7 @@ import SettingsView from "containers/SettingsView/SettingsView";
 import StartView from "containers/StartView/StartView";
 import EventEditView from 'containers/EventEditView/EventEditView';
 import AlertModal, {ALERT_TYPE_ALERT} from 'components/modals/AlertModal/AlertModal';
-import CitySelectModal from "components/modals/CitySelectModal/CitySelectModal";
+import SettlementSelectModal from "components/modals/SettlementSelectModal/SettlementSelectModal";
 
 import styles from './app.sss';
 
@@ -97,9 +97,9 @@ class App extends React.Component {
                           resendVerEmail={resendVerEmail}
                           resetStatus={resetStatus} />;
 
-      case MODAL_TYPE_CITY:
-        return <CitySelectModal onClose={closeModal}
-                                params={nav.modalParams} />;
+      case MODAL_TYPE_SETTLEMENT:
+        return <SettlementSelectModal onClose={closeModal}
+                                      params={nav.modalParams} />;
     }
   };
 

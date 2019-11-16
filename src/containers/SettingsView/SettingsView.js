@@ -10,7 +10,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 import {Russian} from "flatpickr/dist/l10n/ru";
 import Flatpickr from 'react-flatpickr';
 
-import {MODAL_TYPE_CITY, showModal} from "ducks/nav";
+import {MODAL_TYPE_SETTLEMENT, showModal} from "ducks/nav";
 import {update, updateEmail, updatePassword, resendVerEmail, ERROR_USER_EXISTS, ERROR_OTHER} from 'ducks/user';
 import {convertDataUnits, BYTES, M_BYTES} from 'utils/common';
 import {checkEmail, filterSpecials, getTextDate} from 'utils/strings';
@@ -238,7 +238,7 @@ class SettingsView extends Component {
 
   onChangeLocation = () => {
     const {showModal} = this.props.navActions;
-    showModal(MODAL_TYPE_CITY, {callback: loc => {
+    showModal(MODAL_TYPE_SETTLEMENT, {callback: loc => {
         this.userData.location = loc;
         this.props.userActions.update(this.userData);
       }});

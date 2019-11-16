@@ -141,7 +141,7 @@ class EventView extends Component {
             {event.location &&
               <div styleName="location">
                 <div styleName="place">{event.locationPlace}</div>
-                <div styleName="place">{event.locationCity}, {event.locationAddress}</div>
+                <div styleName="place">{event.locationSettlement}, {event.locationAddress}</div>
                 <div styleName="place">{event.locationDetails}</div>
                 <div styleName="map" ref={elm => this.mapElm = elm}></div>
               </div>

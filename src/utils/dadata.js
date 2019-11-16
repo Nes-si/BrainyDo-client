@@ -13,9 +13,9 @@ export function shortLocType(type) {
     case 'городской поселок': return 'г/п';
     case 'рабочий поселок': return 'р/п';
     case 'дачный поселок': return 'д/п';
-    case 'территория днт': return 'терр. ДНТ';
+    case 'территория днт': return 'т. ДНТ';
     case 'станица': return 'стан.';
-    case 'аобл': return 'авт. обл.';
+    case 'аобл': return 'а/о';
   }
 
   if (shortLocTypes.indexOf(type) != -1)
@@ -24,14 +24,14 @@ export function shortLocType(type) {
   return type;
 }
 
-export function transformDadataCity(location, includeRegions = false) {
+export function transformDadataSettlement(location, includeRegions = false) {
   const {data} = location;
 
-  let city;
+  let settlement;
   if (data.city)
-    city = `${shortLocType(data.city_type)} ${data.city}`;
+    settlement = `${shortLocType(data.city_type)} ${data.city}`;
   else if (data.settlement)
-    city = `${shortLocType(data.settlement_type_full)} ${data.settlement}`;
+    settlement = `${shortLocType(data.settlement_type_full)} ${data.settlement}`;
 
   const area = data.area ? `${data.area} ${data.area_type}` : null;
 
@@ -44,17 +44,17 @@ export function transformDadataCity(location, includeRegions = false) {
       region = `${data.region} ${regType}`;
   }
 
-  const main = city ? city : region;
+  const main = settlement ? settlement : region;
   let details = region;
   if (area)
     details = `${area}, ${details}`;
 
   const sId = data.settlement_fias_id;
   return {
-    city,
+    settlement,
     area,
     region,
-    cityFias: sId ? sId : data.city_fias_id,
+    settlementFias: sId ? sId : data.city_fias_id,
     regionFias: data.region_fias_id,
     isSettlement: !!data.settlement,
 
@@ -83,6 +83,7 @@ export function transformDadataAddress(location) {
   };
 }
 
+//Вычисляет населённый пункт по IP
 export async function detectLocation() {
   const URL = `https://suggestions.dadata.ru/suggestions/api/4_1/rs/detectAddressByIp`;
 
@@ -95,7 +96,7 @@ export async function detectLocation() {
     });
 
     const resJson = await res.json();
-    return transformDadataCity(resJson.location);
+    return transformDadataSettlement(resJson.location);
 
   } catch (e) {
   }

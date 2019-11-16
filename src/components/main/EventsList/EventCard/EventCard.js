@@ -105,7 +105,7 @@ export default class EventCard extends Component {
           }
 
           {event.location &&
-            <div styleName="location"><b>{event.locationPlace ? event.locationPlace + ': ' : ''}</b>{event.locationCity}, {event.locationAddress}</div>
+            <div styleName="location"><b>{event.locationPlace ? event.locationPlace + ': ' : ''}</b>{event.locationSettlement}, {event.locationAddress}</div>
           }
 
           {(event.tags && !!event.tags.length) &&

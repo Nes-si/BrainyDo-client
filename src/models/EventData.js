@@ -28,8 +28,8 @@ export class EventData {
 
   location = null;
   locationRegionFias = ``;
-  locationCityFias = ``;
-  locationCity = ``;
+  locationSettlementFias = ``;
+  locationSettlement = ``;
   locationAddress = ``;
   locationPlace = ``;
   locationDetails = ``;
@@ -58,13 +58,13 @@ export class EventData {
     if (origin.get(`price`))        this.price        = origin.get(`price`);
     if (origin.get(`tags`))         this.tags         = origin.get(`tags`);
 
-    if (origin.get(`location`))           this.location           = origin.get(`location`);
-    if (origin.get(`locationRegionFias`)) this.locationRegionFias = origin.get(`locationRegionFias`);
-    if (origin.get(`locationCityFias`))   this.locationCityFias   = origin.get(`locationCityFias`);
-    if (origin.get(`locationCity`))       this.locationCity       = origin.get(`locationCity`);
-    if (origin.get(`locationAddress`))    this.locationAddress    = origin.get(`locationAddress`);
-    if (origin.get(`locationPlace`))      this.locationPlace      = origin.get(`locationPlace`);
-    if (origin.get(`locationDetails`))    this.locationDetails    = origin.get(`locationDetails`);
+    if (origin.get(`location`))               this.location               = origin.get(`location`);
+    if (origin.get(`locationRegionFias`))     this.locationRegionFias     = origin.get(`locationRegionFias`);
+    if (origin.get(`locationSettlementFias`)) this.locationSettlementFias = origin.get(`locationSettlementFias`);
+    if (origin.get(`locationSettlement`))     this.locationSettlement     = origin.get(`locationSettlement`);
+    if (origin.get(`locationAddress`))        this.locationAddress        = origin.get(`locationAddress`);
+    if (origin.get(`locationPlace`))          this.locationPlace          = origin.get(`locationPlace`);
+    if (origin.get(`locationDetails`))        this.locationDetails        = origin.get(`locationDetails`);
 
     return this;
   }
@@ -84,13 +84,13 @@ export class EventData {
     if (this.owner)
       this.origin.set(`owner`,    this.owner.origin);
 
-    this.origin.set(`location`,           this.location);
-    this.origin.set(`locationRegionFias`, this.locationRegionFias);
-    this.origin.set(`locationCityFias`,   this.locationCityFias);
-    this.origin.set(`locationCity`,       this.locationCity);
-    this.origin.set(`locationAddress`,    this.locationAddress);
-    this.origin.set(`locationPlace`,      this.locationPlace);
-    this.origin.set(`locationDetails`,    this.locationDetails);
+    this.origin.set(`location`,               this.location);
+    this.origin.set(`locationRegionFias`,     this.locationRegionFias);
+    this.origin.set(`locationSettlementFias`, this.locationSettlementFias);
+    this.origin.set(`locationSettlement`,     this.locationSettlement);
+    this.origin.set(`locationAddress`,        this.locationAddress);
+    this.origin.set(`locationPlace`,          this.locationPlace);
+    this.origin.set(`locationDetails`,        this.locationDetails);
   }
 }
 
@@ -138,7 +138,7 @@ export class FilterEventData {
 
   region = {
     type: FILTER_REGION_OFF,
-    cityFias: undefined,
+    settlementFias: undefined,
     regionFias: undefined
   };
 

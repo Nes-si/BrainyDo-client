@@ -32,8 +32,8 @@ class EventsList extends Component {
 
       const userLoc = props.user.userData.location;
       if (userLoc) {
-        paramsStr += `&cityFias=${userLoc.cityFias}`;
-        this.startFilter.region.cityFias = userLoc.cityFias;
+        paramsStr += `&settlementFias=${userLoc.settlementFias}`;
+        this.startFilter.region.settlementFias = userLoc.settlementFias;
       }
 
       this.props.history.replace(`${props.match.url}${paramsStr}`);
@@ -74,8 +74,8 @@ class EventsList extends Component {
 
     if (params.has('regionType'))
       filter.region.type = params.get('regionType');
-    if (params.has('cityFias'))
-      filter.region.cityFias = params.get('cityFias');
+    if (params.has('settlementFias'))
+      filter.region.settlementFias = params.get('settlementFias');
     if (params.has('regionFias'))
       filter.region.regionFias = params.get('regionFias');
 

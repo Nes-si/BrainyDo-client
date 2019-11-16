@@ -15,14 +15,14 @@ import {EventData, AGE_LIMITS, AGE_LIMIT_NO_LIMIT} from "models/EventData";
 import {createEvent, updateEvent, showEvent} from "ducks/events";
 import {convertDataUnits, BYTES, M_BYTES} from "utils/common";
 import {getTextDateTime, filterSpecials} from 'utils/strings';
-import {transformDadataAddress, transformDadataCity} from 'utils/dadata';
+import {transformDadataAddress, transformDadataSettlement} from 'utils/dadata';
 
 import ButtonControl from "components/elements/ButtonControl/ButtonControl";
 import InputControl from "components/elements/InputControl/InputControl";
 import DropdownControl from "components/elements/DropdownControl/DropdownControl";
 import CheckboxControl from 'components/elements/CheckboxControl/CheckboxControl';
 import LoaderComponent from 'components/elements/LoaderComponent/LoaderComponent';
-import GeoSearchControl, {TYPE_ADDRESS, TYPE_CITY} from "components/elements/GeoSearchControl/GeoSearchControl";
+import GeoSearchControl, {TYPE_ADDRESS, TYPE_SETTLEMENT} from "components/elements/GeoSearchControl/GeoSearchControl";
 
 import styles from './EventEditView.sss';
 
@@ -39,17 +39,17 @@ class EventEditView extends Component {
     price: 0,
     ageLimit: AGE_LIMIT_NO_LIMIT,
 
-    city: null,
+    settlement: null,
     address: null,
     place: null,
     locationDetails: null,
 
-    loadingCity: false,
+    loadingSettlement: false,
     loadingAddress: false,
     loadingPlace: false,
 
     errorNameRequired: false,
-    errorCityRequired: false,
+    errorSettlementRequired: false,
     errorMarkerNull: false,
 
     image: null,
@@ -65,7 +65,7 @@ class EventEditView extends Component {
   event = null;
 
   mapElm = null;
-  cityElm = null;
+  settlementElm = null;
   addressElm = null;
 
   map = null;
@@ -95,7 +95,7 @@ class EventEditView extends Component {
       this.state.dateEnd.setDate(this.state.dateEnd.getDate() + 1);
       this.state.dateEnd.setHours(19, 0, 0, 0);
 
-      this.state.city = props.user.userData.location;
+      this.state.settlement = props.user.userData.location;
     }
   }
 
@@ -133,8 +133,8 @@ class EventEditView extends Component {
       image:          event.image,
       place:          event.locationPlace,
       locationDetails:event.locationDetails,
-      city:       {main: event.locationCity, cityFias: event.locationCityFias, regionFias: event.locationRegionFias},
-      address:    {main: event.locationAddress}
+      settlement:     {main: event.locationSettlement, settlementFias: event.locationSettlementFias, regionFias: event.locationRegionFias},
+      address:        {main: event.locationAddress}
     };
   };
 
@@ -146,9 +146,9 @@ class EventEditView extends Component {
   setupGMaps = () => {
     let center = {lat: 55.76, lng: 37.64}; // Москва
     let zoom = 11;
-    const {city} = this.state;
-    if (city && city.geoLat && city.geoLon)
-      center = {lat: city.geoLat, lng: city.geoLon};
+    const {settlement} = this.state;
+    if (settlement && settlement.geoLat && settlement.geoLon)
+      center = {lat: settlement.geoLat, lng: settlement.geoLon};
     if (this.event.location) {
       center = {lat: this.event.location.latitude, lng: this.event.location.longitude};
       zoom = 19;
@@ -229,17 +229,17 @@ class EventEditView extends Component {
 
     const resJson = await res.json();
     const suggestion = resJson.suggestions[0];
-    this.setState({loadingCity: false, loadingAddress: false});
+    this.setState({loadingSettlement: false, loadingAddress: false});
     if (!suggestion) {
-      this.setState({city: null, address: null});
-      this.cityElm.updateValue('');
+      this.setState({settlement: null, address: null});
+      this.settlementElm.updateValue('');
       this.addressElm.updateValue('');
       return;
     }
-    const city = transformDadataCity(suggestion);
+    const settlement = transformDadataSettlement(suggestion);
     const address = transformDadataAddress(suggestion);
-    this.setState({city, address});
-    this.cityElm.updateValue(city.main);
+    this.setState({settlement, address});
+    this.settlementElm.updateValue(settlement.main);
     this.addressElm.updateValue(address.main);
   };
 
@@ -274,12 +274,12 @@ class EventEditView extends Component {
     this.setState({dateEndEnabled, dirty: true});
   };
 
-  onChangeCity = city => {
-    this.setState({city, address: null, place: '', errorCityRequired: false, dirty: true});
+  onChangeSettlement = settlement => {
+    this.setState({settlement, address: null, place: '', errorSettlementRequired: false, dirty: true});
     this.addressElm.updateValue('');
 
-    if (city) {
-      this.map.setCenter({lat: city.geoLat, lng: city.geoLon});
+    if (settlement) {
+      this.map.setCenter({lat: settlement.geoLat, lng: settlement.geoLon});
       this.map.setZoom(11);
     }
   };
@@ -331,8 +331,8 @@ class EventEditView extends Component {
       return false;
     }
 
-    if (!this.state.city) {
-      this.setState({errorCityRequired: true});
+    if (!this.state.settlement) {
+      this.setState({errorSettlementRequired: true});
       return false;
     }
 
@@ -360,13 +360,13 @@ class EventEditView extends Component {
     this.event.members     = [this.props.user.userData];
 
     const markerPos = this.marker.getPosition();
-    this.event.location           = new Parse.GeoPoint(markerPos.lat(), markerPos.lng());
-    this.event.locationRegionFias = this.state.city.regionFias;
-    this.event.locationCityFias   = this.state.city.cityFias;
-    this.event.locationCity       = this.state.city.city;
-    this.event.locationAddress    = this.state.address.main;
-    this.event.locationPlace      = this.state.place;
-    this.event.locationDetails    = this.state.locationDetails;
+    this.event.location               = new Parse.GeoPoint(markerPos.lat(), markerPos.lng());
+    this.event.locationRegionFias     = this.state.settlement.regionFias;
+    this.event.locationSettlementFias = this.state.settlement.settlementFias;
+    this.event.locationSettlement     = this.state.settlement.settlement;
+    this.event.locationAddress        = this.state.address.main;
+    this.event.locationPlace          = this.state.place;
+    this.event.locationDetails        = this.state.locationDetails;
 
     const {createEvent, updateEvent} = this.props.eventsActions;
     if (this.eventId) {
@@ -385,7 +385,7 @@ class EventEditView extends Component {
 
     const imageSrc = this.state.image ? this.state.image.url() : require('assets/images/event-empty.png');
 
-    const errorRequired = this.state.errorNameRequired || this.state.errorCityRequired;
+    const errorRequired = this.state.errorNameRequired || this.state.errorSettlementRequired;
 
     const title = this.eventId ? 'Изменение события' : 'Новое событие';
 
@@ -493,15 +493,15 @@ class EventEditView extends Component {
             <div styleName="location">
               <div styleName="title">Место проведения</div>
               <div styleName="inline top-margin">
-                <div>Город:</div>
+                <div>Населённый пункт:</div>
                 <div styleName="input-wrapper">
-                  <GeoSearchControl ref={elm => this.cityElm = elm}
-                                    type={TYPE_CITY}
+                  <GeoSearchControl ref={elm => this.settlementElm = elm}
+                                    type={TYPE_SETTLEMENT}
                                     sendNull
                                     placeholder="Введите первые буквы населённого пункта"
-                                    value={this.state.city ? this.state.city.main : null}
-                                    showLoader={this.state.loadingCity}
-                                    onChange={this.onChangeCity} />
+                                    value={this.state.settlement ? this.state.settlement.main : null}
+                                    showLoader={this.state.loadingSettlement}
+                                    onChange={this.onChangeSettlement} />
                 </div>
               </div>
 
@@ -513,7 +513,7 @@ class EventEditView extends Component {
                                     sendNull
                                     placeholder="Введите начало адреса"
                                     value={this.state.address ? this.state.address.main : null}
-                                    city={this.state.city}
+                                    settlement={this.state.settlement}
                                     showLoader={this.state.loadingAddress}
                                     onChange={this.onChangeAddress} />
                 </div>

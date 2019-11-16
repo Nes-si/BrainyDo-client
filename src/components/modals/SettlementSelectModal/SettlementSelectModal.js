@@ -5,11 +5,11 @@ import ModalContainer from 'components/elements/ModalContainer/ModalContainer';
 import ButtonControl from 'components/elements/ButtonControl/ButtonControl';
 import GeoSearchControl from 'components/elements/GeoSearchControl/GeoSearchControl';
 
-import styles from './CitySelectModal.sss';
+import styles from './SettlementSelectModal.sss';
 
 
 @CSSModules(styles, {allowMultiple: true})
-export default class CitySelectModal extends Component {
+export default class SettlementSelectModal extends Component {
   state = {
     data: null
   };
@@ -34,7 +34,7 @@ export default class CitySelectModal extends Component {
   render() {
     return (
       <ModalContainer onClose={this.close}>
-        <div styleName="CitySelectModal">
+        <div styleName="SettlementSelectModal">
           <div styleName="title">Выбор населённого пункта</div>
 
           <div styleName='search-wrapper'>

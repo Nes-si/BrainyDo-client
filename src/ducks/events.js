@@ -158,8 +158,8 @@ async function requestEvents(filter = {}) {
   if (filter.region && filter.region.type != FILTER_REGION_OFF) {
     query = new Parse.Query(EventData.OriginClass);
 
-    if (filter.region.cityFias)
-      query.equalTo("locationCityFias", filter.region.cityFias);
+    if (filter.region.settlementFias)
+      query.equalTo("locationSettlementFias", filter.region.settlementFias);
     else if (filter.region.regionFias)
       query.equalTo("locationRegionFias", filter.region.regionFias);
 

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import CSSModules from 'react-css-modules';
 
 import {DADATA_TOKEN} from 'config';
-import {transformDadataCity, transformDadataAddress} from "utils/dadata";
+import {transformDadataSettlement, transformDadataAddress} from "utils/dadata";
 
 import LoaderComponent from "components/elements/LoaderComponent/LoaderComponent";
 import InputControl from "components/elements/InputControl/InputControl";
@@ -10,8 +10,8 @@ import InputControl from "components/elements/InputControl/InputControl";
 import styles from './GeoSearchControl.sss';
 
 
-export const TYPE_CITY = 'TYPE_CITY';
-export const TYPE_CITY_AND_REGION = 'TYPE_CITY_AND_REGION';
+export const TYPE_SETTLEMENT = 'TYPE_SETTLEMENT';
+export const TYPE_SETTLEMENT_AND_REGION = 'TYPE_SETTLEMENT_AND_REGION';
 export const TYPE_ADDRESS = 'TYPE_ADDRESS';
 
 
@@ -24,7 +24,7 @@ export default class GeoSearchControl extends Component {
     disabled: false
   };
   list = [];
-  type = TYPE_CITY;
+  type = TYPE_SETTLEMENT;
   inputElm;
 
 
@@ -127,7 +127,7 @@ export default class GeoSearchControl extends Component {
       const URL = `https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address`;
       let queryParams;
       switch (this.type) {
-        case TYPE_CITY:
+        case TYPE_SETTLEMENT:
           queryParams = {
             locations: [{
               "country": "Россия"
@@ -137,7 +137,7 @@ export default class GeoSearchControl extends Component {
           };
           break;
 
-        case TYPE_CITY_AND_REGION:
+        case TYPE_SETTLEMENT_AND_REGION:
           queryParams = {
             locations: [{
               "country": "Россия"
@@ -152,13 +152,13 @@ export default class GeoSearchControl extends Component {
             "from_bound": {"value": "street"},
             "to_bound": {"value": "house"}
           };
-          if (this.props.city.isSettlement)
+          if (this.props.settlement.isSettlement)
             queryParams.locations = [{
-              "settlement_fias_id": this.props.city.cityFias
+              "settlement_fias_id": this.props.settlement.settlementFias
             }];
           else
             queryParams.locations = [{
-              "city_fias_id": this.props.city.cityFias
+              "city_fias_id": this.props.settlement.settlementFias
             }];
           break;
       }
@@ -183,12 +183,12 @@ export default class GeoSearchControl extends Component {
       for (let suggestion of suggestions) {
         let data;
         switch (this.type) {
-          case TYPE_CITY:
-            data = transformDadataCity(suggestion);
+          case TYPE_SETTLEMENT:
+            data = transformDadataSettlement(suggestion);
             break;
 
-          case TYPE_CITY_AND_REGION:
-            data = transformDadataCity(suggestion, true);
+          case TYPE_SETTLEMENT_AND_REGION:
+            data = transformDadataSettlement(suggestion, true);
             break;
 
           case TYPE_ADDRESS:
