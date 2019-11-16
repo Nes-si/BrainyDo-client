@@ -5,7 +5,7 @@ import CSSModules from 'react-css-modules';
 import {Helmet} from "react-helmet";
 
 import {showEvents, joinEvent, leaveEvent} from "ducks/events";
-import {FilterEventData, FILTER_DATE_FUTURE} from "models/EventData";
+import {FilterEventData, FILTER_DATE_FUTURE, FILTER_REGION_VALUE} from "models/EventData";
 
 import EventCard from 'components/main/EventsList/EventCard/EventCard';
 import EventFilterComponent from 'components/main/EventsList/EventFilterComponent/EventFilterComponent';
@@ -32,6 +32,9 @@ class EventsList extends Component {
 
       const userLoc = props.user.userData.location;
       if (userLoc) {
+        paramsStr += `&regionType=${FILTER_REGION_VALUE}`;
+        this.startFilter.region.type = FILTER_REGION_VALUE;
+
         paramsStr += `&settlementFias=${userLoc.settlementFias}`;
         this.startFilter.region.settlementFias = userLoc.settlementFias;
       }
