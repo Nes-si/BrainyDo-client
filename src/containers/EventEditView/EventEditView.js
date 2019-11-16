@@ -10,7 +10,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 import {Russian} from "flatpickr/dist/l10n/ru";
 import Flatpickr from 'react-flatpickr';
 
-import {FILE_SIZE_MAX} from 'ConnectConstants';
+import {DADATA_TOKEN, FILE_SIZE_MAX} from 'config';
 import {EventData, AGE_LIMITS, AGE_LIMIT_NO_LIMIT} from "models/EventData";
 import {createEvent, updateEvent, showEvent} from "ducks/events";
 import {convertDataUnits, BYTES, M_BYTES} from "utils/common";
@@ -218,7 +218,7 @@ class EventEditView extends Component {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-        Authorization: "Token b53aed1c17af2ad242dfec5cb6ab6065ff9789ea"
+        Authorization: `Token ${DADATA_TOKEN}`
       },
       body: JSON.stringify({
         lat,

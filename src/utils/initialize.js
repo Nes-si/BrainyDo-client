@@ -2,7 +2,7 @@ import {Parse} from 'parse';
 
 import {store} from 'index';
 import {getLocalStorage} from 'ducks/user';
-import {config as _config} from 'ConnectConstants';
+import {connectConfig as _config} from 'config';
 
 
 export const config = {};

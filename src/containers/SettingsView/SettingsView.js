@@ -15,7 +15,7 @@ import {update, updateEmail, updatePassword, resendVerEmail, ERROR_USER_EXISTS, 
 import {convertDataUnits, BYTES, M_BYTES} from 'utils/common';
 import {checkEmail, filterSpecials, getTextDate} from 'utils/strings';
 import {checkPassword} from 'utils/data';
-import {FILE_SIZE_MAX} from "ConnectConstants";
+import {FILE_SIZE_MAX} from "config";
 
 import InputControl from 'components/elements/InputControl/InputControl';
 import ButtonControl from 'components/elements/ButtonControl/ButtonControl';

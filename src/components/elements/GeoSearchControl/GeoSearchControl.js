@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import CSSModules from 'react-css-modules';
 
+import {DADATA_TOKEN} from 'config';
 import {transformDadataCity, transformDadataAddress} from "utils/data";
 
 import LoaderComponent from "components/elements/LoaderComponent/LoaderComponent";
@@ -55,9 +56,10 @@ export default class GeoSearchControl extends Component {
       event = window.event;
     event.stopPropagation();
 
-    //Enter or Esc pressed
+    //Нажатие Enter
     if (event.keyCode == 13) {
       setTimeout(this.onOK, 1);
+    //Нажатие Esc
     } else if (event.keyCode == 27) {
       if (this.state.listVis)
         this.setState({listVis: false});
@@ -86,7 +88,7 @@ export default class GeoSearchControl extends Component {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          Authorization: "Token b53aed1c17af2ad242dfec5cb6ab6065ff9789ea"
+          Authorization: `Token ${DADATA_TOKEN}`
         },
         body: JSON.stringify({
           query: data.unrestricted,
@@ -165,7 +167,7 @@ export default class GeoSearchControl extends Component {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          Authorization: "Token b53aed1c17af2ad242dfec5cb6ab6065ff9789ea"
+          Authorization: `Token ${DADATA_TOKEN}`
         },
         body: JSON.stringify({
           query: value,

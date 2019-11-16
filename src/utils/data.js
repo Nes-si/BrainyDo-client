@@ -1,5 +1,6 @@
 import {Parse} from 'parse';
 
+import {DADATA_TOKEN} from "config";
 import {store} from 'index';
 import {AGE_LIMIT_NO_LIMIT, AGE_LIMIT_6_MINUS, AGE_LIMIT_6_PLUS, AGE_LIMIT_12_MINUS, AGE_LIMIT_12_PLUS, AGE_LIMIT_18_MINUS,
   AGE_LIMIT_18_PLUS} from 'models/EventData';
@@ -149,7 +150,7 @@ export async function detectLocation() {
     const res = await fetch(URL, {
       headers: {
         Accept: "application/json",
-        Authorization: "Token b53aed1c17af2ad242dfec5cb6ab6065ff9789ea"
+        Authorization: `Token ${DADATA_TOKEN}`
       }
     });
 
