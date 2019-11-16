@@ -88,7 +88,8 @@ class EventsList extends Component {
     else if (params.has('region'))
       filter.region.main = params.get('region');
 
-    //this.filter.tags = this.state.tags;
+    if (params.has('tags'))
+      filter.tags = decodeURIComponent(params.get('tags')).split(',');
 
     return filter;
   };
@@ -98,7 +99,7 @@ class EventsList extends Component {
   };
 
   onTagClick = tag => {
-
+    this.filterComp.onTagClick(tag);
   };
 
   render() {

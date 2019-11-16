@@ -64,7 +64,7 @@ export default class EventFilterComponent extends Component {
     regionType: FILTER_REGION_VALUE,
     region: null,
 
-    tags: []
+    tag: null
   };
 
   filter = new FilterEventData();
@@ -99,6 +99,9 @@ export default class EventFilterComponent extends Component {
 
     this.state.regionType = this.filter.region.type;
     this.state.region = this.filter.region;
+
+    if (this.filter.tags.length)
+      this.state.tag = this.filter.tags[0];
   }
 
   onChangeSearch = search => {
@@ -139,7 +142,8 @@ export default class EventFilterComponent extends Component {
     this.setState({region}, this.onApply);
   };
 
-  onTagAdd = tag => {
+  onTagClick = tag => {
+    this.setState({tag}, this.onApply);
   };
 
   onApply = e => {
@@ -175,6 +179,9 @@ export default class EventFilterComponent extends Component {
       }
     }
 
+    if (this.state.tag)
+      params.push(`tags=${this.state.tag}`);
+
     let paramsStr;
     if (params.length) {
       paramsStr = '?' + params.join('&');
@@ -196,7 +203,8 @@ export default class EventFilterComponent extends Component {
       dateType: FILTER_DATE_FUTURE,
       priceType: FILTER_PRICE_OFF,
       ageType: FILTER_AGE_OFF,
-      regionType: FILTER_REGION_OFF
+      regionType: FILTER_REGION_OFF,
+      tag: null
     });
 
     let paramsStr = `?dateType=${FILTER_DATE_FUTURE}`;
