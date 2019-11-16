@@ -35,7 +35,6 @@ class EventEditView extends Component {
     dateStart: new Date(),
     dateEnd: new Date(),
     dateEndEnabled: false,
-    tags: [],
     price: 0,
     ageLimit: AGE_LIMIT_NO_LIMIT,
 
@@ -43,6 +42,9 @@ class EventEditView extends Component {
     address: null,
     place: null,
     locationDetails: null,
+
+    tags: [],
+    tagsString: '',
 
     loadingSettlement: false,
     loadingAddress: false,
@@ -128,6 +130,7 @@ class EventEditView extends Component {
       dateEnd,
       dateEndEnabled: !!event.dateEnd,
       tags:           event.tags,
+      tagsString:     event.tags.join(', '),
       price:          event.price,
       ageLimit:       event.ageLimit,
       image:          event.image,
@@ -311,6 +314,10 @@ class EventEditView extends Component {
     this.setState({locationDetails, dirty: true});
   };
 
+  onChangeTags = tagsString => {
+    this.setState({tagsString, dirty: true});
+  };
+
   onImageUpload = async event => {
     const file = event.target.files[0];
     if (!file)
@@ -358,7 +365,7 @@ class EventEditView extends Component {
     this.event.description = this.state.description;
     this.event.dateStart   = this.state.dateStart;
     this.event.dateEnd     = this.state.dateEndEnabled ? this.state.dateEnd : undefined;
-    this.event.tags        = this.state.tags;
+    this.event.tags        = this.state.tagsString.split(', ');
     this.event.price       = parseInt(this.state.price);
     this.event.ageLimit    = this.state.ageLimit;
     this.event.image       = this.state.image;
@@ -542,6 +549,14 @@ class EventEditView extends Component {
                   <InputControl onChange={this.onChangeLocDetails}
                                 value={this.state.locationDetails} />
                 </div>
+              </div>
+            </div>
+
+            <div styleName="inline top-margin">
+              <div>Тэги:</div>
+              <div styleName="input-wrapper">
+                <InputControl onChange={this.onChangeTags}
+                              value={this.state.tagsString} />
               </div>
             </div>
 
