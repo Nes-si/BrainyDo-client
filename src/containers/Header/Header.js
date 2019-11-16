@@ -100,7 +100,7 @@ class Header extends Component {
         {menu}
         {!authorized && !!this.state.location &&
           <div styleName="location" onClick={this.onLocationClick}>
-            Ваш город — {this.state.location.main}, верно?
+            Ваш населённый пункт — {this.state.location.main}, верно?
           </div>
         }
       </div>

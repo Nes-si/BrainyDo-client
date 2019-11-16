@@ -498,7 +498,7 @@ class EventEditView extends Component {
                   <GeoSearchControl ref={elm => this.cityElm = elm}
                                     type={TYPE_CITY}
                                     sendNull
-                                    placeholder="Введите первые буквы города"
+                                    placeholder="Введите первые буквы населённого пункта"
                                     value={this.state.city ? this.state.city.main : null}
                                     showLoader={this.state.loadingCity}
                                     onChange={this.onChangeCity} />

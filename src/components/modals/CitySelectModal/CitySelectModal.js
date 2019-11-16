@@ -35,10 +35,10 @@ export default class CitySelectModal extends Component {
     return (
       <ModalContainer onClose={this.close}>
         <div styleName="CitySelectModal">
-          <div styleName="title">Выбор города</div>
+          <div styleName="title">Выбор населённого пункта</div>
 
           <div styleName='search-wrapper'>
-            <GeoSearchControl placeholder="Введите первые буквы вашего города"
+            <GeoSearchControl placeholder="Введите первые буквы вашего населённого пункта"
                               sendNull
                               onChange={this.onChange} />
           </div>
