@@ -236,17 +236,21 @@ export default class GeoSearchControl extends Component {
         }
         {this.state.listVis &&
           <div styleName="items">
-            {this.list.map((item, key) =>
-              <div onMouseDown={e => this.onItemClick(item)}
+            {this.list.map((item, key) => {
+              let hint = item.main;
+              if (item.details)
+                hint += `, ${item.details}`;
+              
+              return <div onMouseDown={e => this.onItemClick(item)}
                    styleName="item"
                    key={key}>
-                <span>{item.main}</span>
+                <span title={hint}>{item.main}</span>
                 {item.details &&
-                  <span styleName="item-details">, {item.details}</span>
+                  <span styleName="item-details" title={hint}>, {item.details}</span>
                 }
                 <div styleName="ending"></div>
               </div>
-            )}
+            })}
           </div>
         }
       </div>
