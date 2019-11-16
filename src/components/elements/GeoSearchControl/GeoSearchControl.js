@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import CSSModules from 'react-css-modules';
 
 import {DADATA_TOKEN} from 'config';
-import {transformDadataCity, transformDadataAddress} from "utils/data";
+import {transformDadataCity, transformDadataAddress} from "utils/dadata";
 
 import LoaderComponent from "components/elements/LoaderComponent/LoaderComponent";
 import InputControl from "components/elements/InputControl/InputControl";

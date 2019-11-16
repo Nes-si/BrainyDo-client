@@ -15,7 +15,7 @@ import {EventData, AGE_LIMITS, AGE_LIMIT_NO_LIMIT} from "models/EventData";
 import {createEvent, updateEvent, showEvent} from "ducks/events";
 import {convertDataUnits, BYTES, M_BYTES} from "utils/common";
 import {getTextDateTime, filterSpecials} from 'utils/strings';
-import {transformDadataAddress, transformDadataCity} from 'utils/data';
+import {transformDadataAddress, transformDadataCity} from 'utils/dadata';
 
 import ButtonControl from "components/elements/ButtonControl/ButtonControl";
 import InputControl from "components/elements/InputControl/InputControl";

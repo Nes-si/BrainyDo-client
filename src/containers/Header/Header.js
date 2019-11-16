@@ -5,7 +5,7 @@ import CSSModules from 'react-css-modules';
 import {NavLink, withRouter} from "react-router-dom";
 import InlineSVG from 'svg-inline-react';
 
-import {detectLocation} from 'utils/data';
+import {detectLocation} from 'utils/dadata';
 import {showModal, MODAL_TYPE_SIGN, MODAL_TYPE_CITY} from "ducks/nav";
 import {logout} from "ducks/user";
 
