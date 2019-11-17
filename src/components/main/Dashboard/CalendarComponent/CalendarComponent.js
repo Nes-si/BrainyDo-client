@@ -62,6 +62,7 @@ export default class CalendarComponent extends Component {
   }
 
   getCells = () => {
+    const {onlyOwn, userEvents, userData} = this.props;
     const cells = [];
 
     for (let week = 1; week <= this.weeksInMonth; week++) {
@@ -70,20 +71,18 @@ export default class CalendarComponent extends Component {
       for (let DOW = 1; DOW <= 7; DOW++) {
         const day = this.getCellValue(week, DOW);
         if (day) {
-          const events = [];
-          for (let event of this.props.userEvents) {
-            if (event.dateStart.getFullYear() == this.state.monthDate.getFullYear() &&
-                event.dateStart.getMonth() == this.state.monthDate.getMonth() &&
-                event.dateStart.getDate() == day)
-              events.push(event);
-          }
-
           cellsInString.push(
             <td key={DOW}>
               <div styleName="day">{day}</div>
               <div styleName="events">
-                {
-                  events.map(event => {
+                {userEvents
+                  .filter(event => (
+                    event.dateStart.getFullYear() == this.state.monthDate.getFullYear() &&
+                    event.dateStart.getMonth() == this.state.monthDate.getMonth() &&
+                    event.dateStart.getDate() == day &&
+                    (!onlyOwn || event.owner.origin.id == userData.origin.id)
+                  ))
+                  .map(event => {
                     const image = event.image ? event.image.url() : require('assets/images/events/event1.png');
 
                     return (

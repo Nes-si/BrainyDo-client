@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
 import CSSModules from 'react-css-modules';
-import {Link} from 'react-router-dom';
 
 import EventCard from "components/main/EventsList/EventCard/EventCard";
+import ButtonControl from "components/elements/ButtonControl/ButtonControl";
 
 import styles from './EventsFlowComponent.sss';
-import ButtonControl from "../../../elements/ButtonControl/ButtonControl";
 
 
 
@@ -46,7 +45,7 @@ export default class EventsFlowComponent extends Component {
   };
 
   render() {
-    const {userEvents, userData} = this.props;
+    const {userEvents, userData, onlyOwn} = this.props;
 
     let monthName = this.state.monthDate.toLocaleString('ru', {month: 'long'});
     monthName = monthName[0].toUpperCase() + monthName.slice(1);
@@ -70,17 +69,16 @@ export default class EventsFlowComponent extends Component {
             userEvents
               .filter(event => (
                 event.dateStart.getFullYear() == this.state.monthDate.getFullYear() &&
-                event.dateStart.getMonth() == this.state.monthDate.getMonth()) )
-              .sort((event1, event2) => {
-                if (event1.dateStart > event2.dateStart)
-                  return 1;
-                return -1;
-              })
+                event.dateStart.getMonth() == this.state.monthDate.getMonth() &&
+                (!onlyOwn || event.owner.origin.id == userData.origin.id)
+              ))
+              .sort((event1, event2) => event1.dateStart > event2.dateStart ? 1 : -1)
               .map(event =>
-              <EventCard key={event.origin.id}
-                         flow={true}
-                         userData={userData}
-                         event={event} />)
+                <EventCard key={event.origin.id}
+                           flow={true}
+                           userData={userData}
+                           event={event} />
+              )
           :
             <div styleName="caption-not-found">События не найдены</div>)
         }

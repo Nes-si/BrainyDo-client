@@ -7,9 +7,10 @@ import {Link} from 'react-router-dom';
 
 import {showModal} from "ducks/nav";
 
+import ButtonControl from 'components/elements/ButtonControl/ButtonControl';
+import CheckboxControl from "components/elements/CheckboxControl/CheckboxControl";
 import CalendarComponent from "components/main/Dashboard/CalendarComponent/CalendarComponent";
 import EventsFlowComponent from "components/main/Dashboard/EventsFlowComponent/EventsFlowComponent";
-import ButtonControl from 'components/elements/ButtonControl/ButtonControl';
 
 import styles from './Dashboard.sss';
 
@@ -21,15 +22,21 @@ const MODE_FLOW = "MODE_FLOW";
 @CSSModules(styles, {allowMultiple: true})
 class Dashboard extends Component {
   state = {
-    mode: MODE_CAL
+    mode: MODE_CAL,
+    onlyOwn: false
   };
 
   setMode = mode => {
     this.setState({mode});
   };
 
+  onChangeOwn = value => {
+    this.setState({onlyOwn: value});
+  };
+
   render() {
     const {events, user} = this.props;
+    const {onlyOwn} = this.state;
 
     return (
       <div styleName="Dashboard">
@@ -58,15 +65,24 @@ class Dashboard extends Component {
             </div>
           </div>
 
+          <div styleName="view">
+            <CheckboxControl title="Только созданные мной события"
+                             onChange={this.onChangeOwn}
+                             checked={onlyOwn} />
+          </div>
+
           {this.state.mode == MODE_CAL &&
             <div styleName="view">
-              <CalendarComponent userEvents={events.userEvents}/>
+              <CalendarComponent userEvents={events.userEvents}
+                                 userData={user.userData}
+                                 onlyOwn={onlyOwn} />
             </div>
           }
           {this.state.mode == MODE_FLOW &&
             <div styleName="view">
               <EventsFlowComponent userEvents={events.userEvents}
-                                   userData={user.userData} />
+                                   userData={user.userData}
+                                   onlyOwn={onlyOwn} />
             </div>
           }
         </div>
