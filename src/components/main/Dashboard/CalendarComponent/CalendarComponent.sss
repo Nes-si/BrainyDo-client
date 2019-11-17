@@ -29,34 +29,39 @@
     border-collapse: collapse
 
     th, td
-      padding: 10px
       border: 1px solid grey
       width: 80px
       vertical-align: top
+      text-align: center
 
     th
+      padding: 10px
       font-weight: normal
       background: #b5ccf9
-      text-align: left
 
     td
+      padding: 0
       height: 80px
 
       .day
-        border: none
+        padding: 5px
+        background: #eaeaea
 
       .events
-        margin-top: 10px
+        margin-top: 5px
+        margin-left: 3px
+        margin-right: 3px
         display: flex
         align-items: flex-start
-        justify-content: space-between
+        justify-content: space-around
         flex-wrap: wrap
 
         .event-icon
-          width: 20px
-          height: 20px
-          margin-left: auto
-          margin-right: auto
+          width: 23px
+          height: 23px
+          margin-bottom: 8px
+          margin-left: 5px
+          margin-right: 5px
           overflow: hidden
           display: block
 
@@ -64,7 +69,7 @@
           background-size: cover
           background-position: center center
           border-radius: 50%
-          box-shadow: 0 0 15px 0 #999999
+          box-shadow: 0 0 5px 0 #999999
 
 
 
