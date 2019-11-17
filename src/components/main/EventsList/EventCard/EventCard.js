@@ -51,7 +51,7 @@ export default class EventCard extends Component {
   };
 
   render() {
-    const {event, userData, onTagClick} = this.props;
+    const {event, userData, onTagClick, flow} = this.props;
     if (!event)
       return <LoaderComponent />;
 
@@ -61,7 +61,6 @@ export default class EventCard extends Component {
     const imageSrc = event.image ? event.image.url() : require('assets/images/event-empty.png');
 
     const isMember = isMeEventMember(event);
-
     const isOwner = event.owner.origin.id == userData.origin.id;
 
 
@@ -120,19 +119,20 @@ export default class EventCard extends Component {
             {this.getMembersImgs()}
           </div>
 
-          {isOwner ?
-            <div styleName="expand">Я создатель события, ёпта</div>
-          :
-            <div styleName="button-wrapper">
-              {isMember ?
-                <ButtonControl onClick={this.onLeave}
-                               color="red"
-                               value="Не пойду"/>
-              :
-                <ButtonControl onClick={this.onJoin}
-                               value="Пойду"/>
-              }
-            </div>
+          {!flow &&
+            (isOwner ?
+              <div styleName="expand">Я создатель события, ёпта</div>
+            :
+              <div styleName="button-wrapper">
+                {isMember ?
+                  <ButtonControl onClick={this.onLeave}
+                                 color="red"
+                                 value="Не пойду"/>
+                :
+                  <ButtonControl onClick={this.onJoin}
+                                 value="Пойду"/>
+                }
+              </div>)
           }
         </div>
       </div>

@@ -118,7 +118,8 @@ export default class CalendarComponent extends Component {
 
     return (
       <div styleName="CalendarComponent">
-        <div styleName="title">Календарь событий</div>
+        {//<div styleName="title">Календарь событий</div>
+        }
 
         <div styleName="month-control">
           <div styleName="prev">
