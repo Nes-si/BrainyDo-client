@@ -143,8 +143,8 @@ export default class SignModal extends Component {
     if (!this.getRegAvail())
       return false;
 
-    const {register, params} = this.props;
-    register(this.state.email, this.state.password, params.location);
+    const {register} = this.props;
+    register(this.state.email, this.state.password);
     this.setState({lock: true});
 
     return false;

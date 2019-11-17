@@ -28,7 +28,7 @@ export const ERROR_OTHER        = 'app/user/ERROR_OTHER';
 export const OK                 = 'app/user/OK';
 
 
-export function register(email, password, location) {
+export function register(email, password) {
   return dispatch => {
     dispatch({
       type: REGISTER_REQUEST,
@@ -36,11 +36,12 @@ export function register(email, password, location) {
       password
     });
 
+    const loc = store.getState().user.loc;
     const user = new Parse.User();
     user.set("username", email);
     user.set("email", email);
     user.set("password", password);
-    user.set("location", location);
+    user.set("location", loc);
 
     send(user.signUp())
 

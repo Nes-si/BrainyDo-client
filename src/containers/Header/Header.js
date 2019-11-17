@@ -15,24 +15,14 @@ import styles from './Header.sss';
 
 @CSSModules(styles, {allowMultiple: true})
 class Header extends Component {
-  state = {
-    location: null
-  };
-
   onLogin = () => {
     const {showModal} = this.props.navActions;
-    showModal(MODAL_TYPE_SIGN, {
-      mode: MODE_LOGIN,
-      location: this.state.location
-    });
+    showModal(MODAL_TYPE_SIGN, {mode: MODE_LOGIN});
   };
 
   onReg = () => {
     const {showModal} = this.props.navActions;
-    showModal(MODAL_TYPE_SIGN, {
-      mode: MODE_REG,
-      location: this.state.location
-    });
+    showModal(MODAL_TYPE_SIGN, {mode: MODE_REG});
   };
 
   onLogout = () => {
@@ -41,10 +31,9 @@ class Header extends Component {
 
   onLocationClick = () => {
     const {showModal} = this.props.navActions;
-    showModal(MODAL_TYPE_SETTLEMENT, {callback: loc => {
-        this.setState({loc});
-        this.props.userActions.updateLocation(loc);
-      }});
+    showModal(MODAL_TYPE_SETTLEMENT, {callback: loc =>
+      this.props.userActions.updateLocation(loc)
+    });
   };
 
   render() {
