@@ -16,6 +16,7 @@ import styles from './Dashboard.sss';
 @CSSModules(styles, {allowMultiple: true})
 class Dashboard extends Component {
   render() {
+    const {events} = this.props;
 
     return (
       <div styleName="Dashboard">
@@ -25,13 +26,17 @@ class Dashboard extends Component {
 
         <div styleName="background"></div>
         <div styleName="header">
-          <div styleName="title">ДАШБОАРД!</div>
+          <div styleName="title">Домой</div>
         </div>
         <div styleName='content'>
-          <CalendarComponent />
+
           <Link to="/event-edit">
             <ButtonControl value="Создать событие" />
           </Link>
+
+          <div styleName="item">
+            <CalendarComponent userEvents={events.userEvents} />
+          </div>
         </div>
       </div>
     );
@@ -41,6 +46,7 @@ class Dashboard extends Component {
 
 function mapStateToProps(state) {
   return {
+    events: state.events,
     user: state.user
   };
 }

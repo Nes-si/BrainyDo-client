@@ -12,6 +12,8 @@ export default class CalendarComponent extends Component {
     monthDate: null
   };
 
+  events = [];
+
   now = null;
   daysInMonth = 0;
   firstDOW = 0;
@@ -21,11 +23,24 @@ export default class CalendarComponent extends Component {
   constructor(props) {
     super(props);
 
+    this.events = props.events;
+
     this.now = new Date();
     this.state.monthDate = new Date();
     this.state.monthDate.setDate(1);
     this.onChangeMonth(new Date());
   }
+
+  onChangeMonth = monthDate => {
+    this.daysInMonth = 32 - new Date(monthDate.getFullYear(), monthDate.getMonth(), 32).getDate();
+
+    const firstDay = new Date(monthDate);
+    firstDay.setDate(1);
+    this.firstDOW = firstDay.getDay();
+    this.firstDOW = this.firstDOW > 0 ? this.firstDOW : 7;
+
+    this.weeksInMonth = Math.ceil((this.daysInMonth + this.firstDOW - 1) / 7);
+  };
 
   onPrevMonth = () => {
     const monthDate = new Date(this.state.monthDate);
@@ -39,17 +54,6 @@ export default class CalendarComponent extends Component {
     monthDate.setMonth(monthDate.getMonth() + 1);
     this.setState({monthDate});
     this.onChangeMonth(monthDate);
-  };
-
-  onChangeMonth = (monthDate) => {
-    this.daysInMonth = 32 - new Date(monthDate.getFullYear(), monthDate.getMonth(), 32).getDate();
-
-    const firstDay = new Date(monthDate);
-    firstDay.setDate(1);
-    this.firstDOW = firstDay.getDay();
-    this.firstDOW = this.firstDOW > 0 ? this.firstDOW : 7;
-
-    this.weeksInMonth = Math.ceil((this.daysInMonth + this.firstDOW - 1) / 7);
   };
 
   getCellValue(week, DOW) {
@@ -70,11 +74,11 @@ export default class CalendarComponent extends Component {
         const day = this.getCellValue(week, DOW);
         if (day)
           cellsInString.push(
-            <th key={DOW}>{day}</th>
+            <td key={DOW}>{day}</td>
           );
         else
           cellsInString.push(
-            <th key={DOW}></th>
+            <td key={DOW}></td>
           );
       }
       cells.push(
@@ -100,16 +104,20 @@ export default class CalendarComponent extends Component {
         </div>
 
         <table styleName="table">
-          <tr>
-            <th>ПН</th>
-            <th>ВТ</th>
-            <th>СР</th>
-            <th>ЧТ</th>
-            <th>ПТ</th>
-            <th>СБ</th>
-            <th>ВС</th>
-          </tr>
-          {cells}
+          <thead>
+            <tr>
+              <th>ПН</th>
+              <th>ВТ</th>
+              <th>СР</th>
+              <th>ЧТ</th>
+              <th>ПТ</th>
+              <th>СБ</th>
+              <th>ВС</th>
+            </tr>
+          </thead>
+          <tbody>
+            {cells}
+          </tbody>
         </table>
 
       </div>
