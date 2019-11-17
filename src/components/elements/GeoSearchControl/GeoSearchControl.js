@@ -65,6 +65,11 @@ export default class GeoSearchControl extends Component {
         this.setState({listVis: false});
       else
         setTimeout(this.close, 1);
+    //Нажатие стрелки вниз
+    } else if (event.keyCode == 40) {
+      if (this.inputElm == document.activeElement) {
+        console.log('!');
+      }
     }
   };
 
@@ -241,15 +246,16 @@ export default class GeoSearchControl extends Component {
               if (item.details)
                 hint += `, ${item.details}`;
               
-              return <div onMouseDown={e => this.onItemClick(item)}
-                   styleName="item"
-                   key={key}>
-                <span title={hint}>{item.main}</span>
-                {item.details &&
-                  <span styleName="item-details" title={hint}>, {item.details}</span>
-                }
-                <div styleName="ending"></div>
-              </div>
+              return (
+                <div onMouseDown={e => this.onItemClick(item)}
+                     styleName="item"
+                     key={key}>
+                  <span title={hint}>{item.main}</span>
+                  {item.details &&
+                    <span styleName="item-details" title={hint}>, {item.details}</span>
+                  }
+                  <div styleName="ending"></div>
+                </div>);
             })}
           </div>
         }
