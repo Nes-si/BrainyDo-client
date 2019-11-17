@@ -158,10 +158,21 @@ async function requestEvents(filter = {}) {
   if (filter.region && filter.region.type != FILTER_REGION_OFF) {
     query = new Parse.Query(EventData.OriginClass);
 
-    if (filter.region.settlementFias)
+    if (filter.region.settlementFiasDistinct) {
+      let query1 = new Parse.Query(EventData.OriginClass);
+      if (filter.region.regionFias)
+        query1.equalTo("locationRegionFias", filter.region.regionFias);
+
+      let query2 = new Parse.Query(EventData.OriginClass);
+      query2.notEqualTo("locationSettlementFias", filter.region.settlementFiasDistinct);
+      query = Parse.Query.and(query1, query2);
+
+    } else if (filter.region.settlementFias) {
       query.equalTo("locationSettlementFias", filter.region.settlementFias);
-    else if (filter.region.regionFias)
+
+    } else if (filter.region.regionFias) {
       query.equalTo("locationRegionFias", filter.region.regionFias);
+    }
 
     queryTotal = Parse.Query.and(queryTotal, query);
   }
@@ -193,6 +204,9 @@ async function requestEvents(filter = {}) {
     queryTotal = Parse.Query.and(queryTotal, query);
   }
 
+  if (filter.count)
+    queryTotal.limit(filter.count);
+
   const events_o = await send(getAllObjects(queryTotal));
 
   const events = [];
@@ -217,27 +231,44 @@ async function requestEvents(filter = {}) {
   return events;
 }
 
+const START_EVENTS_COUNT = 10;
+
 export function showStartEvents() {
   return async dispatch => {
     const loc = store.getState().user.loc;
 
     let filter = new FilterEventData();
+
+    const addRegion = async events => {
+      if (events.length >= START_EVENTS_COUNT || !loc)
+        return;
+
+      filter.region.settlementFiasDistinct = filter.region.settlementFias;
+      const events2 = await requestEvents(filter);
+      events.push(...events2);
+      filter.region.settlementFiasDistinct = null;
+    };
+
     if (loc) {
       filter.region = loc;
       filter.region.type = FILTER_REGION_VALUE;
     }
     filter.imageRequired = true;
+    filter.count = START_EVENTS_COUNT;
     filter.date.type = FILTER_DATE_TODAY;
     const eventsToday = await requestEvents(filter);
+    await addRegion(eventsToday);
 
     filter.date.type = FILTER_DATE_TOMORROW;
     const eventsTomorrow = await requestEvents(filter);
+    await addRegion(eventsTomorrow);
 
     filter.date.type = FILTER_DATE_VALUES;
     const date = new Date();
     date.setDate(date.getDate() + 2);
     filter.date.from = date;
     const eventsNext = await requestEvents(filter);
+    await addRegion(eventsNext);
 
     dispatch({
       type: SHOW_START_EVENTS,

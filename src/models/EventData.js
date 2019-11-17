@@ -139,7 +139,9 @@ export class FilterEventData {
   region = {
     type: FILTER_REGION_OFF,
     settlementFias: undefined,
-    regionFias: undefined
+    regionFias: undefined,
+
+    settlementFiasDistinct: undefined
   };
 
   members = {
@@ -149,4 +151,6 @@ export class FilterEventData {
   tags = [];
 
   imageRequired = false;
+
+  count = 0;
 }
