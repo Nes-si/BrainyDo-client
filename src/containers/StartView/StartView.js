@@ -17,18 +17,81 @@ const ScrollElement = ScrollAnim.Element;
 
 @CSSModules(styles, {allowMultiple: true})
 class StartView extends Component {
+  state = {
+    eventToday: null,
+    eventTomorrow: null,
+    eventNext: null
+  };
+  timer;
+  eventTodayNum = 0;
+  eventTomorrowNum = 0;
+  eventNextNum = 0;
+
+  loc = null;
+
+
   constructor(props) {
     super(props);
 
+    this.loc = props.user.loc;
     props.eventsActions.showStartEvents();
   }
 
-  render() {
+  componentWillReceiveProps(nextProps) {
+    if (this.loc != nextProps.user.loc) {
+      this.loc = nextProps.user.loc;
+      nextProps.eventsActions.showStartEvents();
+      return;
+    }
+
+    if (this.state.eventToday || this.state.eventTomorrow || this.state.eventNext)
+      return;
+
+    const {eventsToday, eventsTomorrow, eventsNext} = nextProps.events.startEvents;
+    if (!eventsToday.length && !eventsTomorrow.length && !eventsNext.length)
+      return;
+
+    this.setState({
+      eventToday: eventsToday[0],
+      eventTomorrow: eventsTomorrow[0],
+      eventNext: eventsNext[0]
+    });
+
+    this.timer = setInterval(this.onTimer, 7000);
+  }
+
+  onTimer = () => {
     const {eventsToday, eventsTomorrow, eventsNext} = this.props.events.startEvents;
 
-    let imageToday = eventsToday[0] ? eventsToday[0].image.url() : require('assets/images/events/event1.png');
-    let imageTomorrow = eventsTomorrow[0] ? eventsTomorrow[0].image.url() : require('assets/images/events/event2.png');
-    let imageNext = eventsNext[0] ? eventsNext[0].image.url() : require('assets/images/events/event3.png');
+    if (this.eventTodayNum >= eventsToday.length - 1)
+      this.eventTodayNum = 0;
+    else
+      this.eventTodayNum++;
+    const eventToday = eventsToday[this.eventTodayNum];
+
+    if (this.eventTomorrowNum >= eventsTomorrow.length - 1)
+      this.eventTomorrowNum = 0;
+    else
+      this.eventTomorrowNum++;
+    const eventTomorrow = eventsTomorrow[this.eventTomorrowNum];
+
+    if (this.eventNextNum >= eventsNext.length - 1)
+      this.eventNextNum = 0;
+    else
+      this.eventNextNum++;
+    const eventNext = eventsNext[this.eventNextNum];
+
+    this.setState({eventToday, eventTomorrow, eventNext});
+  };
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
+  render() {
+    const imageToday    = this.state.eventToday     ? this.state.eventToday.image.url()     : require('assets/images/events/event1.png');
+    const imageTomorrow = this.state.eventTomorrow  ? this.state.eventTomorrow.image.url()  : require('assets/images/events/event2.png');
+    const imageNext     = this.state.eventNext      ? this.state.eventNext.image.url()      : require('assets/images/events/event3.png');
 
     return (
       <div styleName="StartView">
@@ -50,16 +113,19 @@ class StartView extends Component {
             <div styleName="item">
               <div styleName="item-title">Сегодня</div>
               <div styleName="image"
+                   title={this.state.eventToday ? this.state.eventToday.name : null}
                    style={{backgroundImage: `url(${imageToday})`}} />
             </div>
             <div styleName="item">
               <div styleName="item-title">Завтра</div>
               <div styleName="image"
+                   title={this.state.eventTomorrow ? this.state.eventTomorrow.name : null}
                    style={{backgroundImage: `url(${imageTomorrow})`}} />
             </div>
             <div styleName="item">
               <div styleName="item-title">На следующей неделе</div>
               <div styleName="image"
+                   title={this.state.eventNext ? this.state.eventNext.name : null}
                    style={{backgroundImage: `url(${imageNext})`}} />
             </div>
           </div>
@@ -106,6 +172,7 @@ class StartView extends Component {
 function mapStateToProps(state) {
   return {
     events: state.events,
+    user:   state.user
   };
 }
 
