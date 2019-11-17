@@ -365,12 +365,17 @@ class EventEditView extends Component {
     this.event.description = this.state.description;
     this.event.dateStart   = this.state.dateStart;
     this.event.dateEnd     = this.state.dateEndEnabled ? this.state.dateEnd : undefined;
-    this.event.tags        = this.state.tagsString.split(', ');
     this.event.price       = parseInt(this.state.price);
     this.event.ageLimit    = this.state.ageLimit;
     this.event.image       = this.state.image;
     this.event.owner       = this.props.user.userData;
     this.event.members     = [this.props.user.userData];
+
+    let tags = this.state.tagsString.split(', ');
+    if (!tags[0])
+      this.event.tags = [];
+    else
+      this.event.tags = tags;
 
     const markerPos = this.marker.getPosition();
     this.event.location               = new Parse.GeoPoint(markerPos.lat(), markerPos.lng());
