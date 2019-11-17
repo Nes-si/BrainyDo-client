@@ -55,11 +55,11 @@ class Dashboard extends Component {
           </Link>
 
           <div styleName="modes">
-            <div styleName="mode"
+            <div styleName={"mode" + (this.state.mode == MODE_CAL ? " mode-enabled" : "")}
                  onClick={() => this.setMode(MODE_CAL)}>
               Календарь
             </div>
-            <div styleName="mode"
+            <div styleName={"mode" + (this.state.mode == MODE_FLOW ? " mode-enabled" : "")}
                  onClick={() => this.setMode(MODE_FLOW)}>
               Поток
             </div>
