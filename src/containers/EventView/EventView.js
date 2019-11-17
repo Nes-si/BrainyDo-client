@@ -6,6 +6,8 @@ import {Helmet} from "react-helmet";
 import {Link} from 'react-router-dom';
 
 import {showEvent, joinEvent, leaveEvent} from "ducks/events";
+import {MODAL_TYPE_SIGN, showModal} from "ducks/nav";
+import {MODE_REG} from "components/modals/SignModal/SignModal";
 import {getEventDateTime, getMembersNumber} from "utils/strings";
 import {isMeEventMember} from "utils/data";
 
@@ -69,8 +71,15 @@ class EventView extends Component {
   };
 
   onJoin = () => {
-    const {joinEvent} = this.props.eventsActions;
-    joinEvent(this.state.event);
+    const {userData} = this.props.user;
+
+    if (userData) {
+      const {joinEvent} = this.props.eventsActions;
+      joinEvent(this.state.event);
+    } else {
+      const {showModal} = this.props.navActions;
+      showModal(MODAL_TYPE_SIGN, {mode: MODE_REG});
+    }
   };
 
   onLeave = () => {
@@ -110,7 +119,7 @@ class EventView extends Component {
     const isMember = isMeEventMember(event);
 
     const {userData} = this.props.user;
-    const isOwner = event.owner.origin.id == userData.origin.id;
+    const isOwner = userData && event.owner.origin.id == userData.origin.id;
 
     return (
       <div styleName="EventView">
@@ -155,8 +164,9 @@ class EventView extends Component {
             }
 
             <div styleName="members">
-              {getMembersNumber(event.members.length)}:
-              {this.getMembersImgs()}
+              {getMembersNumber(event.members.length)}
+              {userData && <span>:</span>}
+              {userData && this.getMembersImgs()}
             </div>
 
             <div styleName="button-wrapper">
@@ -190,7 +200,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    eventsActions:bindActionCreators({showEvent, joinEvent, leaveEvent}, dispatch)
+    eventsActions:bindActionCreators({showEvent, joinEvent, leaveEvent}, dispatch),
+    navActions:   bindActionCreators({showModal}, dispatch)
   };
 }
 

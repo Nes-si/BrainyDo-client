@@ -5,6 +5,7 @@ import CSSModules from 'react-css-modules';
 import {connect} from 'react-redux';
 import {Helmet} from "react-helmet";
 import ScrollAnim from 'rc-scroll-anim';
+import {Link} from 'react-router-dom';
 
 import {showStartEvents} from 'ducks/events';
 import {showModal} from 'ducks/nav';
@@ -89,9 +90,11 @@ class StartView extends Component {
   }
 
   render() {
-    const imageToday    = this.state.eventToday     ? this.state.eventToday.image.url()     : require('assets/images/events/event1.png');
-    const imageTomorrow = this.state.eventTomorrow  ? this.state.eventTomorrow.image.url()  : require('assets/images/events/event2.png');
-    const imageNext     = this.state.eventNext      ? this.state.eventNext.image.url()      : require('assets/images/events/event3.png');
+    const {eventToday, eventTomorrow, eventNext} = this.state;
+
+    const imageToday    = eventToday    ? eventToday.image.url()    : require('assets/images/events/event1.png');
+    const imageTomorrow = eventTomorrow ? eventTomorrow.image.url() : require('assets/images/events/event2.png');
+    const imageNext     = eventNext     ? eventNext.image.url()     : require('assets/images/events/event3.png');
 
     return (
       <div styleName="StartView">
@@ -112,21 +115,24 @@ class StartView extends Component {
           <div styleName="events">
             <div styleName="item">
               <div styleName="item-title">Сегодня</div>
-              <div styleName="image"
-                   title={this.state.eventToday ? this.state.eventToday.name : null}
-                   style={{backgroundImage: `url(${imageToday})`}} />
+                <Link styleName="item-image"
+                      to={eventToday ? `/event-${eventToday.origin.id}` : ''}
+                      title={eventToday ? eventToday.name : null}
+                      style={{backgroundImage: `url(${imageToday})`}} />
             </div>
             <div styleName="item">
               <div styleName="item-title">Завтра</div>
-              <div styleName="image"
-                   title={this.state.eventTomorrow ? this.state.eventTomorrow.name : null}
-                   style={{backgroundImage: `url(${imageTomorrow})`}} />
+                <Link styleName="item-image"
+                      to={eventTomorrow ? `/event-${eventTomorrow.origin.id}` : ''}
+                      title={eventTomorrow ? eventTomorrow.name : null}
+                      style={{backgroundImage: `url(${imageTomorrow})`}} />
             </div>
             <div styleName="item">
               <div styleName="item-title">На следующей неделе</div>
-              <div styleName="image"
-                   title={this.state.eventNext ? this.state.eventNext.name : null}
-                   style={{backgroundImage: `url(${imageNext})`}} />
+                <Link styleName="item-image"
+                      to={eventNext ? `/event-${eventNext.origin.id}` : ''}
+                      title={eventNext ? eventNext.name : null}
+                      style={{backgroundImage: `url(${imageNext})`}} />
             </div>
           </div>
 
