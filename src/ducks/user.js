@@ -13,6 +13,7 @@ export const LOGIN_RESPONSE     = 'app/user/LOGIN_RESPONSE';
 export const REGISTER_REQUEST   = 'app/user/REGISTER_REQUEST';
 export const REGISTER_RESPONSE  = 'app/user/REGISTER_RESPONSE';
 export const LOGOUT             = 'app/user/LOGOUT';
+export const UPDATE_LOCATION    = 'app/user/UPDATE_LOCATION';
 export const UPDATE             = 'app/user/UPDATE';
 export const UPDATE_EMAIL       = 'app/user/UPDATE_EMAIL';
 export const UPDATE_PASSWORD    = 'app/user/UPDATE_PASSWORD';
@@ -134,6 +135,13 @@ export function logout() {
   send(Parse.User.logOut());
   
   return {type: LOGOUT};
+}
+
+export function updateLocation(loc) {
+  return {
+    type: UPDATE_LOCATION,
+    loc
+  };
 }
 
 export function update(data) {
@@ -319,6 +327,12 @@ export default function userReducer(state = initialState, action) {
         email: ``
       };
       
+    case UPDATE_LOCATION:
+      return {
+        ...state,
+        loc: action.loc
+      };
+
     case UPDATE:
       loc = action.data.location ? action.data.location : state.loc;
       return {

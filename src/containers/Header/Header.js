@@ -6,7 +6,7 @@ import {NavLink, withRouter} from "react-router-dom";
 import InlineSVG from 'svg-inline-react';
 
 import {showModal, MODAL_TYPE_SIGN, MODAL_TYPE_SETTLEMENT} from "ducks/nav";
-import {logout} from "ducks/user";
+import {logout, updateLocation} from "ducks/user";
 
 import {MODE_LOGIN, MODE_REG} from "components/modals/SignModal/SignModal";
 
@@ -41,9 +41,10 @@ class Header extends Component {
 
   onLocationClick = () => {
     const {showModal} = this.props.navActions;
-    showModal(MODAL_TYPE_SETTLEMENT, {callback: location =>
-      this.setState({location})
-    });
+    showModal(MODAL_TYPE_SETTLEMENT, {callback: loc => {
+        this.setState({loc});
+        this.props.userActions.updateLocation(loc);
+      }});
   };
 
   render() {
@@ -108,7 +109,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     navActions:   bindActionCreators({showModal}, dispatch),
-    userActions:  bindActionCreators({logout}, dispatch)
+    userActions:  bindActionCreators({logout, updateLocation}, dispatch)
   };
 }
 
