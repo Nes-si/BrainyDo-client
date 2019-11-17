@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import CSSModules from 'react-css-modules';
+import {Link} from 'react-router-dom';
 
 import ButtonControl from "components/elements/ButtonControl/ButtonControl";
 
 import styles from './CalendarComponent.sss';
+
 
 
 @CSSModules(styles, {allowMultiple: true})
@@ -11,8 +13,6 @@ export default class CalendarComponent extends Component {
   state = {
     monthDate: null
   };
-
-  events = [];
 
   now = null;
   daysInMonth = 0;
@@ -22,8 +22,6 @@ export default class CalendarComponent extends Component {
 
   constructor(props) {
     super(props);
-
-    this.events = props.events;
 
     this.now = new Date();
     this.state.monthDate = new Date();
@@ -63,29 +61,60 @@ export default class CalendarComponent extends Component {
     return value;
   }
 
-  render() {
-    let monthName = this.state.monthDate.toLocaleString('ru', {month: 'long'});
-    monthName = monthName[0].toUpperCase() + monthName.slice(1);
-
+  getCells = () => {
     const cells = [];
+
     for (let week = 1; week <= this.weeksInMonth; week++) {
       const cellsInString = [];
+
       for (let DOW = 1; DOW <= 7; DOW++) {
         const day = this.getCellValue(week, DOW);
-        if (day)
+        if (day) {
+          const events = [];
+          for (let event of this.props.userEvents) {
+            if (event.dateStart.getFullYear() == this.state.monthDate.getFullYear() &&
+                event.dateStart.getMonth() == this.state.monthDate.getMonth() &&
+                event.dateStart.getDate() == day)
+              events.push(event);
+          }
+
           cellsInString.push(
-            <td key={DOW}>{day}</td>
+            <td key={DOW}>
+              <div styleName="day">{day}</div>
+              <div styleName="events">
+                {
+                  events.map(event => {
+                    const image = event.image ? event.image.url() : require('assets/images/events/event1.png');
+
+                    return (
+                      <Link styleName="event-icon"
+                          key={event.origin.id}
+                          to={`/event-${event.origin.id}`}
+                          title={event.name}
+                          style={{backgroundImage: `url(${image})`}} />
+                    );
+                  })
+                }
+              </div>
+            </td>
           );
-        else
+        } else {
           cellsInString.push(
             <td key={DOW}></td>
           );
+        }
       }
       cells.push(
         <tr key={week}>
           {cellsInString}
         </tr>);
     }
+    return cells;
+  };
+
+  render() {
+    let monthName = this.state.monthDate.toLocaleString('ru', {month: 'long'});
+    monthName = monthName[0].toUpperCase() + monthName.slice(1);
 
     return (
       <div styleName="CalendarComponent">
@@ -116,7 +145,7 @@ export default class CalendarComponent extends Component {
             </tr>
           </thead>
           <tbody>
-            {cells}
+            {this.getCells()}
           </tbody>
         </table>
 
