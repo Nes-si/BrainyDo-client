@@ -19,9 +19,4 @@ let server = new WebpackDevServer(
   }
 );
 
-server.listen(port, 'localhost', error => {
-  if (error)
-    console.error(error);
-  else
-    console.info("==> Listening at http://localhost:%s/", port);
-});
+server.listen(port, 'localhost');
