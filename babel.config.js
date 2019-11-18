@@ -25,7 +25,6 @@ module.exports = {
     "@babel/plugin-transform-runtime",
     "@babel/plugin-transform-regenerator",
 
-    "babel-plugin-lodash",
     "react-hot-loader/babel"
   ]
 };
