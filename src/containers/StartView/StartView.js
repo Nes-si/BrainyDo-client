@@ -16,6 +16,8 @@ import styles from './StartView.sss';
 const ScrollLink = ScrollAnim.Link;
 const ScrollElement = ScrollAnim.Element;
 
+const UPDATE_EVENTS_TIME = 7000;
+
 @CSSModules(styles, {allowMultiple: true})
 class StartView extends Component {
   state = {
@@ -45,7 +47,7 @@ class StartView extends Component {
       return;
     }
 
-    if (this.state.eventToday || this.state.eventTomorrow || this.state.eventNext)
+    if (this.timer)
       return;
 
     const {eventsToday, eventsTomorrow, eventsNext} = nextProps.events.startEvents;
@@ -58,7 +60,7 @@ class StartView extends Component {
       eventNext: eventsNext[0]
     });
 
-    this.timer = setInterval(this.onTimer, 7000);
+    this.timer = setInterval(this.onTimer, UPDATE_EVENTS_TIME);
   }
 
   onTimer = () => {
