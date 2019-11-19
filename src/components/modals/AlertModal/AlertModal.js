@@ -14,7 +14,7 @@ export const ALERT_TYPE_CONFIRM = "modals/alert/ALERT_TYPE_CONFIRM";
 @CSSModules(styles, {allowMultiple: true})
 export default class AlertModal extends Component {
   state = {
-    confirmString: null
+    confirmString: this.props.params.confirmString
   };
 
   active = false;
@@ -27,7 +27,6 @@ export default class AlertModal extends Component {
   constructor(props) {
     super(props);
 
-    this.confirmString = props.params.confirmString;
     if (props.params.type)
       this.type = props.params.type;
   }

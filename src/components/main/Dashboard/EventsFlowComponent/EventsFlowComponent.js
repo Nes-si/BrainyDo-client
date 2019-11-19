@@ -11,18 +11,15 @@ import styles from './EventsFlowComponent.sss';
 @CSSModules(styles, {allowMultiple: true})
 export default class EventsFlowComponent extends Component {
   state = {
-    monthDate: null
+    monthDate: new Date()
   };
 
-  now = null;
   daysInMonth = 0;
 
 
   constructor(props) {
     super(props);
 
-    this.now = new Date();
-    this.state.monthDate = new Date();
     this.state.monthDate.setDate(1);
   }
 

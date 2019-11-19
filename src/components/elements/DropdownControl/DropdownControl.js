@@ -13,7 +13,6 @@ export default class DropdownControl extends Component {
   state = {
     value: '',
     listVis: false,
-    disabled: false
   };
   list = [];
 
@@ -21,25 +20,23 @@ export default class DropdownControl extends Component {
   constructor(props) {
     super(props);
 
-    const {list, current, disabled} = props;
+    const {list, current} = props;
     if (list)
       this.list = list;
-
-    this.state.disabled = disabled;
 
     if (this.list.indexOf(current) != -1 || current === undefined)
       this.state.value = current;
   }
 
   componentWillReceiveProps(nextProps) {
-    const {list, current, disabled} = nextProps;
+    const {list, current} = nextProps;
 
     this.list = list;
 
     if (list.indexOf(current) != -1 || current === undefined)
-      this.setState({value: current, disabled});
+      this.setState({value: current});
     else
-      this.setState({value: '', disabled});
+      this.setState({value: ''});
   }
 
   onItemClick = item => {
@@ -63,7 +60,7 @@ export default class DropdownControl extends Component {
   };
 
   render() {
-    const {label} = this.props;
+    const {label, disabled} = this.props;
 
     let {value} = this.state;
     if (value == '')
@@ -71,7 +68,7 @@ export default class DropdownControl extends Component {
     else if (!value)
       value = '(undefined)';
 
-    if (this.state.disabled)
+    if (disabled)
       return <InputControl label={label}
                            icon="lock"
                            value={value}

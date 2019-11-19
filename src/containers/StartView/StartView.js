@@ -30,13 +30,12 @@ class StartView extends Component {
   eventTomorrowNum = 0;
   eventNextNum = 0;
 
-  loc = null;
+  loc = this.props.user.loc;
 
 
   constructor(props) {
     super(props);
 
-    this.loc = props.user.loc;
     props.eventsActions.showStartEvents();
   }
 

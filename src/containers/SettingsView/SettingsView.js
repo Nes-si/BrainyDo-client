@@ -32,20 +32,22 @@ const CHG_PASSWORD  = `CHG_PASSWORD`;
 
 @CSSModules(styles, {allowMultiple: true})
 class SettingsView extends Component {
+  userData = this.props.user.userData;
+
   state = {
-    nameFirst: '',
-    nameLast: '',
-    sex: ``,
-    birthdate: null,
+    nameFirst:  this.userData.nameFirst,
+    nameLast:   this.userData.nameLast,
+    sex:        this.userData.sex,
+    birthdate:  this.userData.birthdate,
     dirtyData: false,
     errorData: null,
     successData: ``,
 
-    image: null,
+    image: this.userData.image,
     imageLoading: false,
     imageError: null,
 
-    email: '',
+    email: this.userData.email,
     emailNew: '',
     dirtyEmail: false,
     errorEmail: null,
@@ -58,7 +60,6 @@ class SettingsView extends Component {
     errorPassword: null,
     successPassword: ``
   };
-  userData = null;
   lastChange = null;
 
   now = new Date();
@@ -66,17 +67,6 @@ class SettingsView extends Component {
 
   constructor(props) {
     super(props);
-
-    const {user} = props;
-
-    this.userData = user.userData;
-
-    this.state.nameFirst  = this.userData.nameFirst;
-    this.state.nameLast   = this.userData.nameLast;
-    this.state.sex        = this.userData.sex;
-    this.state.birthdate  = this.userData.birthdate;
-    this.state.image      = this.userData.image;
-    this.state.email      = this.userData.email;
 
     if (this.userData.emailNew) {
       this.state.emailNew = this.userData.emailNew;

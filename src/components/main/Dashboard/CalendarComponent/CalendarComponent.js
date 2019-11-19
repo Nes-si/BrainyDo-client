@@ -11,10 +11,9 @@ import styles from './CalendarComponent.sss';
 @CSSModules(styles, {allowMultiple: true})
 export default class CalendarComponent extends Component {
   state = {
-    monthDate: null
+    monthDate: new Date()
   };
 
-  now = null;
   daysInMonth = 0;
   firstDOW = 0;
   weeksInMonth = 0;
@@ -23,8 +22,6 @@ export default class CalendarComponent extends Component {
   constructor(props) {
     super(props);
 
-    this.now = new Date();
-    this.state.monthDate = new Date();
     this.state.monthDate.setDate(1);
     this.onChangeMonth(new Date());
   }

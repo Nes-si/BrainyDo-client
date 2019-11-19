@@ -19,9 +19,7 @@ export const TYPE_ADDRESS = 'TYPE_ADDRESS';
 export default class GeoSearchControl extends Component {
   state = {
     value: '',
-    listVis: false,
-    loading: false,
-    disabled: false
+    listVis: false
   };
   list = [];
   type = TYPE_SETTLEMENT;
@@ -31,20 +29,11 @@ export default class GeoSearchControl extends Component {
   constructor(props) {
     super(props);
 
-    const {type, value, showLoader, disabled} = props;
+    const {type, value} = props;
     if (type)
       this.type = type;
     if (value)
       this.state.value = value;
-    this.state.loading = showLoader;
-    this.state.disabled = disabled;
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      loading: nextProps.showLoader,
-      disabled: nextProps.disabled
-    });
   }
 
   updateValue(value) {
@@ -121,7 +110,7 @@ export default class GeoSearchControl extends Component {
   };
 
   onChange = async (event, value) => {
-    if (this.state.loading)
+    if (this.props.showLoader)
       return;
 
     if (event)
@@ -214,12 +203,12 @@ export default class GeoSearchControl extends Component {
   };
 
   render() {
-    const {placeholder, autoFocus} = this.props;
+    const {placeholder, autoFocus, disabled, showLoader} = this.props;
 
-    if (this.state.disabled)
+    if (disabled)
       return <InputControl icon="lock"
-                           placeholder={this.state.loading ? '' : placeholder}
-                           value={this.state.loading ? '' : this.state.value}
+                           placeholder={showLoader ? '' : placeholder}
+                           value={showLoader ? '' : this.state.value}
                            dropdown={true}
                            readOnly={true} />;
 
@@ -230,11 +219,11 @@ export default class GeoSearchControl extends Component {
            onKeyDown={this.onKeyDown}>
         <input styleName="input"
                autoFocus={autoFocus}
-               placeholder={this.state.loading ? '' : placeholder}
-               value={this.state.loading ? '' : this.state.value}
+               placeholder={showLoader ? '' : placeholder}
+               value={showLoader ? '' : this.state.value}
                ref={elm => this.inputElm = elm}
                onChange={this.onChange} />
-        {this.state.loading &&
+        {showLoader &&
           <div styleName="loader-wrapper">
             <LoaderComponent/>
           </div>

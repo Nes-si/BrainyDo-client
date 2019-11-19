@@ -4,21 +4,17 @@ import InputControl from "components/elements/InputControl/InputControl";
 
 
 export default class InputNumberControl extends Component {
-  state = {value: '0'};
+  state = {value: this.props.value};
   valueParsed = 0;
   parseFunc;
-  min;
-  max;
+  min = this.props.min;
+  max = this.props.max;
   
   
   constructor(props) {
     super(props);
   
     this.parseFunc = props.isInt ? parseInt : parseFloat;
-    this.min = props.min;
-    this.max = props.max;
-    
-    this.state.value = props.value;
     this.valueParsed = this.parseValue(props.value);
   }
   
