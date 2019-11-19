@@ -4,6 +4,7 @@ import 'normalize.css';
 import './fonts.css';
 import './styles.global.sss';
 
+import 'react-hot-loader';
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';

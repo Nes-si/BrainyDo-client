@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import CSSModules from 'react-css-modules';
 import {Route, Switch, Redirect, withRouter} from "react-router-dom";
 import {Helmet} from "react-helmet";
+import {hot} from 'react-hot-loader/root';
 import CSSTransition from 'react-transition-group/CSSTransition';
 
 import {closeModal, MODAL_TYPE_ALERT, MODAL_TYPE_SETTLEMENT, MODAL_TYPE_SIGN} from 'ducks/nav';
@@ -185,4 +186,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(hot(App)));
