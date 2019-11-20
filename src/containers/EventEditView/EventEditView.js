@@ -60,11 +60,11 @@ class EventEditView extends Component {
 
     dirty: false,
 
-    waitingForCreate: false
-  };
+    waitingForCreate: false,
 
-  eventId = '';
-  event = null;
+    eventId: '',
+    event: null
+  };
 
   mapElm = null;
   settlementElm = null;
@@ -81,15 +81,15 @@ class EventEditView extends Component {
 
     const params = new URLSearchParams(this.props.location.search);
     if (params.has('id')) {
-      this.eventId = params.get('id');
+      this.state.eventId = params.get('id');
       const event = props.events.currentEvent;
-      if (event && event.origin.id == this.eventId)
-        Object.assign(this.state, this.setupEvent(event));
+      if (event && event.origin.id == this.state.eventId)
+        Object.assign(this.state, EventEditView.setupEvent(event));
       else
-        props.eventsActions.showEvent(this.eventId);
+        props.eventsActions.showEvent(this.state.eventId);
 
     } else {
-      this.event = new EventData();
+      this.state.event = new EventData();
 
       this.state.dateStart.setDate(this.state.dateStart.getDate() + 1);
       this.state.dateStart.setHours(18, 0, 0, 0);
@@ -101,22 +101,26 @@ class EventEditView extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.eventId && !this.event) {
-      const event = nextProps.events.currentEvent;
-      if (event && event.origin.id == this.eventId) {
-        this.setState({...this.setupEvent(event)});
-        setTimeout(this.setupGMaps, 1);
-      }
+  static getDerivedStateFromProps(props, state) {
+    if (state.eventId && !state.event) {
+      const event = props.events.currentEvent;
+      if (event && event.origin.id == state.eventId)
+        return EventEditView.setupEvent(event);
     }
 
-    if (this.state.waitingForCreate && this.event.origin && this.event.origin.id)
-      this.props.history.push(`/event-${this.event.origin.id}`);
+    return null;
   }
 
-  setupEvent = event => {
-    this.event = event;
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.event && !this.map)
+      this.setupGMaps();
 
+    if (this.state.waitingForCreate && this.state.event.origin && this.state.event.origin.id)
+      this.props.history.push(`/event-${this.state.event.origin.id}`);
+  }
+
+
+  static setupEvent = event => {
     let dateEnd = event.dateEnd;
     if (!dateEnd) {
       dateEnd = new Date(event.dateStart);
@@ -124,6 +128,7 @@ class EventEditView extends Component {
     }
 
     return {
+      event:          event,
       name:           event.name,
       description:    event.description,
       dateStart:      event.dateStart,
@@ -142,18 +147,20 @@ class EventEditView extends Component {
   };
 
   componentDidMount() {
-    if (this.event)
+    if (this.state.event)
       this.setupGMaps();
   }
 
   setupGMaps = () => {
+    const {location} = this.state.event;
+
     let center = {lat: 55.76, lng: 37.64}; // Москва
     let zoom = 11;
     const {settlement} = this.state;
     if (settlement && settlement.geoLat && settlement.geoLon)
       center = {lat: settlement.geoLat, lng: settlement.geoLon};
-    if (this.event.location) {
-      center = {lat: this.event.location.latitude, lng: this.event.location.longitude};
+    if (location) {
+      center = {lat: location.latitude, lng: location.longitude};
       zoom = 19;
     }
 
@@ -189,8 +196,8 @@ class EventEditView extends Component {
       }
     });
 
-    if (this.event.location)
-      this.setMarker(this.event.location.latitude, this.event.location.longitude, false);
+    if (location)
+      this.setMarker(location.latitude, location.longitude, false);
   };
 
   setMarker = (lat, lng, setAddress = true) => {
@@ -361,51 +368,53 @@ class EventEditView extends Component {
     if (!this.validate())
       return;
 
-    this.event.name        = this.state.name;
-    this.event.description = this.state.description;
-    this.event.dateStart   = this.state.dateStart;
-    this.event.dateEnd     = this.state.dateEndEnabled ? this.state.dateEnd : undefined;
-    this.event.price       = parseInt(this.state.price);
-    this.event.ageLimit    = this.state.ageLimit;
-    this.event.image       = this.state.image;
-    this.event.owner       = this.props.user.userData;
-    this.event.members     = [this.props.user.userData];
+    const {event} = this.state;
+
+    event.name        = this.state.name;
+    event.description = this.state.description;
+    event.dateStart   = this.state.dateStart;
+    event.dateEnd     = this.state.dateEndEnabled ? this.state.dateEnd : undefined;
+    event.price       = parseInt(this.state.price);
+    event.ageLimit    = this.state.ageLimit;
+    event.image       = this.state.image;
+    event.owner       = this.props.user.userData;
+    event.members     = [this.props.user.userData];
 
     let tags = this.state.tagsString.split(', ');
     if (!tags[0])
-      this.event.tags = [];
+      event.tags = [];
     else
-      this.event.tags = tags;
+      event.tags = tags;
 
     const markerPos = this.marker.getPosition();
-    this.event.location               = new Parse.GeoPoint(markerPos.lat(), markerPos.lng());
-    this.event.locationRegionFias     = this.state.settlement.regionFias;
-    this.event.locationSettlementFias = this.state.settlement.settlementFias;
-    this.event.locationSettlement     = this.state.settlement.main;
-    this.event.locationAddress        = this.state.address.main;
-    this.event.locationPlace          = this.state.place;
-    this.event.locationDetails        = this.state.locationDetails;
+    event.location               = new Parse.GeoPoint(markerPos.lat(), markerPos.lng());
+    event.locationRegionFias     = this.state.settlement.regionFias;
+    event.locationSettlementFias = this.state.settlement.settlementFias;
+    event.locationSettlement     = this.state.settlement.main;
+    event.locationAddress        = this.state.address.main;
+    event.locationPlace          = this.state.place;
+    event.locationDetails        = this.state.locationDetails;
 
     const {createEvent, updateEvent} = this.props.eventsActions;
-    if (this.eventId) {
-      updateEvent(this.event);
+    if (this.state.eventId) {
+      updateEvent(event);
       this.setState({dirty: false},
-        () => this.props.history.push(`/event-${this.event.origin.id}`));
+        () => this.props.history.push(`/event-${event.origin.id}`));
     } else {
-      createEvent(this.event);
+      createEvent(event);
       this.setState({waitingForCreate: true, dirty: false});
     }
   };
 
   render() {
-    if (!this.event)
+    if (!this.state.event)
       return <LoaderComponent />;
 
     const imageSrc = this.state.image ? this.state.image.url() : require('assets/images/event-empty.png');
 
     const errorRequired = this.state.errorNameRequired || this.state.errorSettlementRequired;
 
-    const title = this.eventId ? 'Изменение события' : 'Новое событие';
+    const title = this.state.eventId ? 'Изменение события' : 'Новое событие';
 
     return (
       <div styleName="EventEditView">
@@ -568,7 +577,7 @@ class EventEditView extends Component {
             <div styleName="buttons">
               <div styleName="button-wrapper">
                 <ButtonControl onClick={this.onApply}
-                               value={this.eventId ? "Изменить событие" : "Создать событие"}/>
+                               value={this.state.eventId ? "Изменить событие" : "Создать событие"}/>
               </div>
               <div styleName="button-wrapper">
                 <Link to="/dashboard">

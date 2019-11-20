@@ -20,12 +20,12 @@ export default class DynamicListComponent extends Component {
     if (props.values)
       this.state.values = props.values;
   }
-  
-  componentWillReceiveProps(nextProps) {
-    let {values} = nextProps;
+
+  static getDerivedStateFromProps(props, state) {
+    let {values} = props;
     if (!values)
       values = [];
-    this.setState({values});
+    return {values};
   }
   
   onKeyDown = (event, i) => {

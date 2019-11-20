@@ -13,8 +13,8 @@ export default class DropdownControl extends Component {
   state = {
     value: '',
     listVis: false,
+    list: []
   };
-  list = [];
 
 
   constructor(props) {
@@ -22,21 +22,21 @@ export default class DropdownControl extends Component {
 
     const {list, current} = props;
     if (list)
-      this.list = list;
+      this.state.list = list;
 
-    if (this.list.indexOf(current) != -1 || current === undefined)
+    if (this.state.list.indexOf(current) != -1 || current === undefined)
       this.state.value = current;
   }
 
-  componentWillReceiveProps(nextProps) {
-    const {list, current} = nextProps;
+  static getDerivedStateFromProps(props, state) {
+    const {list, current} = props;
 
-    this.list = list;
+    const newState = {list, value: ''};
 
     if (list.indexOf(current) != -1 || current === undefined)
-      this.setState({value: current});
-    else
-      this.setState({value: ''});
+      newState.value = current;
+
+    return newState;
   }
 
   onItemClick = item => {
@@ -97,7 +97,7 @@ export default class DropdownControl extends Component {
                readOnly />
         {this.state.listVis &&
           <div styleName="items">
-            {this.list.map((item, key) => {
+            {this.state.list.map((item, key) => {
               const styleName = classNames({
                 'item': true,
                 'empty': !item

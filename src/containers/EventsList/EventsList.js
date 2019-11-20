@@ -45,9 +45,9 @@ class EventsList extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.location.search != nextProps.location.search) {
-      const paramsStr = this.parseParams(nextProps.location.search);
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.location.search != prevProps.location.search) {
+      const paramsStr = this.parseParams(this.props.location.search);
       this.props.eventsActions.showEvents(paramsStr);
     }
   }

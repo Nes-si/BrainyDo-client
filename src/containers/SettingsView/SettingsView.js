@@ -76,8 +76,8 @@ class SettingsView extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    const {user} = nextProps;
+  componentDidUpdate(prevProps, prevState) {
+    const {user} = this.props.user;
 
     switch (this.lastChange) {
       case CHG_DATA:
@@ -108,6 +108,8 @@ class SettingsView extends Component {
         setTimeout(() => this.setState({successPassword: ``}), 2500);
         break;
     }
+
+    this.lastChange = null;
   }
 
   onSaveData = e => {

@@ -17,10 +17,10 @@ export default class InputNumberControl extends Component {
     this.parseFunc = props.isInt ? parseInt : parseFloat;
     this.valueParsed = this.parseValue(props.value);
   }
-  
-  componentWillReceiveProps(nextProps) {
-    const {value, min, max} = nextProps;
-  
+
+  componentDidUpdate(prevProps, prevState) {
+    const {value, min, max} = this.props;
+
     this.min = min;
     this.max = max;
     

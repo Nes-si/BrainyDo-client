@@ -62,23 +62,21 @@ export default class SignModal extends Component {
       setTimeout(this.close, 1);
   };
 
-  componentWillReceiveProps(nextProps) {
-    const {user, nav} = nextProps;
+  static getDerivedStateFromProps(props, state) {
+    const {user, nav} = props;
 
-    if (nav.serverProblemB) {
-      this.setState({
+    if (nav.serverProblemB)
+      return {
         error: null,
         lock: false,
         mode: MODE_SERVER_DOWN
-      });
-      return;
-    }
+      };
 
     const status = user.status;
     if (!status)
-      return;
+      return null;
 
-    let mode = this.state.mode;
+    let mode = state.mode;
     if (mode == MODE_REG && status == OK)
       mode = MODE_REG_MAIL;
     else if (mode == MODE_FORGOT && status == OK)
@@ -86,12 +84,16 @@ export default class SignModal extends Component {
     else if (mode == MODE_LOGIN && status == ERROR_UNVERIF)
       mode = MODE_UNVERIF;
 
-    this.props.resetStatus();
-    this.setState({
+    return {
       error: status,
       lock: !status,
       mode
-    });
+    };
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.user.status)
+      this.props.resetStatus();
   }
 
   setMode = mode => {

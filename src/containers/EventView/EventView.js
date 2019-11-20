@@ -35,18 +35,24 @@ class EventView extends Component {
       props.eventsActions.showEvent(props.match.params.id);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!this.state.event) {
-      const event = nextProps.events.currentEvent;
-      if (event && event.origin.id == this.props.match.params.id) {
-        this.setState({event});
-        setTimeout(this.setupGMaps, 1);
-      }
-    }
-  }
-
   componentDidMount() {
     if (this.state.event)
+      this.setupGMaps();
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if (state.event)
+      return null;
+
+    const event = props.events.currentEvent;
+    if (event && event.origin.id == props.match.params.id)
+      return {event};
+
+    return null;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.event && !this.map)
       this.setupGMaps();
   }
 

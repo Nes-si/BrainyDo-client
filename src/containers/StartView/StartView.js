@@ -39,26 +39,27 @@ class StartView extends Component {
     props.eventsActions.showStartEvents();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.loc != nextProps.user.loc) {
-      this.loc = nextProps.user.loc;
-      nextProps.eventsActions.showStartEvents();
+  static getDerivedStateFromProps(props, state) {
+    const {eventsToday, eventsTomorrow, eventsNext} = props.events.startEvents;
+    if (!eventsToday.length && !eventsTomorrow.length && !eventsNext.length)
+      return null;
+
+    return {
+      eventToday: eventsToday[0],
+      eventTomorrow: eventsTomorrow[0],
+      eventNext: eventsNext[0]
+    };
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.loc != this.props.user.loc) {
+      this.loc = this.props.user.loc;
+      this.props.eventsActions.showStartEvents();
       return;
     }
 
     if (this.timer)
       return;
-
-    const {eventsToday, eventsTomorrow, eventsNext} = nextProps.events.startEvents;
-    if (!eventsToday.length && !eventsTomorrow.length && !eventsNext.length)
-      return;
-
-    this.setState({
-      eventToday: eventsToday[0],
-      eventTomorrow: eventsTomorrow[0],
-      eventNext: eventsNext[0]
-    });
-
     this.timer = setInterval(this.onTimer, UPDATE_EVENTS_TIME);
   }
 
