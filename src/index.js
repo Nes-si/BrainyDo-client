@@ -9,6 +9,7 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import {BrowserRouter as Router} from "react-router-dom";
+import {HelmetProvider} from 'react-helmet-async';
 
 import configureStore from 'store/configureStore';
 import {initApp} from 'utils/initialize';
@@ -23,9 +24,11 @@ initApp();
 class Root extends Component {
   render () {
     return <Provider store={store}>
-      <Router>
-        <App />
-      </Router>
+      <HelmetProvider>
+        <Router>
+          <App />
+        </Router>
+      </HelmetProvider>
     </Provider>
   }
 }

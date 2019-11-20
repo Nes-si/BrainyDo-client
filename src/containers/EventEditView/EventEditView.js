@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import CSSModules from 'react-css-modules';
-import {Helmet} from "react-helmet";
+import {Helmet} from "react-helmet-async";
 import {Parse} from 'parse';
 import {Link, Prompt} from 'react-router-dom';
 

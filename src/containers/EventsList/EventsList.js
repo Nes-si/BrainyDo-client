@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import CSSModules from 'react-css-modules';
-import {Helmet} from "react-helmet";
+import {Helmet} from "react-helmet-async";
 
 import {showEvents, joinEvent, leaveEvent} from "ducks/events";
 import {FilterEventData, FILTER_DATE_FUTURE, FILTER_REGION_VALUE} from "models/EventData";
