@@ -70,8 +70,11 @@ class Header extends Component {
 
     return (
       <div styleName="Header">
-        <InlineSVG styleName="logo"
-                   src={require("assets/images/logo.svg")} />
+        <NavLink styleName="logo-link"
+                 to="/">
+          <InlineSVG styleName="logo"
+                     src={require("assets/images/logo.svg")} />
+        </NavLink>
         {//<div styleName="logo">
           //<img src={require("assets/images/logo.png")}/>
         //</div>
