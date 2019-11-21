@@ -21,15 +21,15 @@ const UPDATE_EVENTS_TIME = 7000;
 @CSSModules(styles, {allowMultiple: true})
 class StartView extends Component {
   state = {
-    eventToday: null,
-    eventTomorrow: null,
-    eventNext: null
+    eventsToday: [],
+    eventsTomorrow: [],
+    eventsNext: [],
+
+    eventTodayNum: 0,
+    eventTomorrowNum: 0,
+    eventNextNum: 0
   };
   timer;
-  eventTodayNum = 0;
-  eventTomorrowNum = 0;
-  eventNextNum = 0;
-
   loc = this.props.user.loc;
 
 
@@ -41,13 +41,19 @@ class StartView extends Component {
 
   static getDerivedStateFromProps(props, state) {
     const {eventsToday, eventsTomorrow, eventsNext} = props.events.startEvents;
-    if (!eventsToday.length && !eventsTomorrow.length && !eventsNext.length)
+    if (state.eventsToday == eventsToday &&
+        state.eventsTomorrow == eventsTomorrow &&
+        state.eventsNext == eventsNext)
       return null;
 
     return {
-      eventToday: eventsToday[0],
-      eventTomorrow: eventsTomorrow[0],
-      eventNext: eventsNext[0]
+      eventsToday,
+      eventsTomorrow,
+      eventsNext,
+
+      eventTodayNum: 0,
+      eventTomorrowNum: 0,
+      eventNextNum: 0
     };
   }
 
@@ -64,27 +70,25 @@ class StartView extends Component {
   }
 
   onTimer = () => {
-    const {eventsToday, eventsTomorrow, eventsNext} = this.props.events.startEvents;
+    const {eventsToday, eventsTomorrow, eventsNext} = this.state;
+    let {eventTodayNum, eventTomorrowNum, eventNextNum} = this.state;
 
-    if (this.eventTodayNum >= eventsToday.length - 1)
-      this.eventTodayNum = 0;
+    if (eventTodayNum >= eventsToday.length - 1)
+      eventTodayNum = 0;
     else
-      this.eventTodayNum++;
-    const eventToday = eventsToday[this.eventTodayNum];
+      eventTodayNum++;
 
-    if (this.eventTomorrowNum >= eventsTomorrow.length - 1)
-      this.eventTomorrowNum = 0;
+    if (eventTomorrowNum >= eventsTomorrow.length - 1)
+      eventTomorrowNum = 0;
     else
-      this.eventTomorrowNum++;
-    const eventTomorrow = eventsTomorrow[this.eventTomorrowNum];
+      eventTomorrowNum++;
 
-    if (this.eventNextNum >= eventsNext.length - 1)
-      this.eventNextNum = 0;
+    if (eventNextNum >= eventsNext.length - 1)
+      eventNextNum = 0;
     else
-      this.eventNextNum++;
-    const eventNext = eventsNext[this.eventNextNum];
+      eventNextNum++;
 
-    this.setState({eventToday, eventTomorrow, eventNext});
+    this.setState({eventTodayNum, eventTomorrowNum, eventNextNum});
   };
 
   componentWillUnmount() {
@@ -92,7 +96,11 @@ class StartView extends Component {
   }
 
   render() {
-    const {eventToday, eventTomorrow, eventNext} = this.state;
+    const {eventsToday, eventsTomorrow, eventsNext, eventTodayNum, eventTomorrowNum, eventNextNum} = this.state;
+
+    const eventToday = eventsToday[eventTodayNum];
+    const eventTomorrow = eventsTomorrow[eventTomorrowNum];
+    const eventNext = eventsNext[eventNextNum];
 
     const imageToday    = eventToday    ? eventToday.image.url()    : require('assets/images/events/event1.png');
     const imageTomorrow = eventTomorrow ? eventTomorrow.image.url() : require('assets/images/events/event2.png');
