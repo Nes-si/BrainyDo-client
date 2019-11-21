@@ -31,6 +31,9 @@ export default class DropdownControl extends Component {
   static getDerivedStateFromProps(props, state) {
     const {list, current} = props;
 
+    if (state.list === list && state.value === current)
+      return null;
+
     const newState = {list, value: ''};
 
     if (list.indexOf(current) != -1 || current === undefined)

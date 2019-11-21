@@ -5,62 +5,49 @@ import InputControl from "components/elements/InputControl/InputControl";
 
 export default class InputNumberControl extends Component {
   state = {value: this.props.value};
-  valueParsed = 0;
-  parseFunc;
-  min = this.props.min;
-  max = this.props.max;
-  
-  
-  constructor(props) {
-    super(props);
-  
-    this.parseFunc = props.isInt ? parseInt : parseFloat;
-    this.valueParsed = this.parseValue(props.value);
-  }
 
-  componentDidUpdate(prevProps, prevState) {
-    const {value, min, max} = this.props;
 
-    this.min = min;
-    this.max = max;
-    
-    const valueParsed = this.parseValue(value);
-    if (valueParsed === this.valueParsed)
-      return;
-    this.valueParsed = valueParsed;
-    this.setState({value: valueParsed});
+  static getDerivedStateFromProps(props, state) {
+    const valueParsed = InputNumberControl.parseValue(props.value, props);
+    const valueParsedPrev = InputNumberControl.parseValue(state.value, props);
+    if (valueParsed === valueParsedPrev)
+      return null;
+    return {value: valueParsed};
   }
   
-  parseValue(value) {
-    let num = this.parseFunc(value);
+  static parseValue(value, props) {
+    const {min, max, isInt} = props;
+
+    const parseFunc = isInt ? parseInt : parseFloat;
+    let num = parseFunc(value);
     if (isNaN(num))
       return undefined;
-  
-    if (this.min !== undefined && this.min !== null && num < this.min)
+
+    if (min !== undefined && min !== null && num < min)
       num = this.min;
-    if (this.max !== undefined && this.max !== null && num > this.max)
+    if (max !== undefined && max !== null && num > max)
       num = this.max;
     
     return num;
   }
   
   onChange = value => {
-    value = value.replace(/[^\d\.,]/g, '');
+    value = value.replace(/[^\d.,]/g, '');
     value = value.replace(/,/g, '.');
     this.setState({value});
-    
-    const valueParsed = this.parseValue(value);
-    if (valueParsed === this.valueParsed)
-      return;
-    this.valueParsed = valueParsed;
-  
-    this.props.onChange(valueParsed);
   };
   
   onBlur = () => {
-    this.setState({value: this.valueParsed});
+    const valueParsed = InputNumberControl.parseValue(this.state.value, this.props);
+    this.setState({value: valueParsed});
+    this.props.onChange(valueParsed);
   };
-  
+
+  componentWillUnmount() {
+    const valueParsed = InputNumberControl.parseValue(this.state.value, this.props);
+    this.props.onChange(valueParsed);
+  }
+
   render() {
     let {label, placeholder, readOnly, autoFocus, onKeyDown, DOMRef, icon} = this.props;
     
