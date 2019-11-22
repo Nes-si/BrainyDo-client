@@ -230,7 +230,7 @@ export default class GeoSearchControl extends Component {
         }
         {this.state.listVis &&
           <div styleName="items">
-            {this.list.map((item, key) => {
+            {this.list.map(item => {
               let hint = item.main;
               if (item.details)
                 hint += `, ${item.details}`;
@@ -238,7 +238,7 @@ export default class GeoSearchControl extends Component {
               return (
                 <div onMouseDown={e => this.onItemClick(item)}
                      styleName="item"
-                     key={key}>
+                     key={item.unrestricted}>
                   <span title={hint}>{item.main}</span>
                   {item.details &&
                     <span styleName="item-details" title={hint}>, {item.details}</span>

@@ -100,15 +100,15 @@ export default class DropdownControl extends Component {
                readOnly />
         {this.state.listVis &&
           <div styleName="items">
-            {this.state.list.map((item, key) => {
+            {this.state.list.map(item => {
               const styleName = classNames({
                 'item': true,
                 'empty': !item
               });
               return (
-                <div onMouseDown={() => this.onItemClick(item)}
+                <div onMouseDown={e => this.onItemClick(item)}
                      styleName={styleName}
-                     key={key}>
+                     key={item}>
                   {item ? item : '(empty)'}
                 </div>
               );
