@@ -7,6 +7,7 @@ import {Link} from 'react-router-dom';
 
 import {showModal} from "ducks/nav";
 
+import ContainerComponent from 'components/elements/ContainerComponent/ContainerComponent';
 import ButtonControl from 'components/elements/ButtonControl/ButtonControl';
 import CheckboxControl from "components/elements/CheckboxControl/CheckboxControl";
 import CalendarComponent from "components/main/Dashboard/CalendarComponent/CalendarComponent";
@@ -39,54 +40,47 @@ class Dashboard extends Component {
     const {onlyOwn} = this.state;
 
     return (
-      <div styleName="Dashboard">
+      <ContainerComponent title="Мои события">
         <Helmet>
           <title>Моя страница — BrainyDo</title>
         </Helmet>
 
-        <div styleName="background"></div>
-        <div styleName="header">
-          <div styleName="title">Мои события</div>
+        <Link to="/event-edit">
+          <ButtonControl value="Создать событие" />
+        </Link>
+
+        <div styleName="modes">
+          <div styleName={"mode" + (this.state.mode == MODE_CAL ? " mode-enabled" : "")}
+               onClick={() => this.setMode(MODE_CAL)}>
+            Календарь
+          </div>
+          <div styleName={"mode" + (this.state.mode == MODE_FLOW ? " mode-enabled" : "")}
+               onClick={() => this.setMode(MODE_FLOW)}>
+            Поток
+          </div>
         </div>
-        <div styleName='content'>
 
-          <Link to="/event-edit">
-            <ButtonControl value="Создать событие" />
-          </Link>
+        <div styleName="view">
+          <CheckboxControl title="Только созданные мной события"
+                           onChange={this.onChangeOwn}
+                           checked={onlyOwn} />
+        </div>
 
-          <div styleName="modes">
-            <div styleName={"mode" + (this.state.mode == MODE_CAL ? " mode-enabled" : "")}
-                 onClick={() => this.setMode(MODE_CAL)}>
-              Календарь
-            </div>
-            <div styleName={"mode" + (this.state.mode == MODE_FLOW ? " mode-enabled" : "")}
-                 onClick={() => this.setMode(MODE_FLOW)}>
-              Поток
-            </div>
-          </div>
-
+        {this.state.mode == MODE_CAL &&
           <div styleName="view">
-            <CheckboxControl title="Только созданные мной события"
-                             onChange={this.onChangeOwn}
-                             checked={onlyOwn} />
+            <CalendarComponent userEvents={events.userEvents}
+                               userData={user.userData}
+                               onlyOwn={onlyOwn} />
           </div>
-
-          {this.state.mode == MODE_CAL &&
-            <div styleName="view">
-              <CalendarComponent userEvents={events.userEvents}
+        }
+        {this.state.mode == MODE_FLOW &&
+          <div styleName="view">
+            <EventsFlowComponent userEvents={events.userEvents}
                                  userData={user.userData}
                                  onlyOwn={onlyOwn} />
-            </div>
-          }
-          {this.state.mode == MODE_FLOW &&
-            <div styleName="view">
-              <EventsFlowComponent userEvents={events.userEvents}
-                                   userData={user.userData}
-                                   onlyOwn={onlyOwn} />
-            </div>
-          }
-        </div>
-      </div>
+          </div>
+        }
+      </ContainerComponent>
     );
   }
 }

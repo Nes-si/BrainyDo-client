@@ -17,6 +17,7 @@ import {checkEmail, filterSpecials, getTextDate} from 'utils/strings';
 import {checkPassword} from 'utils/data';
 import {FILE_SIZE_MAX} from "config";
 
+import ContainerComponent from 'components/elements/ContainerComponent/ContainerComponent';
 import InputControl from 'components/elements/InputControl/InputControl';
 import ButtonControl from 'components/elements/ButtonControl/ButtonControl';
 import RadioControl from "components/elements/RadioControl/RadioControl";
@@ -271,7 +272,7 @@ class SettingsView extends Component {
     const imageSrc = this.state.image ? this.state.image.url() : require('assets/images/default-avatar.jpg');
 
     return (
-      <div styleName="SettingsView">
+      <ContainerComponent title="Настройки">
         <Helmet>
           <title>Настройки — BrainyDo</title>
         </Helmet>
@@ -279,173 +280,166 @@ class SettingsView extends Component {
         <Prompt when={this.state.dirtyData || this.state.dirtyEmail || this.state.dirtyPassword}
                 message="У вас есть несохранённые изменения. Покинуть страницу?" />
 
-        <div styleName="background"></div>
-        <div styleName="header">
-          <div styleName="title">Настройки</div>
-        </div>
+        <form styleName="section" onSubmit={this.onSaveData}>
+          <div styleName="section-header">Личные данные</div>
 
-        <div styleName='content'>
-          <form styleName="section" onSubmit={this.onSaveData}>
-            <div styleName="section-header">Личные данные</div>
-
-            <div styleName="section-columns">
-              <div styleName='image-container'>
-                <div styleName="image"
-                     style={{backgroundImage: `url(${imageSrc}`}} />
-                <div styleName="upload-button">
-                  Загрузить изображение
-                  <input styleName="upload-hidden"
-                         type="file"
-                         accept="image/jpeg,image/png,image/gif"
-                         onChange={this.onImageUpload}/>
-                </div>
-                {this.state.imageLoading &&
-                  <div styleName="image-loading">
-                    <LoaderComponent/>
-                  </div>
-                }
+          <div styleName="section-columns">
+            <div styleName='image-container'>
+              <div styleName="image"
+                   style={{backgroundImage: `url(${imageSrc}`}} />
+              <div styleName="upload-button">
+                Загрузить изображение
+                <input styleName="upload-hidden"
+                       type="file"
+                       accept="image/jpeg,image/png,image/gif"
+                       onChange={this.onImageUpload}/>
               </div>
+              {this.state.imageLoading &&
+                <div styleName="image-loading">
+                  <LoaderComponent/>
+                </div>
+              }
+            </div>
 
-              <div styleName="text">
-                <div styleName="field inline">
-                  <div styleName="field-title">Имя:</div>
-                  <div styleName="input-wrapper">
-                    <InputControl value={this.state.nameFirst}
-                                  onChange={this.onChangeNameFirst} />
-                  </div>
-                </div>
-                <div styleName="field inline">
-                  <div styleName="field-title">Фамилия:</div>
-                  <div styleName="input-wrapper">
-                    <InputControl value={this.state.nameLast}
-                                  onChange={this.onChangeNameLast} />
-                  </div>
-                </div>
-                <div styleName="field inline">
-                  <div styleName="field-title">Пол:</div>
-                  <div styleName="radio-wrapper">
-                    <RadioControl name="sex"
-                                  data="male"
-                                  value={this.state.sex}
-                                  label="мужской"
-                                  onChange={this.onChangeSex} />
-                  </div>
-                  <div styleName="radio-wrapper">
-                    <RadioControl name="sex"
-                                  data="female"
-                                  value={this.state.sex}
-                                  label="женский"
-                                  onChange={this.onChangeSex} />
-                  </div>
-                </div>
-                <div styleName="field inline">
-                  <div styleName="field-title">Дата рождения:</div>
-                  <div styleName="date-picker">
-                    <Flatpickr value={this.state.birthdate}
-                               options={{
-                                 locale: Russian,
-                                 formatDate: getTextDate,
-                                 maxDate: this.now
-                               }}
-                               onChange={this.onChangeBirthdate} />
-                  </div>
+            <div styleName="text">
+              <div styleName="field inline">
+                <div styleName="field-title">Имя:</div>
+                <div styleName="input-wrapper">
+                  <InputControl value={this.state.nameFirst}
+                                onChange={this.onChangeNameFirst} />
                 </div>
               </div>
-            </div>
-            <div styleName="buttons-wrapper">
-              <ButtonControl type="submit"
-                             disabled={!this.state.dirtyData || this.state.errorData}
-                             value="Обновить личные данные"/>
-            </div>
-            <div styleName="field-success">
-              {this.state.successData}
-            </div>
-            <div styleName="field-error">
-              {this.state.errorData}
-            </div>
-          </form>
-
-          <div styleName="section">
-            <div styleName="section-header">Населённый пункт</div>
-            <div styleName="input-wrapper">
-              <InputControl value={location ? location.main : "Не выбран"}
-                            disabled={true} />
-            </div>
-            <div styleName="buttons-wrapper">
-              <ButtonControl onClick={this.onChangeLocation}
-                             value="Изменить"/>
+              <div styleName="field inline">
+                <div styleName="field-title">Фамилия:</div>
+                <div styleName="input-wrapper">
+                  <InputControl value={this.state.nameLast}
+                                onChange={this.onChangeNameLast} />
+                </div>
+              </div>
+              <div styleName="field inline">
+                <div styleName="field-title">Пол:</div>
+                <div styleName="radio-wrapper">
+                  <RadioControl name="sex"
+                                data="male"
+                                value={this.state.sex}
+                                label="мужской"
+                                onChange={this.onChangeSex} />
+                </div>
+                <div styleName="radio-wrapper">
+                  <RadioControl name="sex"
+                                data="female"
+                                value={this.state.sex}
+                                label="женский"
+                                onChange={this.onChangeSex} />
+                </div>
+              </div>
+              <div styleName="field inline">
+                <div styleName="field-title">Дата рождения:</div>
+                <div styleName="date-picker">
+                  <Flatpickr value={this.state.birthdate}
+                             options={{
+                               locale: Russian,
+                               formatDate: getTextDate,
+                               maxDate: this.now
+                             }}
+                             onChange={this.onChangeBirthdate} />
+                </div>
+              </div>
             </div>
           </div>
+          <div styleName="buttons-wrapper">
+            <ButtonControl type="submit"
+                           disabled={!this.state.dirtyData || this.state.errorData}
+                           value="Обновить личные данные"/>
+          </div>
+          <div styleName="field-success">
+            {this.state.successData}
+          </div>
+          <div styleName="field-error">
+            {this.state.errorData}
+          </div>
+        </form>
 
-          <form styleName="section" onSubmit={this.onSaveEmail}>
-            <div styleName="section-header">Email</div>
-            <div styleName="field">
-              <div styleName="field-title">Email</div>
-              <div styleName="input-wrapper">
-                <InputControl value={this.state.emailNew}
-                              onChange={this.onChangeEmail} />
-              </div>
-            </div>
-            <div styleName="buttons-wrapper">
-              <ButtonControl type="submit"
-                             disabled={!this.state.dirtyEmail || this.state.errorEmail}
-                             value="Изменить email"/>
-            </div>
-            {this.state.successEmailState &&
-              <div styleName="field-success">
-                <div>
-                  Ваш email был изменён. Мы отправили вам письмо со ссылкой подтверждения. До подтверждения будет использовать ваш старый email <b>{this.state.email}</b>.
-                </div>
-                <div styleName="field-success-resend" onClick={this.resendVerification}>
-                  Отправить подтверждение повторно
-                </div>
-              </div>
-            }
-            <div styleName="field-error">
-              {this.state.errorEmail}
-            </div>
-          </form>
-
-          <form styleName="section" onSubmit={this.onSavePassword}>
-            <div styleName="section-header">Изменение пароля</div>
-            <div styleName="field">
-              <div styleName="field-title">Введите текущий пароль</div>
-              <div styleName="input-wrapper">
-                <InputControl inputType="password"
-                              value={this.state.passwordOld}
-                              onChange={this.onChangePasswordOld} />
-              </div>
-            </div>
-            <div styleName="field">
-              <div styleName="field-title">Введите новый пароль</div>
-              <div styleName="input-wrapper">
-                <InputControl inputType="password"
-                              value={this.state.password}
-                              onChange={this.onChangePassword} />
-              </div>
-            </div>
-            <div styleName="field">
-              <div styleName="field-title">Введите новый пароль повторно</div>
-              <div styleName="input-wrapper">
-                <InputControl inputType="password"
-                              value={this.state.passwordConfirm}
-                              onChange={this.onChangePasswordConfirm} />
-              </div>
-            </div>
-            <div styleName="buttons-wrapper">
-              <ButtonControl type="submit"
-                             disabled={!this.state.dirtyPassword || this.state.errorPassword}
-                             value="Изменить пароль"/>
-            </div>
-            <div styleName="field-success">
-              {this.state.successPassword}
-            </div>
-            <div styleName="field-error">
-              {this.state.errorPassword}
-            </div>
-          </form>
+        <div styleName="section">
+          <div styleName="section-header">Населённый пункт</div>
+          <div styleName="input-wrapper">
+            <InputControl value={location ? location.main : "Не выбран"}
+                          disabled={true} />
+          </div>
+          <div styleName="buttons-wrapper">
+            <ButtonControl onClick={this.onChangeLocation}
+                           value="Изменить"/>
+          </div>
         </div>
-      </div>
+
+        <form styleName="section" onSubmit={this.onSaveEmail}>
+          <div styleName="section-header">Email</div>
+          <div styleName="field">
+            <div styleName="field-title">Email</div>
+            <div styleName="input-wrapper">
+              <InputControl value={this.state.emailNew}
+                            onChange={this.onChangeEmail} />
+            </div>
+          </div>
+          <div styleName="buttons-wrapper">
+            <ButtonControl type="submit"
+                           disabled={!this.state.dirtyEmail || this.state.errorEmail}
+                           value="Изменить email"/>
+          </div>
+          {this.state.successEmailState &&
+            <div styleName="field-success">
+              <div>
+                Ваш email был изменён. Мы отправили вам письмо со ссылкой подтверждения. До подтверждения будет использовать ваш старый email <b>{this.state.email}</b>.
+              </div>
+              <div styleName="field-success-resend" onClick={this.resendVerification}>
+                Отправить подтверждение повторно
+              </div>
+            </div>
+          }
+          <div styleName="field-error">
+            {this.state.errorEmail}
+          </div>
+        </form>
+
+        <form styleName="section" onSubmit={this.onSavePassword}>
+          <div styleName="section-header">Изменение пароля</div>
+          <div styleName="field">
+            <div styleName="field-title">Введите текущий пароль</div>
+            <div styleName="input-wrapper">
+              <InputControl inputType="password"
+                            value={this.state.passwordOld}
+                            onChange={this.onChangePasswordOld} />
+            </div>
+          </div>
+          <div styleName="field">
+            <div styleName="field-title">Введите новый пароль</div>
+            <div styleName="input-wrapper">
+              <InputControl inputType="password"
+                            value={this.state.password}
+                            onChange={this.onChangePassword} />
+            </div>
+          </div>
+          <div styleName="field">
+            <div styleName="field-title">Введите новый пароль повторно</div>
+            <div styleName="input-wrapper">
+              <InputControl inputType="password"
+                            value={this.state.passwordConfirm}
+                            onChange={this.onChangePasswordConfirm} />
+            </div>
+          </div>
+          <div styleName="buttons-wrapper">
+            <ButtonControl type="submit"
+                           disabled={!this.state.dirtyPassword || this.state.errorPassword}
+                           value="Изменить пароль"/>
+          </div>
+          <div styleName="field-success">
+            {this.state.successPassword}
+          </div>
+          <div styleName="field-error">
+            {this.state.errorPassword}
+          </div>
+        </form>
+      </ContainerComponent>
     );
   }
 }

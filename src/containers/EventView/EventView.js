@@ -11,6 +11,7 @@ import {MODE_REG} from "components/modals/SignModal/SignModal";
 import {getEventDateTime, getMembersNumber} from "utils/strings";
 import {isMeEventMember} from "utils/data";
 
+import ContainerComponent from 'components/elements/ContainerComponent/ContainerComponent';
 import LoaderComponent from "components/elements/LoaderComponent/LoaderComponent";
 import ButtonControl from "components/elements/ButtonControl/ButtonControl";
 
@@ -128,17 +129,12 @@ class EventView extends Component {
     const isOwner = userData && event.owner.origin.id == userData.origin.id;
 
     return (
-      <div styleName="EventView">
+      <ContainerComponent title={event.name}>
         <Helmet>
           <title>{event.name} — BrainyDo</title>
         </Helmet>
 
-        <div styleName="background"></div>
-        <div styleName="header">
-          <div styleName="title">{event.name}</div>
-        </div>
-
-        <div styleName='content'>
+        <div styleName="content">
           <div styleName="image"
                style={{backgroundImage: `url(${imageSrc}`}} />
 
@@ -191,7 +187,7 @@ class EventView extends Component {
             </div>
           </div>
         </div>
-      </div>
+      </ContainerComponent>
     );
   }
 }

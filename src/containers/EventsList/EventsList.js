@@ -7,6 +7,7 @@ import {Helmet} from "react-helmet-async";
 import {showEvents, joinEvent, leaveEvent} from "ducks/events";
 import {FilterEventData, FILTER_DATE_FUTURE, FILTER_REGION_VALUE} from "models/EventData";
 
+import ContainerComponent from 'components/elements/ContainerComponent/ContainerComponent';
 import EventCard from 'components/main/EventsList/EventCard/EventCard';
 import EventFilterComponent from 'components/main/EventsList/EventFilterComponent/EventFilterComponent';
 import LoaderComponent from "components/elements/LoaderComponent/LoaderComponent";
@@ -109,40 +110,32 @@ class EventsList extends Component {
     const {joinEvent, leaveEvent} = this.props.eventsActions;
 
     return (
-      <div styleName="EventsList">
+      <ContainerComponent title="Список событий">
         <Helmet>
           <title>Список событий — BrainyDo</title>
         </Helmet>
 
-        <div styleName="background"></div>
-        <div styleName="header">
-          <div styleName="title">Список событий</div>
-        </div>
-
-        <div styleName='content'>
-          <EventFilterComponent ref={elm => this.filterComp = elm}
-                                onApply={this.onFilterChange}
-                                startFilter={this.startFilter}
-                                hasAge={userData.birthdate} />
-          {pending ?
-            <div styleName="loader">
-              <LoaderComponent />
-            </div>
+        <EventFilterComponent ref={elm => this.filterComp = elm}
+                              onApply={this.onFilterChange}
+                              startFilter={this.startFilter}
+                              hasAge={userData.birthdate} />
+        {pending ?
+          <div styleName="loader">
+            <LoaderComponent />
+          </div>
+        :
+          (!!events.length ?
+            events.map(event =>
+              <EventCard key={event.origin.id}
+                         event={event}
+                         userData={userData}
+                         joinEvent={joinEvent}
+                         leaveEvent={leaveEvent}
+                         onTagClick={this.onTagClick} />)
           :
-            (!!events.length ?
-              events.map(event =>
-                <EventCard key={event.origin.id}
-                           event={event}
-                           userData={userData}
-                           joinEvent={joinEvent}
-                           leaveEvent={leaveEvent}
-                           onTagClick={this.onTagClick} />)
-            :
-              <div styleName="caption-not-found">События не найдены</div>)
-          }
-
-        </div>
-      </div>
+            <div styleName="caption-not-found">События не найдены</div>)
+        }
+      </ContainerComponent>
     );
   }
 }

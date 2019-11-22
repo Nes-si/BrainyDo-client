@@ -1,103 +1,67 @@
-.EventView
-  position: relative
-  width: 100%
-  max-width: 800px
-  margin-top: 40px
+.content
+  display: flex
+  align-items: flex-start
 
-  .background
-    position: absolute
-    width: 100%
-    height: 100%
+  .image
+    flex-shrink: 0
+    width: 150px
+    height: 150px
+    margin-right: 30px
 
-    background: #fff
-    border-radius: 5px
-    box-shadow: 0 2px 4px 0 rgba(230, 230, 230, 1)
+    background-repeat: no-repeat
+    background-position: center
+    background-size: cover
 
-  .header
-    position: relative
-    min-height: 55px
+  .text
+    padding: 0
+    width: 600px
 
-    display: flex
-    flex-flow: column nowrap
-    justify-content: center
-    align-items: center
+    .description
+      margin-top: 15px
 
-    border-bottom: 1px solid #E5E5E5
-    text-align: center
+    .cost
+      margin-top: 15px
 
-    .title
-      text-align: center
-      font-size: 20px
+    .date
+      margin-top: 15px
 
-
-  .content
-    position: relative
-    width: 100%
-    padding: 50px
-
-    display: flex
-    align-items: flex-start
-
-    .image
-      flex-shrink: 0
-      width: 150px
-      height: 150px
-      margin-right: 30px
-
-      background-repeat: no-repeat
-      background-position: center
-      background-size: cover
-
-    .text
+    .location
       padding: 0
-      width: 600px
 
-      .description
+      .place
         margin-top: 15px
 
-      .cost
+      .map
         margin-top: 15px
+        width: 100%
+        height: 300px
 
-      .date
-        margin-top: 15px
+    .tags
+      margin-top: 15px
+      padding: 2px 10px
 
-      .location
-        padding: 0
+      display: flex
+      flex-wrap: wrap
 
-        .place
-          margin-top: 15px
+      background: #fff
 
-        .map
-          margin-top: 15px
-          width: 100%
-          height: 300px
+      .tag
+        margin-right: 10px
+        padding: 5px 10px
 
-      .tags
-        margin-top: 15px
-        padding: 2px 10px
-
-        display: flex
-        flex-wrap: wrap
-
-        background: #fff
-
-        .tag
-          margin-right: 10px
-          padding: 5px 10px
-
-          background: #deeefc
-          border: 1px solid #c0d2f5
-          border-radius: 14px
+        background: #deeefc
+        border: 1px solid #c0d2f5
+        border-radius: 14px
 
 
-      .members
-        margin-top: 15px
-        display: flex
-        align-items: center
-        flex-wrap: wrap
+    .members
+      margin-top: 15px
+      display: flex
+      align-items: center
+      flex-wrap: wrap
 
-        .member-image
-          margin-left: 20px
+      .member-image
+        margin-left: 20px
 
-      .button-wrapper
-        margin-top: 15px
+    .button-wrapper
+      margin-top: 15px

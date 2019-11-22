@@ -1,161 +1,125 @@
-.SettingsView
-  position: relative
+.section
   width: 100%
-  max-width: 1000px
   margin-top: 40px
 
-  .background
-    position: absolute
-    height: 100%
-    width: 100%
-    background: #fff
-    border-radius: 5px
-    box-shadow: 0 2px 4px 0 rgba(230, 230, 230, 1)
+  &-header
+    font-size: 18px
+    font-weight: bold
 
-  .header
+  &-columns
     position: relative
-    min-height: 55px
+    width: 100%
+    margin-top: 30px
 
     display: flex
-    flex-flow: column nowrap
-    justify-content: center
-    align-items: center
+    align-items: flex-start
 
-    border-bottom: 1px solid #E5E5E5
-    text-align: center
+    .image-container
+      position: relative
+      margin-right: 30px
 
-    .title
-      text-align: center
-      font-size: 20px
+      .image
+        width: 150px
+        height: 150px
+        background-repeat: no-repeat
+        background-position: center
+        background-size: cover
 
-
-  .content
-    position: relative
-    width: 100%
-    padding: 50px
-
-    .section
-      width: 100%
-      margin-top: 40px
-
-      &-header
-        font-size: 18px
-        font-weight: bold
-
-      &-columns
+      .upload-button
         position: relative
-        width: 100%
-        margin-top: 30px
+        height: 40px
+        padding: 0 15px
 
         display: flex
-        align-items: flex-start
+        justify-content: center
+        align-items: center
 
-        .image-container
-          position: relative
-          margin-right: 30px
+        background-image: linear-gradient(-180deg, #658ad2 0%, #476a9e 150%)
+        box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.15)
+        border-radius: 2px
+        border: none
 
-          .image
-            width: 150px
-            height: 150px
-            background-repeat: no-repeat
-            background-position: center
-            background-size: cover
+        text-align: center
+        font-weight: bold
+        color: #FFFFFF
 
-          .upload-button
-            position: relative
-            height: 40px
-            padding: 0 15px
+        cursor: pointer
 
-            display: flex
-            justify-content: center
-            align-items: center
-
-            background-image: linear-gradient(-180deg, #658ad2 0%, #476a9e 150%)
-            box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.15)
-            border-radius: 2px
-            border: none
-
-            text-align: center
-            font-weight: bold
-            color: #FFFFFF
-
-            cursor: pointer
-
-          .upload-hidden
-            position: absolute
-            left: 0
-            top: 0
-            width: 100%
-            height: 100%
-            opacity: 0
-            cursor: pointer
-
-          .image-loading
-            position: absolute
-            top: 0
-            left: 0
-            width: 100%
-            height: 100%
-            display: flex
-            justify-content: center
-            align-items: center
-
-            background: rgba(255, 255, 255, .6)
-
-        .text
-          padding: 0
-          flex-grow: 1
-
-
-    .section:first-child
-      margin-top: 0
-
-    .field
-      width: 100%
-      margin-top: 15px
-
-      text-align: left
-
-      &-title,
-      &-error,
-      &-success
-        line-height: 30px
-
-      &-title
-        margin-right: 20px
-
-      &-error
-        color: #DD5555
-
-      &-success
-        color: #5DAD47
-
-        &-resend
-          cursor: pointer
-          text-decoration: underline
-
-      &-value
-        margin-bottom: 10px
-        font-size: 18px
-
-      .input-wrapper
-        display: flex
+      .upload-hidden
+        position: absolute
+        left: 0
+        top: 0
         width: 100%
-        flex-flow: column nowrap
+        height: 100%
+        opacity: 0
+        cursor: pointer
 
-    .inline
-      display: flex
-      align-items: center
+      .image-loading
+        position: absolute
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+        display: flex
+        justify-content: center
+        align-items: center
 
-    .buttons-wrapper
-      margin-top: 20px
+        background: rgba(255, 255, 255, .6)
 
-      display: flex
-      flex-flow: row nowrap
-      justify-content: flex-end
+    .text
+      padding: 0
+      flex-grow: 1
 
-    .radio-wrapper
-      display: inline-block
 
-    .date-picker
-      width: 100px
+.section:first-child
+  margin-top: 0
+
+.field
+  width: 100%
+  margin-top: 15px
+
+  text-align: left
+
+  &-title,
+  &-error,
+  &-success
+    line-height: 30px
+
+  &-title
+    margin-right: 20px
+
+  &-error
+    color: #DD5555
+
+  &-success
+    color: #5DAD47
+
+    &-resend
+      cursor: pointer
+      text-decoration: underline
+
+  &-value
+    margin-bottom: 10px
+    font-size: 18px
+
+  .input-wrapper
+    display: flex
+    width: 100%
+    flex-flow: column nowrap
+
+.inline
+  display: flex
+  align-items: center
+
+.buttons-wrapper
+  margin-top: 20px
+
+  display: flex
+  flex-flow: row nowrap
+  justify-content: flex-end
+
+.radio-wrapper
+  display: inline-block
+
+.date-picker
+  width: 100px

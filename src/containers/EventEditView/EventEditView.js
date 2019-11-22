@@ -17,6 +17,7 @@ import {convertDataUnits, BYTES, M_BYTES} from "utils/common";
 import {getTextDateTime, filterSpecials} from 'utils/strings';
 import {transformDadataAddress, transformDadataSettlement} from 'utils/dadata';
 
+import ContainerComponent from 'components/elements/ContainerComponent/ContainerComponent';
 import ButtonControl from "components/elements/ButtonControl/ButtonControl";
 import InputControl from "components/elements/InputControl/InputControl";
 import DropdownControl from "components/elements/DropdownControl/DropdownControl";
@@ -417,7 +418,7 @@ class EventEditView extends Component {
     const title = this.state.eventId ? 'Изменение события' : 'Новое событие';
 
     return (
-      <div styleName="EventEditView">
+      <ContainerComponent title={title}>
         <Helmet>
           <title>{title} — BrainyDo</title>
         </Helmet>
@@ -425,12 +426,7 @@ class EventEditView extends Component {
         <Prompt when={this.state.dirty}
                 message="У вас остались несохранённые изменения. Покинуть страницу?" />
 
-        <div styleName="background"></div>
-        <div styleName="header">
-          <div styleName="title">{title}</div>
-        </div>
-
-        <div styleName='content'>
+        <div styleName="content">
           <div styleName='image-container'>
             <div styleName="image"
                  style={{backgroundImage: `url(${imageSrc}`}} />
@@ -602,7 +598,7 @@ class EventEditView extends Component {
             <LoaderComponent/>
           </div>
         }
-      </div>
+      </ContainerComponent>
     );
   }
 }
