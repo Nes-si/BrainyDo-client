@@ -29,7 +29,7 @@ export const OK                 = 'app/user/OK';
 
 
 export function register(email, password) {
-  return dispatch => {
+  return async dispatch => {
     dispatch({
       type: REGISTER_REQUEST,
       email,
@@ -43,92 +43,87 @@ export function register(email, password) {
     user.set("password", password);
     user.set("location", loc);
 
-    send(user.signUp())
+    try {
+      await send(user.signUp());
 
-      .then(() => {
-        dispatch({
-          type: REGISTER_RESPONSE,
-          status: OK
-        });
-      })
-      
-      .catch(error => {
-        let status = ERROR_OTHER;
-        switch (error.code) {
-          case PARSE_ERROR_CODE__USERNAME_TAKEN:
-          case PARSE_ERROR_CODE__EMAIL_TAKEN:
-            status = ERROR_USER_EXISTS; break;
-        }
-
-        dispatch({
-          type: REGISTER_RESPONSE,
-          status
-        });
+      dispatch({
+        type: REGISTER_RESPONSE,
+        status: OK
       });
+
+    } catch(error) {
+      let status = ERROR_OTHER;
+      switch (error.code) {
+        case PARSE_ERROR_CODE__USERNAME_TAKEN:
+        case PARSE_ERROR_CODE__EMAIL_TAKEN:
+          status = ERROR_USER_EXISTS;
+          break;
+      }
+
+      dispatch({
+        type: REGISTER_RESPONSE,
+        status
+      });
+    }
   };
 }
 
 export function login(email, password) {
-  return dispatch => {
+  return async dispatch => {
     dispatch({
       type: LOGIN_REQUEST,
       email,
       password
     });
 
-    send(Parse.User.logIn(email, password))
+    try {
+      await send(Parse.User.logIn(email, password));
 
-      .then(() => {
-        const userData = new UserData();
-        dispatch({
-          type: LOGIN_RESPONSE,
-          status: OK,
-          authorized: true,
-          userData
-        });
-      })
-      
-      .catch(error => {
-        let status = ERROR_OTHER;
-        switch (error.code) {
-          case PARSE_ERROR_CODE__OBJECT_NOT_FOUND:  status = ERROR_WRONG_PASS; break;
-          case PARSE_ERROR_CODE__EMAIL_NOT_FOUND:   status = ERROR_UNVERIF;    break;
-        }
-  
-        dispatch({
-          type: LOGIN_RESPONSE,
-          status
-        });
+      const userData = new UserData();
+      dispatch({
+        type: LOGIN_RESPONSE,
+        status: OK,
+        authorized: true,
+        userData
       });
+
+    } catch (error) {
+      let status = ERROR_OTHER;
+      switch (error.code) {
+        case PARSE_ERROR_CODE__OBJECT_NOT_FOUND:  status = ERROR_WRONG_PASS; break;
+        case PARSE_ERROR_CODE__EMAIL_NOT_FOUND:   status = ERROR_UNVERIF;    break;
+      }
+
+      dispatch({
+        type: LOGIN_RESPONSE,
+        status
+      });
+    }
   };
 }
 
 export function getLocalStorage() {
-  return dispatch => {
-    let loc;
-    detectLocation()
-      .catch(e => {})
-      .then(_loc => {
-        loc = _loc;
-        const currentUser = Parse.User.current();
-        if (!currentUser || !currentUser.get('sessionToken')) {
-          dispatch({type: LOGIN_RESPONSE, loc});
-          return;
-        }
+  return async dispatch => {
+    const loc = await detectLocation();
+    const currentUser = Parse.User.current();
+    if (!currentUser || !currentUser.get('sessionToken')) {
+      dispatch({type: LOGIN_RESPONSE, loc});
+      return;
+    }
 
-        return send(currentUser.fetch());
-      })
-      .then(() => {
-        const userData = new UserData();
-        dispatch({
-          type: LOGIN_RESPONSE,
-          status: OK,
-          authorized: true,
-          userData,
-          loc
-        });
-      })
-      .catch(() => dispatch({type: LOGIN_RESPONSE, loc}));
+    try {
+      await send(currentUser.fetch());
+      const userData = new UserData();
+      dispatch({
+        type: LOGIN_RESPONSE,
+        status: OK,
+        authorized: true,
+        userData,
+        loc
+      });
+    } catch (error) {
+      dispatch({type: LOGIN_RESPONSE, loc});
+    }
   };
 }
 
@@ -159,29 +154,31 @@ export function updateEmail(email) {
   if (!email)
     return null;
   
-  return dispatch => {
+  return async dispatch => {
     const userData = Parse.User.current();
-    send(userData.requestEmailChange(email))
-      .then(() => {
-        dispatch({
-          type: UPDATE_EMAIL,
-          status: OK,
-          email
-        });
-      })
-      .catch(error => {
-        let status = ERROR_OTHER;
-        switch (error.code) {
-          case PARSE_ERROR_CODE__USERNAME_TAKEN:
-          case PARSE_ERROR_CODE__EMAIL_TAKEN:
-            status = ERROR_USER_EXISTS;
-            break;
-        }
-        dispatch({
-          type: UPDATE_EMAIL,
-          status
-        });
+
+    try {
+      await send(userData.requestEmailChange(email));
+
+      dispatch({
+        type: UPDATE_EMAIL,
+        status: OK,
+        email
       });
+
+    } catch (error) {
+      let status = ERROR_OTHER;
+      switch (error.code) {
+        case PARSE_ERROR_CODE__USERNAME_TAKEN:
+        case PARSE_ERROR_CODE__EMAIL_TAKEN:
+          status = ERROR_USER_EXISTS;
+          break;
+      }
+      dispatch({
+        type: UPDATE_EMAIL,
+        status
+      });
+    }
   };
 }
 
@@ -200,21 +197,21 @@ export function restorePassword(email) {
   if (!email)
     return null;
   
-  return dispatch => {
-    send(Parse.User.requestPasswordReset(email))
-      .then(result =>
-        dispatch({
-          type: RESTORE_PASSWORD,
-          status: OK,
-          result
-        })
-      )
-      .catch(error =>
-        dispatch({
-          type: RESTORE_PASSWORD,
-          status: ERROR_OTHER
-        })
-      );
+  return async dispatch => {
+    try {
+      const result = await send(Parse.User.requestPasswordReset(email));
+      dispatch({
+        type: RESTORE_PASSWORD,
+        status: OK,
+        result
+      });
+
+    } catch (error) {
+      dispatch({
+        type: RESTORE_PASSWORD,
+        status: ERROR_OTHER
+      });
+    }
   };
 }
 
@@ -227,27 +224,27 @@ export function resendVerEmail(email) {
       return null;
   }
   
-  return dispatch => {
-    send(fetch(config.serverURL + '/verificationEmailRequest', {
-      method: 'POST',
-      headers: {
-        'X-Parse-Application-Id': config.appId,
-        'X-Parse-REST-API-Key': config.RESTkey
-      },
-      body: JSON.stringify({email})
-    }))
-      .then(result =>
-        dispatch({
-          type: RESEND_VERIF,
-          status: OK
-        })
-      )
-      .catch(error =>
-        dispatch({
-          type: RESEND_VERIF,
-          status: ERROR_OTHER
-        })
-      );
+  return async dispatch => {
+    try {
+      await send(fetch(config.serverURL + '/verificationEmailRequest', {
+        method: 'POST',
+        headers: {
+          'X-Parse-Application-Id': config.appId,
+          'X-Parse-REST-API-Key': config.RESTkey
+        },
+        body: JSON.stringify({email})
+      }));
+      dispatch({
+        type: RESEND_VERIF,
+        status: OK
+      });
+
+    } catch (error) {
+      dispatch({
+        type: RESEND_VERIF,
+        status: ERROR_OTHER
+      });
+    }
   };
 }
 

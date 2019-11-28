@@ -285,7 +285,6 @@ export function init() {
     filterMy.members.onlyMy = true;
 
     const events = await requestEvents(filterMy);
-
     dispatch({
       type: INIT_END,
       events
@@ -298,6 +297,7 @@ export function showEvents(filter = {}) {
     dispatch({
       type: PENDING_START
     });
+    
     const events = await requestEvents(filter);
     dispatch({
       type: SHOW_EVENTS,
