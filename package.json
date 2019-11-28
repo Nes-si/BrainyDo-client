@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node build/server.js",
-    "bundle": "rimraf dist && webpack --config build/webpack.dev.config.js",
-    "build": "node build/build.js",
-    "localrun": "node build/local.run.js"
+    "start-dev": "node build/server.js",
+    "build-dev": "rimraf dist && webpack --config build/webpack.dev.config.js",
+    "build-prod": "node build/build.js",
+    "localrun-prod": "node build/local.run.js"
   },
   "bin": {
     "brainy_do": "./bin/brainy_do"
@@ -31,7 +31,6 @@
     "@babel/plugin-proposal-throw-expressions": "^7.2.0",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/plugin-syntax-import-meta": "^7.2.0",
-    "@babel/plugin-transform-regenerator": "^7.4.5",
     "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.6.3",
     "@babel/preset-react": "^7.6.3",
@@ -68,7 +67,6 @@
   },
   "peerDependencies": {},
   "dependencies": {
-    "@babel/polyfill": "^7.6.0",
     "@babel/runtime": "^7.6.3",
     "@hot-loader/react-dom": "^16.11.0",
     "classnames": "^2.2.6",
@@ -91,6 +89,7 @@
     "redux": "^4.0.4",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
+    "regenerator-runtime": "^0.13.3",
     "svg-inline-react": "^3.2.0",
     "webpack-hot-middleware": "^2.25.0",
     "whatwg-fetch": "^3.0.0"
