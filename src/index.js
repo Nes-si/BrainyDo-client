@@ -1,6 +1,6 @@
 import 'whatwg-fetch';
-
 import 'normalize.css';
+
 import './fonts.css';
 import './styles.global.sss';
 
