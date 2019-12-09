@@ -24,9 +24,9 @@ export default class InputNumberControl extends Component {
       return undefined;
 
     if (min !== undefined && min !== null && num < min)
-      num = this.min;
+      num = min;
     if (max !== undefined && max !== null && num > max)
-      num = this.max;
+      num = max;
     
     return num;
   }
