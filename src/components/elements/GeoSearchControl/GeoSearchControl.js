@@ -18,23 +18,13 @@ export const TYPE_ADDRESS = 'TYPE_ADDRESS';
 @CSSModules(styles, {allowMultiple: true})
 export default class GeoSearchControl extends Component {
   state = {
-    value: '',
+    value: this.props.value ? this.props.value : '',
     listVis: false
   };
   list = [];
-  type = TYPE_SETTLEMENT;
+  type = this.props.type ? this.props.type : TYPE_SETTLEMENT;
   inputElm;
 
-
-  constructor(props) {
-    super(props);
-
-    const {type, value} = props;
-    if (type)
-      this.type = type;
-    if (value)
-      this.state.value = value;
-  }
 
   updateValue(value) {
     this.setState({value});
