@@ -8,7 +8,11 @@ module.exports = ({file, options, env}) => {
   };
 
   if (env == 'production')
-    res.plugins.unshift(require('cssnano'));
+    res.plugins.unshift(require('cssnano')({
+      preset: ['default', {
+        mergeRules: false
+      }]
+    }));
 
   if (file.extname === '.sss') {
     res.parser = 'sugarss';
