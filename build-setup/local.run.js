@@ -20,7 +20,7 @@ const configRESTkey   = program.RESTkey;
 
 const server = new express();
 
-server.use('/', express.static(path.resolve(__dirname, '../dist')));
+server.use('/', express.static(path.resolve(__dirname, '../build')));
 
 server.get('/brainy_do-config.json', (req, res) => {
   const response = {configServerURL, configAppId, configJSkey, configRESTkey};
@@ -28,7 +28,7 @@ server.get('/brainy_do-config.json', (req, res) => {
 });
 
 server.get('*', (req, res) =>
-  res.sendFile(path.resolve(__dirname, '../dist/index.html'))
+  res.sendFile(path.resolve(__dirname, '../build/index.html'))
 );
 
 server.listen(port, error => {

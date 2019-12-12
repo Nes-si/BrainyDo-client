@@ -21,4 +21,9 @@ let server = new WebpackDevServer(
   }
 );
 
-server.listen(port, 'localhost');
+server.listen(port, 'localhost', error => {
+  if (error) {
+    console.error(error);
+    return;
+  }
+});

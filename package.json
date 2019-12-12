@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start-dev": "node build/server.js",
-    "build-dev": "rimraf dist && webpack --config build/webpack.dev.config.js",
-    "build-prod": "node build/build.js",
-    "localrun-prod": "node build/local.run.js"
+    "start-dev": "node build-setup/server.js",
+    "build-dev": "rimraf build && webpack --config build-setup/webpack.dev-build.config.js",
+    "build-prod": "node build-setup/build.js",
+    "localrun-prod": "node build-setup/local.run.js"
   },
   "bin": {
     "brainy_do": "./bin/brainy_do"

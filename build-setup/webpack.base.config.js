@@ -5,10 +5,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   entry: ['index'],
   output: {
-    path: path.join(__dirname, '../dist/'),
+    path: path.join(__dirname, '../build/'),
     filename: '[name].js',
     publicPath: '/'
   },
+  target: 'web',
   resolve: {
     alias: {
       'react-dom': '@hot-loader/react-dom'
