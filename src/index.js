@@ -23,13 +23,17 @@ initApp();
 
 class Root extends Component {
   render () {
-    return <Provider store={store}>
-      <HelmetProvider>
-        <Router>
-          <App />
-        </Router>
-      </HelmetProvider>
-    </Provider>
+    return (
+      <React.StrictMode>
+        <Provider store={store}>
+          <HelmetProvider>
+            <Router>
+              <App />
+            </Router>
+          </HelmetProvider>
+        </Provider>
+      </React.StrictMode>
+    );
   }
 }
 
