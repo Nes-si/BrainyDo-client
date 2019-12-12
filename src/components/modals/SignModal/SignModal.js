@@ -5,7 +5,7 @@ import ButtonControl from 'components/elements/ButtonControl/ButtonControl';
 import ModalContainer from 'components/elements/ModalContainer/ModalContainer';
 import CheckboxControl from 'components/elements/CheckboxControl/CheckboxControl';
 import InputControl from 'components/elements/InputControl/InputControl';
-import {ERROR_USER_EXISTS, ERROR_WRONG_PASS, ERROR_UNVERIF, ERROR_OTHER, OK} from 'ducks/user';
+import {ERROR_USER_EXISTS, ERROR_WRONG_PASS, ERROR_WRONG_EMAIL_FORMAT, ERROR_UNVERIF, ERROR_OTHER, OK} from 'ducks/user';
 
 import styles from './SignModal.sss';
 
@@ -272,6 +272,21 @@ export default class SignModal extends Component {
 
 
       case MODE_REG:
+        let errorElm = null;
+        switch (this.state.error) {
+          case ERROR_USER_EXISTS:
+            errorElm = <div styleName="error">Этот email уже используется!</div>;
+            break;
+
+          case ERROR_WRONG_EMAIL_FORMAT:
+            errorElm = <div styleName="error">Неверный формат email!</div>;
+            break;
+
+          case ERROR_OTHER:
+            errorElm = <div styleName="error">Что-то пошло не так. Попробуйте позже.</div>;
+            break;
+        }
+
         content = (
           <form styleName="form" onSubmit={this.onReg}>
             {this.elmEmail}
@@ -286,9 +301,7 @@ export default class SignModal extends Component {
             </div>
 
             <div styleName="errors">
-              {this.state.error == ERROR_USER_EXISTS &&
-                <div styleName="error">Этот email уже используется!</div>
-              }
+              {errorElm}
             </div>
           </form>
         );

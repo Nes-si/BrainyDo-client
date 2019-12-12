@@ -5,7 +5,7 @@ import {UserData} from 'models/UserData';
 import {config} from 'utils/initialize';
 import {detectLocation} from 'utils/dadata';
 import {send, PARSE_ERROR_CODE__USERNAME_TAKEN, PARSE_ERROR_CODE__OBJECT_NOT_FOUND, PARSE_ERROR_CODE__EMAIL_NOT_FOUND,
-  PARSE_ERROR_CODE__EMAIL_TAKEN} from 'utils/server';
+  PARSE_ERROR_CODE__EMAIL_TAKEN, PARSE_ERROR_CODE__WRONG_EMAIL_FORMAT} from 'utils/server';
 
 
 export const LOGIN_REQUEST      = 'app/user/LOGIN_REQUEST';
@@ -21,11 +21,12 @@ export const RESTORE_PASSWORD   = 'app/user/RESTORE_PASSWORD';
 export const RESEND_VERIF       = 'app/user/RESEND_VERIF';
 export const RESET_STATUS       = 'app/user/RESET_STATUS';
 
-export const ERROR_USER_EXISTS  = 'app/user/ERROR_USER_EXISTS';
-export const ERROR_WRONG_PASS   = 'app/user/ERROR_WRONG_PASS';
-export const ERROR_UNVERIF      = 'app/user/ERROR_UNVERIF';
-export const ERROR_OTHER        = 'app/user/ERROR_OTHER';
-export const OK                 = 'app/user/OK';
+export const ERROR_USER_EXISTS        = 'app/user/ERROR_USER_EXISTS';
+export const ERROR_WRONG_EMAIL_FORMAT = 'app/user/ERROR_WRONG_EMAIL_FORMAT';
+export const ERROR_WRONG_PASS         = 'app/user/ERROR_WRONG_PASS';
+export const ERROR_UNVERIF            = 'app/user/ERROR_UNVERIF';
+export const ERROR_OTHER              = 'app/user/ERROR_OTHER';
+export const OK                       = 'app/user/OK';
 
 
 export function register(email, password) {
@@ -54,6 +55,10 @@ export function register(email, password) {
     } catch(error) {
       let status = ERROR_OTHER;
       switch (error.code) {
+        case PARSE_ERROR_CODE__WRONG_EMAIL_FORMAT:
+          status = ERROR_WRONG_EMAIL_FORMAT;
+          break;
+
         case PARSE_ERROR_CODE__USERNAME_TAKEN:
         case PARSE_ERROR_CODE__EMAIL_TAKEN:
           status = ERROR_USER_EXISTS;
