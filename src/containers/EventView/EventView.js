@@ -17,6 +17,9 @@ import ButtonControl from "components/elements/ButtonControl/ButtonControl";
 
 import styles from './EventView.sss';
 
+import ImageDefaultAvatarMini from 'assets/images/default-avatar-mini.png';
+import ImageEventEmpty from 'assets/images/event-empty.png';
+
 
 @CSSModules(styles, {allowMultiple: true})
 class EventView extends Component {
@@ -103,7 +106,7 @@ class EventView extends Component {
     const res = [];
     for (let i = 0; i < members.length; i++) {
       let member = members[i];
-      const image = member.imageMini ? member.imageMini.url() : require('assets/images/default-avatar-mini.png');
+      const image = member.imageMini ? member.imageMini.url() : ImageDefaultAvatarMini;
 
       res.push(<img styleName="member-image"
                     src={image}
@@ -121,7 +124,7 @@ class EventView extends Component {
     const dateStart = getEventDateTime(event.dateStart);
     const dateEnd = event.dateEnd ? getEventDateTime(event.dateEnd) : null;
 
-    const imageSrc = event.image ? event.image.url() : require('assets/images/event-empty.png');
+    const imageSrc = event.image ? event.image.url() : ImageEventEmpty;
 
     const isMember = isMeEventMember(event);
 

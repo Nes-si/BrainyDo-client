@@ -12,6 +12,8 @@ import {MODE_LOGIN, MODE_REG} from "components/modals/SignModal/SignModal";
 
 import styles from './Header.sss';
 
+import ImageLogo from 'assets/images/logo3.svg';
+
 
 @CSSModules(styles, {allowMultiple: true})
 class Header extends Component {
@@ -72,11 +74,10 @@ class Header extends Component {
       <div styleName="Header">
         <NavLink styleName="logo-link"
                  to="/">
-          <InlineSVG styleName="logo"
-                     src={require("assets/images/logo.svg")} />
+          <InlineSVG styleName="logo" src={ImageLogo} />
         </NavLink>
         {//<div styleName="logo">
-          //<img src={require("assets/images/logo.png")}/>
+          //<img src={ImageLogo}/>
         //</div>
         }
         {menu}

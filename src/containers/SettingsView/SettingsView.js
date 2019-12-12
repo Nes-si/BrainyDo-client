@@ -25,6 +25,8 @@ import LoaderComponent from "components/elements/LoaderComponent/LoaderComponent
 
 import styles from './SettingsView.sss';
 
+import ImageDefaultAvatar from 'assets/images/default-avatar.jpg';
+
 
 const CHG_DATA      = `CHG_DATA`;
 const CHG_EMAIL     = `CHG_EMAIL`;
@@ -269,7 +271,7 @@ class SettingsView extends Component {
   render() {
     const {location} = this.props.user.userData;
 
-    const imageSrc = this.state.image ? this.state.image.url() : require('assets/images/default-avatar.jpg');
+    const imageSrc = this.state.image ? this.state.image.url() : ImageDefaultAvatar;
 
     return (
       <ContainerComponent title="Настройки">

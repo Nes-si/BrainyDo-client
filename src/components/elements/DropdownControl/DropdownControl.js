@@ -7,6 +7,8 @@ import InputControl from 'components/elements/InputControl/InputControl';
 
 import styles from './DropdownControl.sss';
 
+import ImageArrowDown from 'assets/images/arrow-down.svg';
+
 
 @CSSModules(styles, {allowMultiple: true})
 export default class DropdownControl extends Component {
@@ -94,7 +96,7 @@ export default class DropdownControl extends Component {
           <div styleName="label">{label}</div>
         }
         <div styleName="input-wrapper">
-          <InlineSVG styleName={arrowClasses} src={require("assets/images/arrow-down.svg")} />
+          <InlineSVG styleName={arrowClasses} src={ImageArrowDown} />
           <input styleName={inputClasses}
                  value={value}
                  onClick={this.onInputClick}

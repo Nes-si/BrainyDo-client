@@ -6,6 +6,7 @@ import ButtonControl from "components/elements/ButtonControl/ButtonControl";
 
 import styles from './CalendarComponent.sss';
 
+import ImageEvent1 from 'assets/images/events/event1.png';
 
 
 @CSSModules(styles, {allowMultiple: true})
@@ -80,7 +81,7 @@ export default class CalendarComponent extends Component {
                     (!onlyOwn || event.owner.origin.id == userData.origin.id)
                   ))
                   .map(event => {
-                    const image = event.image ? event.image.url() : require('assets/images/events/event1.png');
+                    const image = event.image ? event.image.url() : ImageEvent1;
 
                     return (
                       <Link styleName="event-icon"

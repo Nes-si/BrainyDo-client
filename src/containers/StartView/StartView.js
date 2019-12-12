@@ -12,6 +12,11 @@ import {showModal} from 'ducks/nav';
 
 import styles from './StartView.sss';
 
+import ImageEvent1 from 'assets/images/events/event1.png';
+import ImageEvent2 from 'assets/images/events/event2.png';
+import ImageEvent3 from 'assets/images/events/event3.png';
+import ImageArrowDown from 'assets/images/arrow-down.svg';
+
 
 const ScrollLink = ScrollAnim.Link;
 const ScrollElement = ScrollAnim.Element;
@@ -102,9 +107,9 @@ class StartView extends Component {
     const eventTomorrow = eventsTomorrow[eventTomorrowNum];
     const eventNext = eventsNext[eventNextNum];
 
-    const imageToday    = eventToday    ? eventToday.image.url()    : require('assets/images/events/event1.png');
-    const imageTomorrow = eventTomorrow ? eventTomorrow.image.url() : require('assets/images/events/event2.png');
-    const imageNext     = eventNext     ? eventNext.image.url()     : require('assets/images/events/event3.png');
+    const imageToday    = eventToday    ? eventToday.image.url()    : ImageEvent1;
+    const imageTomorrow = eventTomorrow ? eventTomorrow.image.url() : ImageEvent2;
+    const imageNext     = eventNext     ? eventNext.image.url()     : ImageEvent3;
 
     return (
       <div styleName="StartView">
@@ -148,7 +153,7 @@ class StartView extends Component {
 
           <ScrollLink styleName="arrow-down-wrapper" to="page1">
             <InlineSVG styleName="arrow-down"
-                       src={require("assets/images/arrow-down.svg")}
+                       src={ImageArrowDown}
                        onClick={this.scrollDown} />
           </ScrollLink>
         </section>

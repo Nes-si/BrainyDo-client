@@ -10,6 +10,9 @@ import LoaderComponent from "components/elements/LoaderComponent/LoaderComponent
 
 import styles from './EventCard.sss';
 
+import ImageDefaultAvatarMini from 'assets/images/default-avatar-mini.png';
+import ImageEventEmpty from 'assets/images/event-empty.png';
+
 
 @CSSModules(styles, {allowMultiple: true})
 export default class EventCard extends Component {
@@ -39,7 +42,7 @@ export default class EventCard extends Component {
     const res = [];
     for (let i = 0; i < members.length && i < 6; i++) {
       let member = members[i];
-      const image = member.imageMini ? member.imageMini.url() : require('assets/images/default-avatar-mini.png');
+      const image = member.imageMini ? member.imageMini.url() : ImageDefaultAvatarMini;
 
       res.push(<img styleName="member-image"
                     title={getVisibleMemberName(member)}
@@ -58,7 +61,7 @@ export default class EventCard extends Component {
     const dateStart = getEventDateTime(event.dateStart, true);
     const dateEnd = event.dateEnd ? getEventDateTime(event.dateEnd) : null;
 
-    const imageSrc = event.image ? event.image.url() : require('assets/images/event-empty.png');
+    const imageSrc = event.image ? event.image.url() : ImageEventEmpty;
 
     const isMember = isMeEventMember(event);
     const isOwner = event.owner.origin.id == userData.origin.id;

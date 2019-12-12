@@ -27,6 +27,8 @@ import GeoSearchControl, {TYPE_ADDRESS, TYPE_SETTLEMENT} from "components/elemen
 
 import styles from './EventEditView.sss';
 
+import ImageEventEmpty from 'assets/images/event-empty.png';
+
 
 @CSSModules(styles, {allowMultiple: true})
 class EventEditView extends Component {
@@ -411,7 +413,7 @@ class EventEditView extends Component {
     if (!this.state.event)
       return <LoaderComponent />;
 
-    const imageSrc = this.state.image ? this.state.image.url() : require('assets/images/event-empty.png');
+    const imageSrc = this.state.image ? this.state.image.url() : ImageEventEmpty;
 
     const errorRequired = this.state.errorNameRequired || this.state.errorSettlementRequired;
 
