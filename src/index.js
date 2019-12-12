@@ -24,7 +24,7 @@ initApp();
 class Root extends Component {
   render () {
     return (
-      <React.StrictMode>
+      //<React.StrictMode>
         <Provider store={store}>
           <HelmetProvider>
             <Router>
@@ -32,7 +32,7 @@ class Root extends Component {
             </Router>
           </HelmetProvider>
         </Provider>
-      </React.StrictMode>
+      //</React.StrictMode>
     );
   }
 }
