@@ -4,15 +4,17 @@ import InputControl from "components/elements/InputControl/InputControl";
 
 
 export default class InputNumberControl extends Component {
-  state = {value: this.props.value};
+  state = {
+    value: this.props.value,
+    valueParsed: InputNumberControl.parseValue(this.props.value, this.props)
+  };
 
 
   static getDerivedStateFromProps(props, state) {
     const valueParsed = InputNumberControl.parseValue(props.value, props);
-    const valueParsedPrev = InputNumberControl.parseValue(state.value, props);
-    if (valueParsed === valueParsedPrev)
+    if (valueParsed === state.valueParsed)
       return null;
-    return {value: valueParsed};
+    return {value: valueParsed, valueParsed};
   }
   
   static parseValue(value, props) {
@@ -35,18 +37,18 @@ export default class InputNumberControl extends Component {
     value = value.replace(/[^\d.,]/g, '');
     value = value.replace(/,/g, '.');
     this.setState({value});
-  };
-  
-  onBlur = () => {
-    const valueParsed = InputNumberControl.parseValue(this.state.value, this.props);
-    this.setState({value: valueParsed});
+
+    const valueParsed = InputNumberControl.parseValue(value, this.props);
+    if (valueParsed === this.state.valueParsed)
+      return;
+    this.setState({valueParsed});
+
     this.props.onChange(valueParsed);
   };
 
-  componentWillUnmount() {
-    const valueParsed = InputNumberControl.parseValue(this.state.value, this.props);
-    this.props.onChange(valueParsed);
-  }
+  onBlur = () => {
+    this.setState({value: this.state.valueParsed});
+  };
 
   render() {
     let {label, placeholder, readOnly, autoFocus, onKeyDown, DOMRef, icon} = this.props;
