@@ -93,28 +93,30 @@ export default class DropdownControl extends Component {
         {label &&
           <div styleName="label">{label}</div>
         }
-        <InlineSVG styleName={arrowClasses} src={require("assets/images/arrow-down.svg")} />
-        <input styleName={inputClasses}
-               value={value}
-               onClick={this.onInputClick}
-               readOnly />
-        {this.state.listVis &&
-          <div styleName="items">
-            {this.state.list.map(item => {
-              const styleName = classNames({
-                'item': true,
-                'empty': !item
-              });
-              return (
-                <div onMouseDown={e => this.onItemClick(item)}
-                     styleName={styleName}
-                     key={item}>
-                  {item ? item : '(empty)'}
-                </div>
-              );
-            })}
-          </div>
-        }
+        <div styleName="input-wrapper">
+          <InlineSVG styleName={arrowClasses} src={require("assets/images/arrow-down.svg")} />
+          <input styleName={inputClasses}
+                 value={value}
+                 onClick={this.onInputClick}
+                 readOnly />
+          {this.state.listVis &&
+            <div styleName="items">
+              {this.state.list.map(item => {
+                const styleName = classNames({
+                  'item': true,
+                  'empty': !item
+                });
+                return (
+                  <div onMouseDown={e => this.onItemClick(item)}
+                       styleName={styleName}
+                       key={item}>
+                    {item ? item : '(empty)'}
+                  </div>
+                );
+              })}
+            </div>
+          }
+        </div>
       </div>
     );
   }
