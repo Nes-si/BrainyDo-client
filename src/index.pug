@@ -6,8 +6,12 @@ html(lang="en")
     title BrainyDo
     meta(name="description" content="Some trash")
     meta(name="viewport" content="width=device-width, initial-scale=1")
-    link(rel='icon' href=require('assets/images/logo.png'))
+    link(rel="apple-touch-icon" sizes="180x180" href="/assets/images/logo/apple-touch-icon.png")
+    link(rel="icon" type="image/png" sizes="512x512"  href="/assets/images/logo/logo512.png")
+    link(rel="icon" type="image/x-icon" href="/favicon.ico")
+    link(rel="manifest" href="/manifest.json")
     //script(src="https://api-maps.yandex.ru/2.1/?apikey=3ac3b264-6307-4318-b75d-38aed7d1c601&lang=ru_RU" type="text/javascript")
     script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAdBCGmHot3RdeKSMMbzugtXasNdnp4PPw&libraries=places")
   body
+    noscript You need to enable JavaScript to run this app.
     #app-root
