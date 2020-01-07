@@ -2,7 +2,20 @@
   "name": "brainy_do-client",
   "version": "0.1.2",
   "description": "",
+  "license": "UNLICENSED",
+  "author": "",
+  "homepage": "https://github.com/Nes-si/BrainyDo-client#readme",
+  "bugs": {
+    "url": "https://github.com/Nes-si/BrainyDo-client/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://Nes-si@github.com/Nes-si/BrainyDo-client.git"
+  },
+  "private": true,
+
   "main": "index.js",
+
   "scripts": {
     "start-dev": "node build-setup/server.js",
     "build-dev": "rimraf build && webpack --config build-setup/webpack.dev-build.config.js",
@@ -12,16 +25,6 @@
   "bin": {
     "brainy_do": "./bin/brainy_do"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://Nes-si@github.com/Nes-si/BrainyDo-client.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Nes-si/BrainyDo-client/issues"
-  },
-  "homepage": "https://github.com/Nes-si/BrainyDo-client#readme",
   "devDependencies": {
     "@babel/core": "^7.6.4",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
